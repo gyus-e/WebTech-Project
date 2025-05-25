@@ -1,2 +1,6 @@
-h1 #{name.toUpperCase()}
-p Welcome to #{name}'s page!
+extends ../base-layout.pug
+
+block heading
+    h1 #{name.toUpperCase()}
+block content
+    p Welcome to #{name}'s page!
