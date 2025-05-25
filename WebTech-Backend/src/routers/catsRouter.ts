@@ -1,4 +1,5 @@
 import express from 'express';
+import pug from 'pug';
 import Cat from '../models/Cat.js';
 import { catPhotosRouter } from './catPhotosRouter.js';
 import { CatPhotoRequestParams, CatRequestParams } from './RequestParams.js';
@@ -23,8 +24,11 @@ catsRouter.route(`/`)
 
 catsRouter.route(`/:cat_id`)
     .get((req: express.Request<CatRequestParams>, res: express.Response) => {
-        res.send(`This will show ${req.params.cat_id}'s page, if it exists!
-            Return a 404 if it does not exist.`);
+        let html = pug.renderFile(`./views/locals/cat.pug`, new Cat(req.params.cat_id));
+        res.send(html);
+
+        // res.send(`This will show ${req.params.cat_id}'s page, if it exists!
+        //     Return a 404 if it does not exist.`);
     })
     .put((req: express.Request<CatRequestParams>, res: express.Response) => {
         res.send(`This will update ${req.params.cat_id}'s page, if it exists!\n
