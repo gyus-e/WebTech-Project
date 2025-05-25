@@ -1,7 +1,7 @@
 import express from 'express';
 import pug from 'pug';
 import Cat from '../models/Cat.js';
-import { deletePhotos } from '../controllers/controller.js';
+import { deletePhotos } from '../middlewares/middlewares.js';
 import { catPhotosRouter } from './catPhotosRouter.js';
 import { CatRequestParams } from './RequestParams.js';
 
