@@ -2,7 +2,7 @@
   "name": "webtech-streetcats-backend",
   "version": "1.0.0",
   "description": "Backend for Unina's Web Technologies 2025 project StreetCats",
-  "main": "index.js",
+  "main": "dist/index.js",
   "type": "module",
   "license": "AGPL-version-3.0",
   "private": false,
@@ -26,8 +26,10 @@
 
   ],
   "scripts": {
-    "dev": "",
-    "test": ""
+    "clean": "rm -rf dist/*.js",
+    "dev": "tsc && nodemon dist/index.js",
+    "start": "tsc && node dist/index.js",
+    "test": "echo \"No tests specified\" && exit 0"
   },
   "dependencies": {
     "express":"^5.1.0",
