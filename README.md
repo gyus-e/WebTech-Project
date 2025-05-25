@@ -4,4 +4,4 @@ Unina WebTech 2025 StreetCats project.
 
 ## Getting Started
 
-npm start
+see README.md for Backend and Frontend
