@@ -22,22 +22,19 @@
     "email": "giuseppe.amato8@studenti.unina.it",
     "url": ""
   },
-  "contributors": [
-
-  ],
+  "contributors": [],
   "scripts": {
-    "clean": "rm -rf dist/*.js",
+    "clean": "rm -rf dist/*",
     "dev": "tsc && nodemon dist/index.js",
     "start": "tsc && node dist/index.js",
     "test": "echo \"No tests specified\" && exit 0"
   },
   "dependencies": {
-    "express":"^5.1.0",
-    "pug":"^3.0.3"
+    "express": "^5.1.0",
+    "pug": "^3.0.3"
   },
   "devDependencies": {
     "nodemon": "^3.1.10",
     "typescript": "^5.8.3"
-
   }
 }
