@@ -4,5 +4,5 @@ import Photo from "./Photo.js";
 
 User.hasMany(Photo);
 Cat.hasMany(Photo);
-Photo.belongsTo(Cat);
+Photo.belongsTo(Cat, { foreignKey: "catId", onDelete: "CASCADE" });
 Photo.hasOne(User, { foreignKey: "uploader" });

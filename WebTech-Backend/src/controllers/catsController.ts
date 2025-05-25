@@ -43,14 +43,17 @@ export async function putCatById(req: express.Request<CatRequestParams>, res: ex
 }
 
 export async function deleteCatById(req: express.Request<CatRequestParams>, res: express.Response) {
-    async function deletePhotos (req: express.Request<CatRequestParams>, res: express.Response) {
-        console.log(`This will delete all ${req.params.cat_id}'s photos.`);
+    try {
+        //TODO: Ensure that the user is authenticated
+        const cat = await Cat.findByPk(req.params.cat_id);
+        if (!cat) {
+            return res.status(404).send(`Cat not found.`);
+        }
+        await cat.destroy();
+        res.status(204).send(`Cat with ID ${req.params.cat_id} deleted successfully.`);
+    } catch (error) {
+        res.status(500).send(`Failed to delete cat.`);
+        console.error(error);
     }
-
-    await deletePhotos(req, res);
-    
-    res.send(`This will delete ${req.params.cat_id}'s page!\n
-        Make sure the user is authenticated!
-        Return a 404 if it does not exist.`);
 }
 
