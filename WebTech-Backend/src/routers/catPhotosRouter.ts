@@ -1,5 +1,5 @@
 import express from 'express';
-import { CatPhotoRequestParams } from './RequestParams.js';
+import { CatPhotoRequestParams } from './requestParams.js';
 
 export const catPhotosRouter = express.Router({ mergeParams: true });
 

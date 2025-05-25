@@ -2,7 +2,7 @@ import express from 'express';
 import Cat from '../models/Cat.js';
 import { deletePhotos } from '../middlewares/middlewares.js';
 import { catPhotosRouter } from './catPhotosRouter.js';
-import { CatRequestParams } from './RequestParams.js';
+import { CatRequestParams } from './requestParams.js';
 
 export const catsRouter = express.Router();
 
