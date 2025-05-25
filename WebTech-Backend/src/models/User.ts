@@ -1,13 +1,20 @@
-export default class User {
-    public username: string;
-    public email: string;
+import { DataTypes, Model } from "sequelize";
+import { database } from "../db.js";
 
-    constructor(username: string, email: string) {
-        this.username = username;
-        this.email = email;
-    }
+export default class User extends Model {};
 
-    public greet(): string {
-        return `Hello, ${this.username}! Your email is ${this.email}.`;
+User.init(
+    {
+        username: { type: DataTypes.TEXT, primaryKey: true, allowNull: false, unique: true },
+        password: { type: DataTypes.TEXT, allowNull: false },
+    },
+    {
+        sequelize: database, modelName: "User",
     }
-}
+);
+
+User.sync({alter: true}).then( () => {
+    console.log("Users table synchronized.");
+}).catch( err => {
+    console.error("Synchronization error:", err.message);
+});

@@ -1,6 +1,7 @@
 import express from 'express';
 import { catsRouter } from './routers/catsRouter.js';
 import { database } from './db.js';
+import './models/associations.js';
 
 const app = express();
 const PORT = 3000;
