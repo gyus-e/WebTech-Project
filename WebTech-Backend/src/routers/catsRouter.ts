@@ -1,15 +1,11 @@
 import express from 'express';
 import pug from 'pug';
 import Cat from '../models/Cat.js';
+import { deletePhotos } from '../controllers/controller.js';
 import { catPhotosRouter } from './catPhotosRouter.js';
-import { CatPhotoRequestParams, CatRequestParams } from './RequestParams.js';
+import { CatRequestParams } from './RequestParams.js';
 
 export const catsRouter = express.Router();
-
-let deletePhotos = function(req: express.Request<CatPhotoRequestParams>, res: express.Response, next: any) {
-    console.log(`This will delete all ${req.params.cat_id}'s photos.`);
-    next();
-}
 
 catsRouter.route(`/`)
     .get((req: express.Request, res: express.Response) => {
