@@ -43,7 +43,7 @@ export async function putCatById(req: express.Request<CatRequestParams>, res: ex
 }
 
 export async function deleteCatById(req: express.Request<CatRequestParams>, res: express.Response) {
-    async function deletePhotos (req: express.Request<CatPhotoRequestParams>, res: express.Response) {
+    async function deletePhotos (req: express.Request<CatRequestParams>, res: express.Response) {
         console.log(`This will delete all ${req.params.cat_id}'s photos.`);
     }
 
