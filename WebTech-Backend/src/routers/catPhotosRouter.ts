@@ -8,5 +8,5 @@ catPhotosRouter.route(`/`)
     .post(postPhotos);
 
 catPhotosRouter.route(`/:photo_id`)
-    .get()
+    .get(getPhotoById)
     .delete(deletePhotoById);
