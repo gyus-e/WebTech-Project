@@ -1,6 +1,6 @@
 import express from "express";
 import Cat from "../models/Cat.js";
-import { CatRequestParams, CatPhotoRequestParams } from './requestParams.js';
+import { CatRequestParams } from './requestParams.js';
 
 export async function getCats(req: express.Request, res: express.Response) {
     const cats = await Cat.findAll();

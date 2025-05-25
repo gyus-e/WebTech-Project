@@ -1,5 +1,4 @@
 import express from 'express';
-import { } from '../middleware/middleware.js';
 import { getCats, postCats, getCatById, putCatById, deleteCatById } from '../controllers/catsController.js';
 import { catPhotosRouter } from './catPhotosRouter.js';
 
