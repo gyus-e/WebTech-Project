@@ -1,0 +1,10 @@
+extends ../base-layout.pug
+
+block heading
+    h1 Behold, the cats! 
+
+block content
+    ul
+        each cat in cats
+            li
+                a(href=`/cats/${cat.id}`) #{cat.name}
