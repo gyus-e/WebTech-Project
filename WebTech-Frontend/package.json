@@ -1,0 +1,40 @@
+{
+  "name": "webtech-streetcats-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for Unina's Web Technologies 2025 project StreetCats",
+  "main": "index.js",
+  "type": "module",
+  "license": "AGPL-version-3.0",
+  "private": false,
+  "engines": {
+    "node": ">= 14.0.0",
+    "npm": ">= 6.0.0"
+  },
+  "homepage": "",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gyus-e/WebTech-Project.git"
+  },
+  "bugs": "",
+  "keywords": [],
+  "author": {
+    "name": "Giuseppe Amato",
+    "email": "giuseppe.amato8@studenti.unina.it",
+    "url": ""
+  },
+  "contributors": [
+
+  ],
+  "scripts": {
+    "dev": "",
+    "test": ""
+  },
+  "dependencies": {
+    "angular": "^1.8.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10",
+    "typescript": "^5.8.3",
+    "sass": "^1.89.0"
+  }
+}
