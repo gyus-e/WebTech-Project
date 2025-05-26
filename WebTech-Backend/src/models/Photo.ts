@@ -21,6 +21,6 @@ export async function initializePhotoModel() {
         }
     );
 
-    await Photo.sync({alter: true});
-    console.log("Photos table synchronized.");
+    // await Photo.sync({alter: true});
+    // console.log("Photos table synchronized.");
 }

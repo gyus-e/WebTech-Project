@@ -17,6 +17,6 @@ export async function initializeCatModel() {
         }
     );
 
-    await Cat.sync({alter: true});
-    console.log("Cats table synchronized.");
+    // await Cat.sync({alter: true});
+    // console.log("Cats table synchronized.");
 }
