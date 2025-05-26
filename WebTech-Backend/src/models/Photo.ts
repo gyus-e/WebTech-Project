@@ -1,7 +1,14 @@
 import { DataTypes, Model } from "sequelize";
 import DatabaseConnectionManager from "../DatabaseConnectionManager.js";
 
-export class Photo extends Model {};
+export class Photo extends Model {
+    public id!: number;
+    public title!: string;
+    public image!: Buffer; // Using Buffer for BLOB data
+    public description!: string | null;
+    public geolocalization!: { type: string; coordinates: number[] } | null; // Assuming POINT type with coordinates
+    public date!: Date;
+};
 
 export async function initializePhotoModel() {
     const database = await DatabaseConnectionManager.getInstance();
