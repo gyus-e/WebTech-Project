@@ -7,10 +7,11 @@ import { initDB } from './models/initDB.js';
 import { router } from './routers/router.js';
 
 dotenv.config();
-const SESSION_SECRET = process.env.SESSION_SECRET ?? (() => { throw new Error("SESSION_SECRET is not set"); })();
-const PORT = 3000;
 
 async function startServer(){
+    const SESSION_SECRET = process.env.SESSION_SECRET ?? (() => { throw new Error("SESSION_SECRET is not set"); })();
+    const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3000;
+
     const database = await DatabaseConnectionManager.getInstance();
     await DatabaseConnectionManager.testConnection();
     await initDB();
