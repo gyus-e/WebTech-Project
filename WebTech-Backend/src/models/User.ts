@@ -15,7 +15,4 @@ export async function initializeUserModel() {
             modelName: "User",
         }
     );
-
-    // await User.sync({alter: true});
-    // console.log("Users table synchronized.");
 }

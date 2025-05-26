@@ -20,7 +20,4 @@ export async function initializePhotoModel() {
             modelName: "Photo",
         }
     );
-
-    // await Photo.sync({alter: true});
-    // console.log("Photos table synchronized.");
 }
