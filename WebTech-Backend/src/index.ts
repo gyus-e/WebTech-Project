@@ -3,7 +3,7 @@ import express from 'express';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import DatabaseConnectionManager from './DatabaseConnectionManager.js';
-import { initializeDatabaseModels } from './models/initializeDatabaseModels.js';
+import { initializeDatabaseModels } from './initializeDatabaseModels.js';
 import { router } from './routers/router.js';
 
 dotenv.config();
