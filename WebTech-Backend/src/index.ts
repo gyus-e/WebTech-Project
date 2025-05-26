@@ -3,7 +3,7 @@ import express from 'express';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
 import DatabaseConnectionManager from './DatabaseConnectionManager.js';
-import { initDB } from './models/initDB.js';
+import { initializeDatabaseModels } from './models/initializeDatabaseModels.js';
 import { router } from './routers/router.js';
 
 dotenv.config();
@@ -14,7 +14,7 @@ async function startServer(){
 
     const database = await DatabaseConnectionManager.getInstance();
     await DatabaseConnectionManager.testConnection();
-    await initDB();
+    await initializeDatabaseModels();
     await database.sync();
 
     const app = express();

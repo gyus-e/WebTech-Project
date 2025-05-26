@@ -2,7 +2,7 @@ import { User, initializeUserModel } from "./User.js";
 import { Cat, initializeCatModel } from "./Cat.js";
 import { Photo, initializePhotoModel } from "./Photo.js";
 
-export async function initDB() {
+export async function initializeDatabaseModels() {
     await initializeUserModel();
     await initializeCatModel();
     await initializePhotoModel();
