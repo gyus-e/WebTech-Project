@@ -1,20 +1,22 @@
 import { DataTypes, Model } from "sequelize";
-import { database } from "../db.js";
+import DatabaseConnectionManager from "../DatabaseConnectionManager.js";
 
-export default class Cat extends Model {};
+export class Cat extends Model {};
 
-Cat.init(
-    {
-        id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, },
-        name: { type: DataTypes.TEXT, allowNull: false, },
-    },
-    {
-        sequelize: database, modelName: "Cat",
-    }
-);
+export async function initializeCatModel() {
+    const database = await DatabaseConnectionManager.getInstance();
 
-Cat.sync({alter: true}).then( () => {
+    Cat.init(
+        {
+            id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, },
+            name: { type: DataTypes.TEXT, allowNull: false, },
+        },
+        {
+            sequelize: database, 
+            modelName: "Cat",
+        }
+    );
+
+    await Cat.sync({alter: true});
     console.log("Cats table synchronized.");
-}).catch( err => {
-    console.error("Synchronization error:", err.message);
-});
+}
