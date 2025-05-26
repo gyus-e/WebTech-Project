@@ -1,5 +1,5 @@
 import express from "express";
-import { CatPhotoRequestParams } from './requestParams.js';
+import { CatPhotoRequestParams } from '../types/requestParams.js';
 
 export function getPhotos(req: express.Request<CatPhotoRequestParams>, res: express.Response) {
     res.send(`This will show a list of all photos of ${req.params.cat_id}!`);
