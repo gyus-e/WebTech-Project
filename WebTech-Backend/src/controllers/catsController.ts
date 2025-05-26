@@ -13,7 +13,7 @@ export async function postCats (req: express.Request, res: express.Response) {
     try {
         const cat = await Cat.create({
             name: req.body.name, 
-            age: req.body.age
+            age: req.body.age,
         });
         res.status(201).json(cat);
     } catch (error) {

@@ -13,9 +13,11 @@ database.sync().then( () => {console.log("Database synchronized.")});
 app.set("view engine", "pug");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser())
+app.use(cookieParser());
 app.use(session({
-secret: "s3cr37", saveUninitialized: false, resave: false
+    secret: "s3cr37", 
+    saveUninitialized: false, 
+    resave: false,
 }));
 app.use(`/`, router);
 
