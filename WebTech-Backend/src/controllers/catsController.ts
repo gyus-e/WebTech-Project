@@ -9,7 +9,6 @@ export async function getCats(req: express.Request, res: express.Response) {
 }
 
 export async function postCats (req: express.Request, res: express.Response) {
-    //TODO: Ensure that the user is authenticated
     try {
         const cat = await Cat.create({
             name: req.body.name, 
@@ -44,7 +43,6 @@ export async function putCatById(req: express.Request<CatRequestParams>, res: ex
 
 export async function deleteCatById(req: express.Request<CatRequestParams>, res: express.Response) {
     try {
-        //TODO: Ensure that the user is authenticated
         const cat = await Cat.findByPk(req.params.cat_id);
         if (!cat) {
             return res.status(404).send(`Cat not found.`);
