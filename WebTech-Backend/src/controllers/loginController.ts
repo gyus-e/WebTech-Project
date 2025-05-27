@@ -21,7 +21,7 @@ export async function postLogin(req: express.Request, res: express.Response) {
     }
 
     function issueToken(username: string){
-        return Jwt.sign({user:username}, process.env.TOKEN_SECRET, {
+        return Jwt.sign({user:username}, process.env.TOKEN_SECRET ?? (() => { throw new Error("TOKEN_SECRET is not defined"); })(), {
             expiresIn: `${24*60*60}s`
         });
     }
