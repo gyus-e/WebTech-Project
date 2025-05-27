@@ -1,0 +1,15 @@
+services:
+  backend:
+    image: webtech-backend
+    build:
+      context: WebTech-Backend
+    ports:
+      - "3000:3000"
+  frontend:
+    image: webtech-frontend
+    build: 
+      context: WebTech-Frontend
+    ports:
+      - "4200:4200"
+    depends_on:
+      - backend
