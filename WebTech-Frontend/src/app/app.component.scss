@@ -1,0 +1,13 @@
+nav a {
+  display: inline-block;
+  position: relative;
+
+  &::after {
+    content: "|";
+    margin: 0 8px;
+  }
+
+  &:last-child::after {
+    content: "";
+  }
+}
