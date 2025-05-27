@@ -1,26 +1,40 @@
 import express from "express";
-import { User } from "../models/User.js";
+import { User } from "../models/User.js"
+import Jwt from "jsonwebtoken";
 
 export function getLogin(req: express.Request, res: express.Response) {
     res.send("login");
 }
 
 export async function postLogin(req: express.Request, res: express.Response) {
-    async function validate(){
+    async function checkCredentials(req: express.Request, res: express.Response){
         let found = await User.findOne({
             where: { username: req.body.usr, password: req.body.pwd }
         });
-        if(found !== null) {
+        if(found === null) {
+            return false;
+        } else {
             req.session.isAuthenticated = true; 
-            req.session.username = found.dataValues.username;
+            req.session.username = found.username;
             return true;
         }
-        return false;
     }
 
-    if (await validate()) {
-        res.send("OK!");
+    function issueToken(username: string){
+        return Jwt.sign({user:username}, process.env.TOKEN_SECRET, {
+            expiresIn: `${24*60*60}s`
+        });
+    }
+
+    // function isTokenValid(token, callback){
+    //     Jwt.verify(token, process.env.TOKEN_SECRET, callback);
+    // }
+
+    let isAuthenticated = await checkCredentials(req, res);
+    if(isAuthenticated){
+        res.json(issueToken(req.body.usr));
     } else {
-        res.status(400).send("LOGIN FAILED");
+        res.status(401);
+        res.json( {error: "Invalid credentials. Try again."});
     }
 }
