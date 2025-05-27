@@ -1,5 +1,5 @@
 <h1>Login</h1>
-<form [formGroup]="loginForm">
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
     <label for="usr">Username:</label>
     <input id="usr" formControlName="username"/>
     <label for="pwd">Password:</label>

@@ -12,4 +12,9 @@ export class LoginComponent {
     username: new FormControl(''),
     password: new FormControl('')
   });
+
+  onSubmit(){
+    alert(`Username: ${this.loginForm.value.username}\nPassword: ${this.loginForm.value.password}`);
+    //TODO: Call a service to handle login logic here
+}
 }
