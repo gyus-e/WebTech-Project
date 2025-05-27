@@ -1,0 +1,8 @@
+form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1rem;
+    max-width: 350px;
+    margin-bottom: 2rem;
+}
