@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import DatabaseConnectionManager from './DatabaseConnectionManager.js';
 import { initializeDatabaseModels } from './initializeDatabaseModels.js';
 import { router } from './routers/router.js';
+import { errorHandler } from './controllers/errorHandler.js';
 
 dotenv.config();
 
@@ -24,6 +25,7 @@ async function startServer(){
     app.use(cookieParser());
     app.use(session({ secret: SESSION_SECRET, saveUninitialized: false, resave: false, }));
     app.use(`/`, router);
+    app.use(errorHandler);
     app.listen(PORT);
 }
 
