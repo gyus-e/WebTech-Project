@@ -1,7 +1,7 @@
 import express from 'express';
 import { getCats, postCats, getCatById, putCatById, deleteCatById } from '../controllers/catsController.js';
 import { catPhotosRouter } from './catPhotosRouter.js';
-import { enforceAuthentication } from '../middleware/middleware.js';
+import { enforceAuthentication } from '../middleware/enforceAuthentication.js';
 
 export const catsRouter = express.Router();
 

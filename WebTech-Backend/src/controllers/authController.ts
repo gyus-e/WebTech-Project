@@ -14,7 +14,7 @@ export async function postLogin(req: express.Request, res: express.Response) {
 export async function postSignup(req: express.Request, res: express.Response) {
     try {
         const user = await User.create({
-            userName: req.body.usr, 
+            username: req.body.usr, 
             password: req.body.pwd
         });
         res.status(201).json(user);
@@ -39,15 +39,6 @@ function issueToken(username: string){
         {user:username}, 
         process.env.TOKEN_SECRET ?? (() => { throw new Error("TOKEN_SECRET is not defined"); })(), 
         {expiresIn: `${24*60*60}s`}
-    );
-}
-
-//TODO: fix the callback type
-function isTokenValid(token: string, callback: any) {
-    Jwt.verify(
-        token, 
-        process.env.TOKEN_SECRET ?? (() => { throw new Error("TOKEN_SECRET is not defined"); })(),
-        callback
     );
 }
 

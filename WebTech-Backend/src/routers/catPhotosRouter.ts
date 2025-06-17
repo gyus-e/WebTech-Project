@@ -1,6 +1,6 @@
 import express from 'express';
 import { getPhotos, postPhotos, getPhotoById, deletePhotoById } from '../controllers/catPhotosController.js';
-import { enforceAuthentication } from '../middleware/middleware.js';
+import { enforceAuthentication } from '../middleware/enforceAuthentication.js';
 
 export const catPhotosRouter = express.Router({ mergeParams: true });
 
