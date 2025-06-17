@@ -3,6 +3,7 @@ import DatabaseConnectionManager from "../DatabaseConnectionManager.js";
 
 export class Photo extends Model {
     public id!: number;
+    public path!: string;
     public title!: string;
     public image!: Buffer; // Using Buffer for BLOB data
     public description!: string | null;
