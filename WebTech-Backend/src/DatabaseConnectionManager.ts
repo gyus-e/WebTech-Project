@@ -10,15 +10,6 @@ export default class DatabaseConnectionManager {
         }
         return DatabaseConnectionManager.instance;
     }
-    
-    public static async testConnection() {
-        try {
-            await DatabaseConnectionManager.instance.authenticate();
-            console.log('Connection has been established successfully.');
-        } catch (error) {
-            console.error('Unable to connect to the database:', error);
-        }
-    }
 
     private static buildURL() {
         const DB_DRIVER = process.env.DB_DRIVER ?? "sqlite";
