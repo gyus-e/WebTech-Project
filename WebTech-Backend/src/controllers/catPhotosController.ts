@@ -8,9 +8,19 @@ export async function getPhotos(req: express.Request, res: express.Response) {
     res.json(photos);
 }
 
-export function postPhotos(req: express.Request, res: express.Response) {
-    res.send(`This will add a new photo to ${req.params.cat_id}'s photos!
-        Make sure the user is authenticated!`);
+export async function postPhotos(req: express.Request, res: express.Response) {
+    try {
+        const photo = await Photo.create({
+            title: req.body.title,
+            description: req.body.description,
+            geolocalization: req.body.geolocalization,
+            uploader: req.username,
+        });
+        res.status(201).json(photo);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to create photo.' });
+        console.error(error);
+    }
 }
 
 export async function getPhotoById(req: express.Request, res: express.Response) {
