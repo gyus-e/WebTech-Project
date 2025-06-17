@@ -16,6 +16,7 @@ export async function initializePhotoModel() {
     Photo.init(
         {
             id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+            path: { type: DataTypes.TEXT, allowNull: false, unique: true },
             title: { type: DataTypes.TEXT, allowNull: false },
             image: { type: DataTypes.BLOB("long"), allowNull: false },
             description: { type: DataTypes.TEXT("long"), allowNull: true },
