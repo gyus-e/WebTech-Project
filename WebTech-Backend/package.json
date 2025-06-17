@@ -23,7 +23,7 @@
   },
   "contributors": [],
   "scripts": {
-    "clean": "rm -rf dist/*",
+    "clean": "rm -rf dist/* && rm mydb.sqlite",
     "dev": "tsc && nodemon dist/index.js",
     "start": "tsc && node dist/index.js",
     "test": "echo \"No tests specified\" && exit 0"
