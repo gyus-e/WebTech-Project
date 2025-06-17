@@ -2,11 +2,11 @@ import express from "express";
 import { User } from "../models/User.js"
 import Jwt from "jsonwebtoken";
 
-export function getLogin(req: express.Request, res: express.Response) {
+export function getAuth(req: express.Request, res: express.Response) {
     res.send("login");
 }
 
-export async function postLogin(req: express.Request, res: express.Response) {
+export async function postAuth(req: express.Request, res: express.Response) {
     async function checkCredentials(req: express.Request, res: express.Response){
         let found = await User.findOne({
             where: { username: req.body.usr, password: req.body.pwd }
