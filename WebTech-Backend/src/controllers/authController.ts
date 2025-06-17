@@ -2,14 +2,10 @@ import express from "express";
 import { User } from "../models/User.js"
 import Jwt from "jsonwebtoken";
 
-export function getAuth(req: express.Request, res: express.Response) {
-    res.send("login");
-}
-
-export async function postAuth(req: express.Request, res: express.Response) {
+export async function postLogin(req: express.Request, res: express.Response) {
     async function checkCredentials(req: express.Request, res: express.Response){
         let found = await User.findOne({
-            where: { username: req.body.usr, password: req.body.pwd }
+            where: { username: req.body.usr, password: req.body.pwd } //assuming password is already hashed
         });
         if(found === null) {
             return false;

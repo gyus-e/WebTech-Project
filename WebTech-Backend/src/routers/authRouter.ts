@@ -1,8 +1,7 @@
 import express from 'express';
-import { getAuth, postAuth } from '../controllers/authController.js';
+import { postLogin } from '../controllers/authController.js';
 
 export const authRouter = express.Router();
 
-authRouter.route(`/`)
-    .get(getAuth)
-    .post(postAuth);
+authRouter.route(`/login`)
+    .post(postLogin);
