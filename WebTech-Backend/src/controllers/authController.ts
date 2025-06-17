@@ -10,8 +10,6 @@ export async function postLogin(req: express.Request, res: express.Response) {
         if(found === null) {
             return false;
         } else {
-            req.session.isAuthenticated = true; 
-            req.session.username = found.username;
             return true;
         }
     }
@@ -22,7 +20,7 @@ export async function postLogin(req: express.Request, res: express.Response) {
         });
     }
 
-    // function isTokenValid(token, callback){
+    // function isTokenValid(token, callback) {
     //     Jwt.verify(token, process.env.TOKEN_SECRET, callback);
     // }
 

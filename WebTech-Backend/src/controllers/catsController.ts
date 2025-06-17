@@ -4,7 +4,6 @@ import { CatRequestParams } from '../types/requestParams.js';
 
 export async function getCats(req: express.Request, res: express.Response) {
     const cats = await Cat.findAll();
-    // res.render(`locals/cats.pug`, { cats });
     res.json(cats);
 }
 
@@ -27,7 +26,6 @@ export async function getCatById(req: express.Request<CatRequestParams>, res: ex
         if (!cat) {
             return res.status(404).send(`Cat not found.`);
         }
-        // res.render(`locals/cat_id.pug`, cat.toJSON());
         res.json(cat);
     } catch (error) {
         res.status(500).send(`Failed to fetch cat.`);
