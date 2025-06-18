@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser';
 import { swaggerSpec } from './swaggerSpec.js';
 import { initializeDatabase } from './database.js';
 import { router } from './routers/router.js';
-import { errorHandler } from './controllers/errorHandler.js';
+import { errorHandler } from './middleware/errorHandler.js';
 
 async function main(){
     dotenv.config();
