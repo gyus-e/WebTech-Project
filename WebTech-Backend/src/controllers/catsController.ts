@@ -2,15 +2,22 @@ import express from "express";
 import { Cat } from "../models/Cat.js";
 import { CatRequestParams } from '../types/requestParams.js';
 
+
 export async function getCats(req: express.Request, res: express.Response) {
-    const cats = await Cat.findAll();
-    res.json(cats);
+    try{
+        const cats = await Cat.findAll();
+        res.json(cats);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to fetch cats.' });
+        console.error(error);
+    }
 }
+
 
 export async function postCats (req: express.Request, res: express.Response) {
     try {
         const cat = await Cat.create({
-            name: req.body.name, 
+            name: req.body.name ?? (() => {res.status(400).json({error: `cat name required`})} )(),
             uploader: req.username,
         });
         res.status(201).json(cat);
@@ -19,6 +26,7 @@ export async function postCats (req: express.Request, res: express.Response) {
         console.error(error);
     }
 }
+
 
 export async function getCatById(req: express.Request<CatRequestParams>, res: express.Response) {
     try {
@@ -33,11 +41,25 @@ export async function getCatById(req: express.Request<CatRequestParams>, res: ex
     }
 }
 
+
 export async function putCatById(req: express.Request<CatRequestParams>, res: express.Response) {
-    res.send(`This will update ${req.params.cat_id}'s page, if it exists!\n
-        Make sure the user is authenticated!
-        Return a 404 if it does not exist.`);
+    try {
+        const cat = await Cat.findByPk(req.params.cat_id);
+        if (!cat) {
+            return res.status(404).send(`Cat not found.`);
+        }
+        const name = req.body.name ?? res.status(400).json({ error: `no cat name specified` });
+        if (cat.name === name) {
+            return res.status(400).json({ error: `cat name is the same as before` });
+        }
+        await cat.save();
+        res.json(cat);
+    } catch (error) {
+        res.status(500).send(`Failed to update cat.`);
+        console.error(error);
+    }
 }
+
 
 export async function deleteCatById(req: express.Request<CatRequestParams>, res: express.Response) {
     try {
