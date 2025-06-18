@@ -7,7 +7,7 @@ type UploadedItem = Photo | Cat;
 
 
 function checkOwnership(item: UploadedItem | null) {
-    return async (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    return (req: express.Request, res: express.Response, next: express.NextFunction) => {
         const user = req.username;
         if (!item) {
             return res.status(404).json({ error: "Item not found" });
