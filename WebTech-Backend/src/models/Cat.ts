@@ -17,7 +17,7 @@ export async function initializeCatModel() {
             uploader: { type: DataTypes.TEXT, allowNull: false, },
         },
         {
-            sequelize: database, 
+            sequelize: database,
             modelName: "Cat",
         }
     );

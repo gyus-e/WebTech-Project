@@ -27,7 +27,7 @@ export async function initializePhotoModel() {
             date: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
         },
         {
-            sequelize: database, 
+            sequelize: database,
             modelName: "Photo",
             hooks: {
                 afterCreate: async (photo: Photo) => {

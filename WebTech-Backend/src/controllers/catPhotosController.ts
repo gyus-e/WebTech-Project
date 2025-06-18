@@ -26,7 +26,7 @@ export async function postPhotos(req: express.Request, res: express.Response) {
 
 export async function getPhotoById(req: express.Request, res: express.Response) {
     const photo = await Photo.findOne({
-        where: { 
+        where: {
             catId: req.params.cat_id,
             id: req.params.photo_id,
         }

@@ -9,10 +9,10 @@ import { router } from './routes/router.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 
-async function main(){
+async function main() {
     dotenv.config();
     const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 3000;
-    const COOKIE_PARSER_SECRET: string = process.env.COOKIE_PARSER_SECRET ?? (() => {throw new Error("Cookie parser secret is not set in environment variables");})();
+    const COOKIE_PARSER_SECRET: string = process.env.COOKIE_PARSER_SECRET ?? (() => { throw new Error("Cookie parser secret is not set in environment variables"); })();
 
     const database = await initializeDatabase();
     await database.sync();
@@ -23,7 +23,7 @@ async function main(){
     app.use(cookieParser(COOKIE_PARSER_SECRET));
     app.use(express.json());
     app.use(cors());
-    
+
     app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerSpec));
     app.use(`/`, router);
 

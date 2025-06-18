@@ -1,5 +1,5 @@
 import express from 'express';
-import { getIndex } from '../controllers/controller.js'; 
+import { getIndex } from '../controllers/controller.js';
 import { catsRouter } from './catsRouter.js';
 import { authRouter } from './authRouter.js';
 

@@ -4,7 +4,7 @@ import { CatRequestParams } from '../types/requestParams.js';
 
 
 export async function getCats(req: express.Request, res: express.Response) {
-    try{
+    try {
         const cats = await Cat.findAll();
         res.json(cats);
     } catch (error) {
@@ -14,10 +14,10 @@ export async function getCats(req: express.Request, res: express.Response) {
 }
 
 
-export async function postCats (req: express.Request, res: express.Response) {
+export async function postCats(req: express.Request, res: express.Response) {
     try {
         const cat = await Cat.create({
-            name: req.body.name ?? (() => {res.status(400).json({error: `cat name required`})} )(),
+            name: req.body.name ?? (() => { res.status(400).json({ error: `cat name required` }) })(),
             uploader: req.username,
         });
         res.status(201).json(cat);

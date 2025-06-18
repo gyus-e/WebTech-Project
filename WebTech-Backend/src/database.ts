@@ -5,7 +5,7 @@ import { initializePhotoModel } from "./models/Photo.js";
 import { initializeRelations } from "./models/relations.js";
 import { Sequelize } from 'sequelize';
 
-export async function initializeDatabase(){
+export async function initializeDatabase() {
     const database = await DatabaseConnectionManager.getInstance();
     await testConnection(database);
     await initializeModels();

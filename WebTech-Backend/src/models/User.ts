@@ -14,7 +14,7 @@ export async function initializeUserModel() {
             password: { type: DataTypes.TEXT, allowNull: false },
         },
         {
-            sequelize: database, 
+            sequelize: database,
             modelName: "User",
         }
     );
