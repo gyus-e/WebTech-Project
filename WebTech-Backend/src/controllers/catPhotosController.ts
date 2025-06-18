@@ -15,6 +15,7 @@ export async function postPhotos(req: express.Request, res: express.Response) {
             description: req.body.description,
             geolocalization: req.body.geolocalization,
             uploader: req.username,
+            catId: req.params.cat_id,
         });
         res.status(201).json(photo);
     } catch (error) {
