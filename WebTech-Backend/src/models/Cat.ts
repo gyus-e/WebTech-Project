@@ -4,6 +4,7 @@ import DatabaseConnectionManager from "../DatabaseConnectionManager.js";
 export class Cat extends Model {
     public id!: number;
     public name!: string;
+    public uploader!: string;
 };
 
 export async function initializeCatModel() {
@@ -13,6 +14,7 @@ export async function initializeCatModel() {
         {
             id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, },
             name: { type: DataTypes.TEXT, allowNull: false, },
+            uploader: { type: DataTypes.TEXT, allowNull: false, },
         },
         {
             sequelize: database, 
