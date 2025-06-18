@@ -11,7 +11,6 @@ export async function postCats (req: express.Request, res: express.Response) {
     try {
         const cat = await Cat.create({
             name: req.body.name, 
-            age: req.body.age,
             uploader: req.username,
         });
         res.status(201).json(cat);
