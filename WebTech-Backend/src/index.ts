@@ -5,7 +5,7 @@ import swaggerUI from 'swagger-ui-express';
 import cookieParser from 'cookie-parser';
 import { swaggerSpec } from './swaggerSpec.js';
 import { initializeDatabase } from './database.js';
-import { router } from './routers/router.js';
+import { router } from './routes/router.js';
 import { errorHandler } from './middleware/errorHandler.js';
 
 async function main(){
