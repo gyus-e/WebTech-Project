@@ -37,7 +37,17 @@ export async function getPhotoById(req: express.Request, res: express.Response) 
     res.json(photo);
 }
 
-export function deletePhotoById(req: express.Request, res: express.Response) {
-    res.send(`This will delete photo ${req.params.photo_id} from cat ${req.params.cat_id}'s photos!
-        Make sure the user is authenticated!`);
+export async function deletePhotoById(req: express.Request, res: express.Response) {
+    try {
+        const photo = await Photo.findByPk(req.params.photo_id);
+        if (!photo) {
+            return res.status(404).send(`Photo not found.`);
+        }
+        await photo.destroy();
+        res.status(204).send(`Photo with ID ${req.params.photo_id} deleted successfully.`);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(`Failed to delete photo.`);
+        console.error(error);
+    }
 }
