@@ -8,8 +8,7 @@ export class Photo extends Model {
     public catId!: number;
     public title!: string;
     public description!: string | null;
-    public geolocalization!: { type: string; coordinates: number[] } | null; // Assuming POINT type with coordinates
-    public date!: Date;
+    public geolocalization!: { type: string; coordinates: number[] } | null;
 };
 
 export async function initializePhotoModel() {
