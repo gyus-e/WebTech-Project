@@ -29,12 +29,6 @@ export async function initializePhotoModel() {
         {
             sequelize: database,
             modelName: "Photo",
-            hooks: {
-                afterCreate: async (photo: Photo) => {
-                    photo.path = `/photos/${photo.catId}/${photo.id}`;
-                    await photo.save();
-                }
-            }
         }
     );
 }

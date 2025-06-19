@@ -2,6 +2,7 @@ import express from 'express';
 import { getPhotos, postPhotos, getPhotoById, deletePhotoById } from '../controllers/catPhotosController.js';
 import { enforceAuthentication } from '../middleware/enforceAuthentication.js';
 import { checkCatOwnership, checkPhotoOwnership } from '../middleware/checkOwnership.js';
+import { uploadSinglePhoto } from '../middleware/upload.js';
 
 export const catPhotosRouter = express.Router({ mergeParams: true });
 
@@ -21,12 +22,7 @@ export const catPhotosRouter = express.Router({ mergeParams: true });
  *      description: Post a new photo for a specific cat
  *      produces:
  *        - application/json
- *      requestHeader:
- *        description: Authentication token
- *        required: true
- *        schema:
- *          type: string
- *          example: Bearer your-auth-token
+ *   
  *      requestBody:
  *        description: title, description, and geolocalization of the photo
  *        required: true
@@ -56,7 +52,7 @@ export const catPhotosRouter = express.Router({ mergeParams: true });
  */
 catPhotosRouter.route(`/`)
     .get(getPhotos)
-    .post([enforceAuthentication, checkCatOwnership], postPhotos);
+    .post([enforceAuthentication, checkCatOwnership, uploadSinglePhoto], postPhotos);
 
 
 /**
