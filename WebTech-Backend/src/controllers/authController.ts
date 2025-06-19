@@ -11,7 +11,7 @@ export async function postSignup(req: express.Request, res: express.Response) {
             username: req.body.usr,
             password: hash,
         });
-        res.status(201).json(user);
+        res.json(issueToken(user.username));
     } catch (error) {
         res.status(500).json({ error: 'Failed to create user.' });
         console.error(error);
@@ -22,8 +22,7 @@ export async function postSignup(req: express.Request, res: express.Response) {
 export async function postLogin(req: express.Request, res: express.Response) {
     let user = await User.findByPk(req.body.usr);
     if (user !== null) {
-        const hash = await argon2.hash(req.body.pwd);
-        if (await argon2.verify(hash, user.password)) {
+        if (await argon2.verify(user.password, req.body.pwd)) {
             return res.json(issueToken(req.body.usr));
         }
     }
