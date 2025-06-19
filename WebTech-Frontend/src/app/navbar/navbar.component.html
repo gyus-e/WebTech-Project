@@ -14,10 +14,9 @@
         <li>
           <a (click)="handleNavigationClick()" routerLink="/" routerLinkActive="bg-teal-700 hover:bg-teal-800 dark:hover:bg-teal-600 text-white md:text-teal-700 md:dark:text-teal-500" class="block py-2 px-3 text-gray-900 rounded md:bg-transparent hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-teal-700 md:p-0 dark:text-white md:dark:hover:text-teal-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent" aria-current="page">Home</a>
         </li>
-        <!-- TODO: uncomment when cats route is implemented -->
-        <!-- <li>
+        <li>
           <a (click)="handleNavigationClick()" routerLink="/cats" routerLinkActive="bg-teal-700 hover:bg-teal-800 dark:hover:bg-teal-600 text-white md:text-teal-700 md:dark:text-teal-500" class="block py-2 px-3 text-gray-900 rounded md:bg-transparent hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-teal-700 md:p-0 dark:text-white md:dark:hover:text-teal-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Cats</a>
-        </li> -->
+        </li>
         @if(! this.authService.isUserAuthenticated()){
           <li>
             <a (click)="handleNavigationClick()" routerLink="/login" routerLinkActive="bg-teal-700 hover:bg-teal-800 dark:hover:bg-teal-600 text-white md:text-teal-700 md:dark:text-teal-500" class="block py-2 px-3 text-gray-900 rounded md:bg-transparent hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-teal-700 md:p-0 dark:text-white md:dark:hover:text-teal-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent">Login</a>
