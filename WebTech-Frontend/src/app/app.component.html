@@ -1,5 +1,7 @@
-<nav>
-  <a routerLink="/">Home</a>
-  <a routerLink="/login" routerLinkActive="active">Login</a>
-</nav>
-<router-outlet />
+<!DOCTYPE html>
+<div class="flex flex-col h-screen bg-gray-50 dark:bg-gray-900">
+  <app-navbar class="sticky top-0"/>
+  <main class="container mx-auto flex-grow pt-20">
+    <router-outlet></router-outlet>
+  </main>
+</div>
