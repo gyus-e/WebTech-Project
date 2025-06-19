@@ -8,6 +8,9 @@
       "schematics": {
         "@schematics/angular:component": {
           "style": "scss"
+        },
+        "@schematics/angular:service": {
+          "path": "src/app/_services"
         }
       },
       "root": "",

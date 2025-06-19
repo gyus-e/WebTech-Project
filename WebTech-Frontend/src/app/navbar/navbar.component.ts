@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../_services/auth/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,8 +13,7 @@ export class NavbarComponent {
   isOpen = false;
   isDropdownOpen = false;
 
-  //TODO: uncomment when AuthService is done
-  // authService = inject('AuthService');
+  authService = inject(AuthService);
 
   toggle() {
     this.isOpen = !this.isOpen;
