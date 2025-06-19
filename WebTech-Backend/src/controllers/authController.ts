@@ -1,21 +1,15 @@
 import express from "express";
 import { User } from "../models/User.js"
 import Jwt from "jsonwebtoken";
+import argon2 from "argon2";
 
-export async function postLogin(req: express.Request, res: express.Response) {
-    let isAuthenticated = await checkCredentials(req, res);
-    if (isAuthenticated) {
-        res.json(issueToken(req.body.usr));
-    } else {
-        res.status(401).json({ error: "Invalid credentials. Try again." });
-    }
-}
 
 export async function postSignup(req: express.Request, res: express.Response) {
+    const hash = await argon2.hash(req.body.pwd);
     try {
         const user = await User.create({
             username: req.body.usr,
-            password: req.body.pwd
+            password: hash,
         });
         res.status(201).json(user);
     } catch (error) {
@@ -24,15 +18,18 @@ export async function postSignup(req: express.Request, res: express.Response) {
     }
 }
 
-async function checkCredentials(req: express.Request, res: express.Response) {
-    let found = await User.findOne({
-        where: {
-            username: req.body.usr,
-            password: req.body.pwd
+
+export async function postLogin(req: express.Request, res: express.Response) {
+    let user = await User.findByPk(req.body.usr);
+    if (user !== null) {
+        const hash = await argon2.hash(req.body.pwd);
+        if (await argon2.verify(hash, user.password)) {
+            return res.json(issueToken(req.body.usr));
         }
-    });
-    return found !== null;
+    }
+    return res.status(401).json({ error: "Bad credentials." });
 }
+
 
 function issueToken(username: string) {
     return Jwt.sign(
@@ -41,4 +38,3 @@ function issueToken(username: string) {
         { expiresIn: `${24 * 60 * 60}s` }
     );
 }
-
