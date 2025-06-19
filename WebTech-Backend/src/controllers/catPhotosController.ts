@@ -32,7 +32,8 @@ export async function getPhotoById(req: express.Request, res: express.Response) 
         }
     });
     if (!photo) {
-        return res.status(404).send(`Photo not found.`);
+        res.status(404).send(`Photo not found.`);
+        return;
     }
     res.json(photo);
 }
@@ -41,7 +42,8 @@ export async function deletePhotoById(req: express.Request, res: express.Respons
     try {
         const photo = await Photo.findByPk(req.params.photo_id);
         if (!photo) {
-            return res.status(404).send(`Photo not found.`);
+            res.status(404).send(`Photo not found.`);
+            return;
         }
         await photo.destroy();
         res.status(204).send(`Photo with ID ${req.params.photo_id} deleted successfully.`);

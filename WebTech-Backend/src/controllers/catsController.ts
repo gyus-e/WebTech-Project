@@ -32,7 +32,8 @@ export async function getCatById(req: express.Request<CatRequestParams>, res: ex
     try {
         const cat = await Cat.findByPk(req.params.cat_id);
         if (!cat) {
-            return res.status(404).send(`Cat not found.`);
+            res.status(404).send(`Cat not found.`);
+            return;
         }
         res.json(cat);
     } catch (error) {
@@ -46,11 +47,13 @@ export async function putCatById(req: express.Request<CatRequestParams>, res: ex
     try {
         const cat = await Cat.findByPk(req.params.cat_id);
         if (!cat) {
-            return res.status(404).send(`Cat not found.`);
+            res.status(404).send(`Cat not found.`);
+            return;
         }
         const name = req.body.name ?? res.status(400).json({ error: `no cat name specified` });
         if (cat.name === name) {
-            return res.status(400).json({ error: `cat name is the same as before` });
+            res.status(400).json({ error: `cat name is the same as before` });
+            return;
         }
         await cat.save();
         res.json(cat);
@@ -65,7 +68,8 @@ export async function deleteCatById(req: express.Request<CatRequestParams>, res:
     try {
         const cat = await Cat.findByPk(req.params.cat_id);
         if (!cat) {
-            return res.status(404).send(`Cat not found.`);
+            res.status(404).send(`Cat not found.`);
+            return;
         }
         await cat.destroy();
         res.status(204).send(`Cat with ID ${req.params.cat_id} deleted successfully.`);

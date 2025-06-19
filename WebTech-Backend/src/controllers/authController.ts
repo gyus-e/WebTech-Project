@@ -23,10 +23,11 @@ export async function postLogin(req: express.Request, res: express.Response) {
     let user = await User.findByPk(req.body.usr);
     if (user !== null) {
         if (await argon2.verify(user.password, req.body.pwd)) {
-            return res.json(issueToken(req.body.usr));
+            res.json(issueToken(req.body.usr));
+            return;
         }
     }
-    return res.status(401).json({ error: "Bad credentials." });
+    res.status(401).json({ error: "Bad credentials." });
 }
 
 
