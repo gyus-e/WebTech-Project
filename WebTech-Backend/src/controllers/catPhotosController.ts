@@ -59,19 +59,19 @@ export async function deletePhotoById(req: express.Request, res: express.Respons
             res.status(404).send(`Photo not found.`);
             return;
         }
-        fs.rm(photo.path, { recursive: true, force: true }, (err) => {
-            if (err) {
-                console.error(`Failed to delete file: ${photo.path}`, err);
-                res.status(500).send(`Failed to delete photo file.`);
-                return;
-            }
-            console.log(`File deleted: ${photo.path}`);
-        });
+        await removePhotoFromUploads(photo);
         await photo.destroy();
         res.status(204).send();
     } catch (error) {
         console.error(error);
         res.status(500).send(`Failed to delete photo.`);
         console.error(error);
+    }
+}
+
+async function removePhotoFromUploads(photo: Photo) {
+    const filePath = photo.path;
+    if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
     }
 }

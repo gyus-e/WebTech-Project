@@ -1,4 +1,6 @@
 import express from "express";
+import fs from "fs";
+import path from "path";
 import { Cat } from "../models/Cat.js";
 import { CatRequestParams } from '../types/requestParams.js';
 
@@ -71,6 +73,7 @@ export async function deleteCatById(req: express.Request<CatRequestParams>, res:
             res.status(404).send(`Cat not found.`);
             return;
         }
+        await removeCatDirectoryFromUploads(cat);
         await cat.destroy();
         res.status(204).send(`Cat with ID ${req.params.cat_id} deleted successfully.`);
     } catch (error) {
@@ -79,3 +82,9 @@ export async function deleteCatById(req: express.Request<CatRequestParams>, res:
     }
 }
 
+async function removeCatDirectoryFromUploads(cat: Cat) {
+    const dirPath = path.join(`uploads`, cat.id.toString());
+    if (fs.existsSync(dirPath)) {
+        fs.rmdirSync(dirPath, { recursive: true });
+    }
+}
