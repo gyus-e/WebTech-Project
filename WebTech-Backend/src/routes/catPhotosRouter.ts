@@ -1,7 +1,7 @@
 import express from 'express';
 import { getPhotos, postPhotos, getPhotoById, deletePhotoById } from '../controllers/catPhotosController.js';
 import { enforceAuthentication } from '../middleware/enforceAuthentication.js';
-import { checkPhotoOwnership } from '../middleware/checkOwnership.js';
+import { checkCatOwnership, checkPhotoOwnership } from '../middleware/checkOwnership.js';
 
 export const catPhotosRouter = express.Router({ mergeParams: true });
 
@@ -56,7 +56,7 @@ export const catPhotosRouter = express.Router({ mergeParams: true });
  */
 catPhotosRouter.route(`/`)
     .get(getPhotos)
-    .post([enforceAuthentication], postPhotos);
+    .post([enforceAuthentication, checkCatOwnership], postPhotos);
 
 
 /**
