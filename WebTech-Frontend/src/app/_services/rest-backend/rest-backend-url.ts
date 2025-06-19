@@ -1,0 +1,1 @@
+export const REST_BACKEND_URL = 'http://localhost:3000';
