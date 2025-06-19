@@ -11,8 +11,9 @@ export class AuthService {
   authState: WritableSignal<AuthState> = signal<AuthState>({
     user: this.getUser(),
     token: this.getToken(),
-    isAuthenticated: this.verifyToken(this.getToken()),
+    isAuthenticated: this.isUserAuthenticated(),
   });
+
 
   user = computed(() => this.authState().user);
   token = computed(() => this.authState().token);
@@ -83,4 +84,5 @@ export class AuthService {
     })
   }
 
+  
 }
