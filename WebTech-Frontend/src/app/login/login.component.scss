@@ -1,0 +1,9 @@
+@use 'tailwindcss';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+p.signup-link {
+    @apply text-sm font-medium text-gray-400;
+}
