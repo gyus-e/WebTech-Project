@@ -1,14 +1,14 @@
-<section class="bg-gray-900 h-full">
-  <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto h-full">
-    <div class="w-full bg-gray-800 rounded-lg shadow border md:mt-0 sm:max-w-md xl:p-0 border-gray-700">
-        <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 class="text-xl font-bold leading-tight tracking-tight text-white md:text-2xl">
+<section class="auth-section">
+  <div class="first">
+    <div class="second">
+        <div class="third">
+            <h1 class="auth-title">
                 Create an account
             </h1>
-            <form class="space-y-4 md:space-y-6" [formGroup]="signupForm" (ngSubmit)="handleSignup()">
+            <form class="auth-form" [formGroup]="signupForm" (ngSubmit)="handleSignup()">
                 <div>
-                    <label for="user" class="block mb-2 text-sm font-medium text-white">Email</label>
-                    <input type="text" formControlName="user" id="user" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5" placeholder="Your username" required="">
+                    <label for="user" class="auth-label">Email</label>
+                    <input type="text" formControlName="user" id="user" class="auth-input" placeholder="Your username" required="">
                     @if(submitted && signupForm.controls.user.errors){
                       @if(signupForm.controls.user.errors['required']){
                         <p class="form-error">Email is required.</p>
@@ -19,8 +19,8 @@
                     }
                   </div>
                   <div>
-                    <label for="pass" class="block mb-2 text-sm font-medium text-white">Password</label>
-                    <input type="password" formControlName="password" id="pass" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5" required="">
+                    <label for="pass" class="auth-label">Password</label>
+                    <input type="password" formControlName="password" id="pass" placeholder="••••••••" class="auth-input" required="">
                     @if(submitted && signupForm.controls.password.errors){
                       @if(signupForm.controls.password.errors['required']){
                         <p class="form-error">Password is required.</p>
@@ -30,7 +30,7 @@
                       }
                     }
                   </div>
-                <button type="submit" class="w-full text-white bg-teal-700 hover:bg-teal-800 rounded-lg text-sm px-5 py-2.5 text-center">Sign up</button>
+                <button type="submit" class="auth-submit">Sign up</button>
             </form>
         </div>
       </div>
