@@ -8,7 +8,7 @@
             <form class="auth-form" [formGroup]="signupForm" (ngSubmit)="handleSignup()">
                 <div>
                     <label for="user" class="auth-label">Email</label>
-                    <input type="text" formControlName="user" id="user" class="auth-input" placeholder="Your username" required="">
+                    <input type="text" formControlName="user" id="user" class="auth-input" placeholder="example@domain.com" required="">
                     @if(submitted && signupForm.controls.user.errors){
                       @if(signupForm.controls.user.errors['required']){
                         <p class="form-error">Email is required.</p>
