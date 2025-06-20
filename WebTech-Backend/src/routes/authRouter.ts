@@ -4,7 +4,7 @@ import { usrValidator, pwdValidator, validateRequest } from '../middleware/valid
 
 export const authRouter = express.Router();
 
-authRouter.use([usrValidator, pwdValidator, validateRequest]);
+authRouter.use([usrValidator(), pwdValidator(), validateRequest]);
 
 /**
  * @swagger

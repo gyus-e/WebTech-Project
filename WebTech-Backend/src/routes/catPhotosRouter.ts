@@ -53,7 +53,7 @@ export const catPhotosRouter = express.Router({ mergeParams: true });
  */
 catPhotosRouter.route(`/`)
     .get(getPhotos)
-    .post([enforceAuthentication, checkCatOwnership, uploadSinglePhoto, photoTitleValidator, photoDescriptionValidator, photoGeolocalizationValidator, validateRequest], postPhotos);
+    .post([enforceAuthentication, checkCatOwnership, uploadSinglePhoto, photoTitleValidator(), photoDescriptionValidator(), photoGeolocalizationValidator(), validateRequest], postPhotos);
 
 
 /**
@@ -82,6 +82,6 @@ catPhotosRouter.route(`/`)
  *       responses:
  */
 catPhotosRouter.route(`/:photo_id`)
-    .all(photoIdValidator)
+    .all(photoIdValidator())
     .get(getPhotoById)
     .delete([enforceAuthentication, checkPhotoOwnership, validateRequest], deletePhotoById);

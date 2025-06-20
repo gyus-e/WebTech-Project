@@ -9,12 +9,12 @@ export const catsRouter = express.Router();
 
 catsRouter.route(`/`)
     .get(getCats)
-    .post([enforceAuthentication, catNameValidator, validateRequest], postCats);
+    .post([enforceAuthentication, catNameValidator(), validateRequest], postCats);
 
 catsRouter.route(`/:cat_id`)
-    .all(catIdValidator)
+    .all(catIdValidator())
     .get([validateRequest], getCatById)
-    .put([enforceAuthentication, checkCatOwnership, catNameValidator, validateRequest], putCatById)
+    .put([enforceAuthentication, checkCatOwnership, catNameValidator(), validateRequest], putCatById)
     .delete([enforceAuthentication, checkCatOwnership, validateRequest], deleteCatById)
 
-catsRouter.use(`/:cat_id/photos`, [catIdValidator], catPhotosRouter);
+catsRouter.use(`/:cat_id/photos`, [catIdValidator()], catPhotosRouter);
