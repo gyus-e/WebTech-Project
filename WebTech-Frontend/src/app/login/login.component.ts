@@ -17,7 +17,7 @@ export class LoginComponent {
   authService = inject(AuthService);
   submitted = false;
   loginForm = new FormGroup({
-    user: new FormControl('', [Validators.required]),
+    user: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [
       Validators.required,
       Validators.minLength(8),
@@ -27,13 +27,11 @@ export class LoginComponent {
 
 
   handleLogin() {
-    console.log("handleLogin called");
     this.submitted = true;
     if(this.loginForm.invalid){
       // this.toastr.error("The data you provided is invalid!", "Error: invalid form data");
       return;
     }
-    console.log("Form is valid");
     this.restService.login({
       usr: this.loginForm.value.user as string,
       pwd: this.loginForm.value.password as string,

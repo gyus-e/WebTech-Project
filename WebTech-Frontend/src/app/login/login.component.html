@@ -7,11 +7,14 @@
             </h1>
             <form class="space-y-4 md:space-y-6" [formGroup]="loginForm" (ngSubmit)="handleLogin()">
                 <div>
-                    <label for="user" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your username</label>
+                    <label for="user" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
                     <input type="text" formControlName="user" id="user" class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5" placeholder="Your username" required="">
                     @if(submitted && loginForm.controls.user.errors){
                       @if(loginForm.controls.user.errors['required']){
-                        <p class="form-error">Username is required.</p>
+                        <p class="form-error">Email is required.</p>
+                      }
+                      @if(loginForm.controls.user.errors['email']){
+                        <p class="form-error">Please enter a valid email address.</p>
                       }
                     }
                   </div>
