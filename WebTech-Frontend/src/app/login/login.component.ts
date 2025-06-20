@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../_services/auth/auth.service';
 import { RestBackendAuthService } from '../_services/rest-backend/rest-backend-auth.service';
 
@@ -13,6 +14,7 @@ import { RestBackendAuthService } from '../_services/rest-backend/rest-backend-a
 })
 export class LoginComponent {
   router = inject(Router);
+  toastr = inject(ToastrService);
   restService = inject(RestBackendAuthService);
   authService = inject(AuthService);
   submitted = false;
@@ -29,7 +31,7 @@ export class LoginComponent {
   handleLogin() {
     this.submitted = true;
     if(this.loginForm.invalid){
-      // this.toastr.error("The data you provided is invalid!", "Error: invalid form data");
+      this.toastr.error("The data you provided is invalid!", "Error: invalid form data");
       return;
     }
     this.restService.login({
@@ -38,12 +40,12 @@ export class LoginComponent {
     }).subscribe({
       next: (token) => {
         this.authService.updateToken(token).then( ()=> {
-          // this.toastr.success(`You can now upload cat photos!`, `Welcome ${this.loginForm.value.user}!`);
+          this.toastr.success(`Welcome ${this.loginForm.value.user}!`, `Login successful!`);
           setTimeout(() => {this.router.navigateByUrl("/")}, 10);
         });
       },
       error: (err) => {
-        // this.toastr.error(err.error, "Error: login failed");
+        this.toastr.error(err.error, "Error: login failed");
       },
       complete: () => {
         
