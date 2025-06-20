@@ -1,0 +1,19 @@
+@use 'tailwindcss';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+section {
+    @apply flex items-center justify-center m-4 text-white;
+
+    div { 
+        h1.title {
+            @apply text-4xl font-bold text-center my-4;
+        }
+    
+        p.subtitle {
+            @apply max-w-md mx-auto text-center font-medium text-lg text-gray-50;
+        }
+    }
+}

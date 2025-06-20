@@ -1,14 +1,14 @@
-<section class="flex items-center justify-center m-4 text-white">
+<section>
   <div>
-    <h1 class="text-4xl font-bold text-center my-4">WebTech Streetcats</h1>
+    <h1 class="title">WebTech Streetcats</h1>
     @if(! this.authService.isUserAuthenticated()){
-      <p class="max-w-md mx-auto text-center font-medium text-lg text-gray-50">
-          Welcome to Streetcats!
-      </p>
+    <p class="subtitle">
+      Welcome to Streetcats!
+    </p>
     } @else {
-      <p class="max-w-md mx-auto text-center font-medium text-lg text-gray-50">
-        Welcome, {{authService.getUser()}}!
-      </p>
+    <p class="subtitle">
+      Welcome, {{authService.getUser()}}!
+    </p>
     }
-  </div>  
+  </div>
 </section>
