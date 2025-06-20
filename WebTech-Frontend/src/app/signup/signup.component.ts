@@ -1,13 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { RestBackendAuthService } from '../_services/rest-backend/rest-backend-auth.service';
 import { AuthService } from '../_services/auth/auth.service';
 
 @Component({
   selector: 'app-signup',
-  imports: [RouterLink, ReactiveFormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './signup.component.html',
   styleUrl: './signup.component.scss'
 })
