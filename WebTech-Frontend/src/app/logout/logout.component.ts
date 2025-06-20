@@ -18,7 +18,7 @@ export class LogoutComponent {
     if (this.authService.isAuthenticated()) {
       this.authService.logout();
     } else {    
-      this.toastr.warning("You are not logged in. You shouldn't even be able to see this page!", "Warning: not logged in");
+      this.toastr.warning("Stop messing with the URL!", "Warning: not logged in");
     }
     this.router.navigateByUrl('/');;
   }

@@ -1,0 +1,14 @@
+@use 'tailwindcss';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.navbar-button{
+  @apply block py-2 px-3 rounded text-white hover:bg-gray-700
+
+}
+
+.navbar-button.active {
+  @apply block py-2 px-3 rounded text-white bg-teal-700 hover:bg-teal-800;
+}
