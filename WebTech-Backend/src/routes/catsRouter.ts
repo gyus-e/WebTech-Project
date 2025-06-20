@@ -3,16 +3,18 @@ import { getCats, postCats, getCatById, putCatById, deleteCatById } from '../con
 import { catPhotosRouter } from './catPhotosRouter.js';
 import { enforceAuthentication } from '../middleware/enforceAuthentication.js';
 import { checkCatOwnership } from '../middleware/checkOwnership.js';
+import { catNameValidator, catIdValidator, validateRequest } from '../middleware/validators.js';
 
 export const catsRouter = express.Router();
 
 catsRouter.route(`/`)
     .get(getCats)
-    .post([enforceAuthentication], postCats);
+    .post([enforceAuthentication, catNameValidator, validateRequest], postCats);
 
 catsRouter.route(`/:cat_id`)
-    .get(getCatById)
-    .put([enforceAuthentication, checkCatOwnership], putCatById)
-    .delete([enforceAuthentication, checkCatOwnership], deleteCatById);
+    .all(catIdValidator)
+    .get([validateRequest], getCatById)
+    .put([enforceAuthentication, checkCatOwnership, catNameValidator, validateRequest], putCatById)
+    .delete([enforceAuthentication, checkCatOwnership, validateRequest], deleteCatById)
 
-catsRouter.use(`/:cat_id/photos`, catPhotosRouter);
+catsRouter.use(`/:cat_id/photos`, [catIdValidator], catPhotosRouter);

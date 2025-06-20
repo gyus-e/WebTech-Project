@@ -1,7 +1,10 @@
 import express from 'express';
 import { postLogin, postSignup } from '../controllers/authController.js';
+import { usrValidator, pwdValidator, validateRequest } from '../middleware/validators.js';
 
 export const authRouter = express.Router();
+
+authRouter.use([usrValidator, pwdValidator, validateRequest]);
 
 /**
  * @swagger
