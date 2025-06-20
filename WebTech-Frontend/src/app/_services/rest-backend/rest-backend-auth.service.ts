@@ -9,7 +9,7 @@ import { AuthRequest } from './auth-request.type';
 export class RestBackendAuthService {
   url = REST_BACKEND_URL + '/auth';
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   httpOptions = {
     headers: new HttpHeaders({
