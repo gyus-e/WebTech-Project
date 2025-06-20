@@ -43,7 +43,7 @@ export class SignupComponent {
         });
       },
       error: (err) => {
-        this.toastr.error(err.error, "Error: signup failed");
+        this.toastr.error("There was an error", "Error: signup failed");
       },
       complete: () => {
 

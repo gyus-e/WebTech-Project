@@ -45,7 +45,7 @@ export class LoginComponent {
         });
       },
       error: (err) => {
-        this.toastr.error(err.error, "Error: login failed");
+        this.toastr.error("Incorrect email or password", "Error: login failed");
       },
       complete: () => {
         
