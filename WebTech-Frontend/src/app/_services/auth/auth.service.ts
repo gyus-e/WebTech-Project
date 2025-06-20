@@ -30,6 +30,15 @@ export class AuthService {
     });
   }
 
+  
+  logout() {
+    this.authState.set({
+      user: null,
+      token: null,
+      isAuthenticated: false
+    });
+  }
+
 
   updateLocalStorage(dataNameInLocalStorage: string, dataFromAuthState: string | null) {
     if (dataFromAuthState !== null && dataFromAuthState !== undefined) {
