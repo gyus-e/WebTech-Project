@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { AuthService } from '../_services/auth/auth.service';
+import { AuthService } from '../../_services/auth/auth.service';
 
 @Component({
   selector: 'app-logout',

@@ -3,17 +3,17 @@
     <div class="second">
         <div class="third">
             <h1 class="auth-title">
-                Sign in to your account
+                {{ title }}
             </h1>
-            <form class="auth-form" [formGroup]="loginForm" (ngSubmit)="handleLogin()">
+            <form class="auth-form" [formGroup]="authForm" (ngSubmit)="handleAuth()">
                 <div>
                     <label for="user" class="auth-label">Email</label>
                     <input type="text" formControlName="user" id="user" class="auth-input" placeholder="example@domain.com" required="">
-                    @if(submitted && loginForm.controls.user.errors){
-                      @if(loginForm.controls.user.errors['required']){
+                    @if(submitted && authForm.controls.user.errors){
+                      @if(authForm.controls.user.errors['required']){
                         <p class="form-error">Email is required.</p>
                       }
-                      @if(loginForm.controls.user.errors['email']){
+                      @if(authForm.controls.user.errors['email']){
                         <p class="form-error">Please enter a valid email address.</p>
                       }
                     }
@@ -21,19 +21,16 @@
                   <div>
                     <label for="pass" class="auth-label">Password</label>
                     <input type="password" formControlName="password" id="pass" placeholder="••••••••" class="auth-input" required="">
-                    @if(submitted && loginForm.controls.password.errors){
-                      @if(loginForm.controls.password.errors['required']){
+                    @if(submitted && authForm.controls.password.errors){
+                      @if(authForm.controls.password.errors['required']){
                         <p class="form-error">Password is required.</p>
                       }
-                      @if(loginForm.controls.password.errors['minlength']){
+                      @if(authForm.controls.password.errors['minlength']){
                         <p class="form-error">Password should contain at least 8 characters</p>
                       }
                     }
                   </div>
-                <button type="submit" class="auth-submit">Sign in</button>
-                <p class="signup-link">
-                    Don't have an account yet? <a routerLink="/signup" class="link">Sign up</a>
-                </p>
+                <button type="submit" class="auth-submit">{{ buttonText }}</button>
             </form>
         </div>
       </div>
