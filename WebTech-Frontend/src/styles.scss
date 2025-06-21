@@ -6,6 +6,10 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  @apply bg-gray-900;
+}
+
 .toast-success {
   background-color: #0fc396;
 }
