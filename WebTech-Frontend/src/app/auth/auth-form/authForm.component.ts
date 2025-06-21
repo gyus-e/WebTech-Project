@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 
 
 export type authFormData = { user: string, password: string };
-type authRestServiceFun = (req: AuthRequest) => Observable<string>;
+type restServiceAuthFun = (req: AuthRequest) => Observable<string>;
 
 @Component({
   selector: 'app-auth-form',
@@ -19,8 +19,8 @@ type authRestServiceFun = (req: AuthRequest) => Observable<string>;
 })
 export class AuthFormComponent {
   @Input() title: string = '';
-  @Input() buttonText: string = '';
-  @Input() authRestServiceFun: authRestServiceFun | null = null;
+  @Input() button_text: string = '';
+  @Input() restservice_auth_fun: restServiceAuthFun | null = null;
 
   toastr = inject(ToastrService);
   router = inject(Router);
@@ -39,7 +39,7 @@ export class AuthFormComponent {
 
 
   handleAuth() {
-    if (!this.authRestServiceFun) {
+    if (!this.restservice_auth_fun) {
       throw new Error ("No authentication function provided!");
     }
 
@@ -50,7 +50,7 @@ export class AuthFormComponent {
       return;
     }
 
-    this.authRestServiceFun({
+    this.restservice_auth_fun({
       usr: this.authForm.value.user!,
       pwd: this.authForm.value.password!,
     }).subscribe({
