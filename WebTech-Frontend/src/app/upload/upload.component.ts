@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { MapComponent } from '../map/map.component';
 
 @Component({
   selector: 'app-upload',
-  imports: [],
+  imports: [MapComponent],
   templateUrl: './upload.component.html',
   styleUrl: './upload.component.scss'
 })

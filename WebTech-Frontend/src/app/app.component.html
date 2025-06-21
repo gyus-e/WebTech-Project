@@ -1,14 +1,8 @@
 <!DOCTYPE html>
 <div class="app">
-  <app-navbar class="navbar"/>
+  <app-navbar/>
   <main class="main">
     <router-outlet></router-outlet>
   </main>
-  <!-- <footer>
-    @if(this.authService.isUserAuthenticated()){
-    <p>
-      Logged in as {{authService.getUser()}}
-    </p>
-    }
-  </footer> -->
+  <app-footer/>
 </div>

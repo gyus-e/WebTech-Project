@@ -7,15 +7,7 @@
 div.app {
     @apply flex flex-col bg-gray-900;
 
-    .navbar {
-        @apply sticky top-0;
-    }
-
     main.main {
         @apply container mx-auto flex-grow pt-20;
     }
-
-    // footer {
-    //     @apply absolute bottom-0 right-0 bg-gray-900 text-white;
-    // }
 }
