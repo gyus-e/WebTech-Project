@@ -11,6 +11,9 @@
         },
         "@schematics/angular:service": {
           "path": "src/app/_services"
+        },
+        "@schematics/angular:guard": {
+          "path": "src/app/_guards"
         }
       },
       "root": "",
@@ -32,6 +35,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/leaflet/dist/images",
+                "output": "assets/"
               },
               "src/assets"
             ],
@@ -93,6 +101,11 @@
               {
                 "glob": "**/*",
                 "input": "public"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/leaflet/dist/images",
+                "output": "assets/"
               },
               "src/assets"
             ],
