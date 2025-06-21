@@ -2,7 +2,6 @@ import { Component, Input, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../_services/auth/auth.service';
-import { RestBackendAuthService } from '../../_services/rest-backend/rest-backend-auth.service';
 import { AuthRequest } from '../../_services/rest-backend/auth-request.type';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
@@ -24,7 +23,6 @@ export class AuthFormComponent {
 
   toastr = inject(ToastrService);
   router = inject(Router);
-  restService = inject(RestBackendAuthService);
   authService = inject(AuthService);
 
   submitted: boolean = false;
