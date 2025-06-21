@@ -53,7 +53,7 @@ export const catPhotosRouter = express.Router({ mergeParams: true });
  */
 catPhotosRouter.route(`/`)
     .get(getPhotos)
-    .post([enforceAuthentication, photoTitleValidator(), photoDescriptionValidator(), photoGeolocalizationValidator(), validateRequest, uploadSinglePhoto, reqHasFile], postPhotos);
+    .post([enforceAuthentication, uploadSinglePhoto, reqHasFile, photoTitleValidator(), photoDescriptionValidator(), photoGeolocalizationValidator(), validateRequest], postPhotos);
 
 
 /**
