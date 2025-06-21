@@ -14,7 +14,7 @@
         <li>
           <a (click)="handleNavigationClick()" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="navbar-button" aria-current="page">Home</a>
         </li>
-        @if(! this.authService.isUserAuthenticated()){
+        @if(! this.authService.isAuthenticated()){
           <li>
             <a (click)="handleNavigationClick()" routerLink="/login" routerLinkActive="active" class="navbar-button">Login</a>
           </li>
