@@ -21,3 +21,11 @@ export function validateRequest(req: express.Request, res: express.Response, nex
     }
     next();
 }
+
+export function reqHasFile(req: express.Request, res: express.Response, next: express.NextFunction) {
+    if (!req.file) {
+        res.status(400).json({ error: 'Photo file is required.' });
+        return;
+    }
+    next();
+}

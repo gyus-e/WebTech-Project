@@ -19,22 +19,21 @@ export async function getPhotos(req: express.Request, res: express.Response) {
 
 export async function postPhotos(req: express.Request, res: express.Response) {
     try {
-        if (!req.file) {
-            res.status(400).json({ error: 'Photo file is required.' });
-            return;
-        }
         const photo = await Photo.create({
             title: req.body.title,
             description: req.body.description,
             geolocalization: req.body.geolocalization,
             uploader: req.username,
             catId: req.params.cat_id,
-            path: req.file.path,
+            path: req.file!.path,
         });
         res.status(201).json(photo);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to create photo.' });
+        if (fs.existsSync(req.file!.path)) {
+            fs.unlinkSync(req.file!.path);
+        }
         console.error(error);
+        res.status(500).json({ error: 'Failed to create photo.' });
     }
 }
 
