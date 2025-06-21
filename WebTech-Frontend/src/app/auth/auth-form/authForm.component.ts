@@ -27,7 +27,10 @@ export class AuthFormComponent {
 
   submitted: boolean = false;
   authForm = new FormGroup({
-    user: new FormControl('', [Validators.required, Validators.email]),
+    user: new FormControl('', [
+      Validators.required, 
+      Validators.email
+    ]),
     password: new FormControl('', [
       Validators.required,
       Validators.minLength(8),
