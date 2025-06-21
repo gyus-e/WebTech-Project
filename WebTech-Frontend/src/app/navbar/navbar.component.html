@@ -21,7 +21,10 @@
           <li>
             <a (click)="handleNavigationClick()" routerLink="/signup" routerLinkActive="active" class="navbar-button">Sign up</a>
           </li>
-        } @else { 
+        } @else {
+          <li>
+            <a (click)="handleNavigationClick()" routerLink="/upload" routerLinkActive="active" class="navbar-button upload-button">Upload</a>
+          </li>
           <li>
             <a (click)="handleNavigationClick()" routerLink="/logout" routerLinkActive="active" class="navbar-button">Logout</a>
           </li>

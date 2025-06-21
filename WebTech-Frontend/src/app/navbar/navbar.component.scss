@@ -37,6 +37,10 @@ ul.buttons-ul {
 
     }
 
+    a.navbar-button.upload-button {
+        @apply text-orange-500 ;
+    }
+
     a.navbar-button.active {
         @apply block py-2 px-3 rounded text-white bg-teal-700 hover:bg-teal-800;
     }
