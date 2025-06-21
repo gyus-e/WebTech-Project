@@ -8,7 +8,7 @@ export const catNameValidator = () => body('name').trim().notEmpty().escape();
 
 export const photoTitleValidator = () => body('title').trim().notEmpty().escape();
 export const photoDescriptionValidator = () => body('description').trim().optional().escape();
-export const photoGeolocalizationValidator = () => body('geolocalization').trim().optional().isLatLong().escape();
+export const photoGeolocalizationValidator = () => body('geolocalization').trim().notEmpty().escape(); //TODO: isLatLong
 
 export const catIdValidator = () => param('cat_id').trim().notEmpty().isInt().escape();
 export const photoIdValidator = () => param('photo_id').trim().notEmpty().isInt().escape();

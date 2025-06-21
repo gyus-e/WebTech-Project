@@ -7,8 +7,8 @@ export class Photo extends Model {
     public uploader!: string;
     public catId!: number;
     public title!: string;
-    public description!: string | null;
     public geolocalization!: { type: string; coordinates: number[] } | null;
+    public description!: string | null;
 };
 
 export async function initializePhotoModel() {
@@ -17,13 +17,13 @@ export async function initializePhotoModel() {
     Photo.init(
         {
             id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-            path: { type: DataTypes.TEXT, allowNull: true, unique: true },
+            path: { type: DataTypes.TEXT, allowNull: false, unique: true },
             uploader: { type: DataTypes.TEXT, allowNull: false },
             catId: { type: DataTypes.INTEGER, allowNull: false, },
-            title: { type: DataTypes.TEXT, allowNull: true },
-            description: { type: DataTypes.TEXT("long"), allowNull: true },
+            title: { type: DataTypes.TEXT, allowNull: false },
             geolocalization: { type: DataTypes.GEOMETRY("POINT"), allowNull: true },
             date: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
+            description: { type: DataTypes.TEXT("long"), allowNull: true },
         },
         {
             sequelize: database,
