@@ -30,3 +30,7 @@ a.link {
 .form-error{
   @apply text-red-400 text-sm pt-2;
 }
+
+img.yamamaya {
+    @apply w-full h-auto rounded-lg shadow-lg;
+}

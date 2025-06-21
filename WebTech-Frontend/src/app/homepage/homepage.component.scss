@@ -7,18 +7,18 @@
 section {
     @apply flex items-center justify-center m-4 text-white;
 
-    div { 
+    div.hero { 
         @apply flex flex-col items-center justify-center;
         h1.title {
             @apply text-4xl font-bold text-center my-4;
         }
     
-        p.subtitle {
+        .subtitle {
             @apply max-w-md mx-auto text-center font-medium text-lg text-gray-50;
         }
-    }
-}
 
-img {
-    @apply w-full h-auto rounded-lg shadow-lg;
+        div.map-container {
+            @apply w-[80vh] max-w-5xl h-[60vh] top-[10vh] relative;
+        }
+    }
 }

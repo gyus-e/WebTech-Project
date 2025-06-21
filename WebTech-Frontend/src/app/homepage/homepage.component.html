@@ -1,14 +1,11 @@
 <section>
-  <div>
-    <h1 class="title">Welcome to WebTech Streetcats</h1>
-    <img src="assets/yamamaya.jpg" alt="yamamaya!"/>
-    @if(! this.authService.isUserAuthenticated()){
-    <p class="subtitle">
-    </p>
-    } @else {
-    <p class="subtitle">
-      Welcome, {{authService.getUser()}}!
-    </p>
-    }
+  <div class="hero">
+    <h1 class="title">WebTech Streetcats</h1>
+    <h2 class="subtitle">
+      Find cats in your area!
+    </h2>
+    <div class="map-container">
+      <app-map></app-map>
+    </div>
   </div>
 </section>

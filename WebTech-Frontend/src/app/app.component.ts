@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './navbar/navbar.component';
+import { AuthService } from './_services/auth/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -10,4 +11,5 @@ import { NavbarComponent } from './navbar/navbar.component';
 })
 export class AppComponent {
   title = 'WebTech-Frontend';
+  authService = inject(AuthService);
 }
