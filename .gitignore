@@ -4,3 +4,5 @@
 **.sqlite
 **.env
 **/uploads
+**/*.kra
+WebTech-Frontend/public/maya.ico
