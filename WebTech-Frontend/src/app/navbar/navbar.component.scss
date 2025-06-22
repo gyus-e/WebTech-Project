@@ -38,11 +38,11 @@ ul.buttons-ul {
     }
 
     a.navbar-button.upload-button {
-        @apply text-orange-500;
+        @apply text-white;
     }
 
     a.navbar-button.upload-button.active {
-        @apply text-white bg-orange-500 hover:bg-orange-600;
+        @apply text-white bg-gradient-to-r from-orange-500 to-orange-700 hover:bg-orange-600;
     }
 
     a.navbar-button.active {
