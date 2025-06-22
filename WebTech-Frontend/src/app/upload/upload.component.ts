@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MapComponent } from '../map/map.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-upload',
@@ -9,6 +10,9 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
   styleUrl: './upload.component.scss'
 })
 export class UploadComponent {
+  toastr = inject(ToastrService);
+
+
   uploadForm = new FormGroup({
     title: new FormControl('', [
       Validators.required,
@@ -28,7 +32,7 @@ export class UploadComponent {
     if (this.uploadForm.invalid) {
       this.uploadForm.markAllAsTouched();
       console.error('Form is invalid');
-      alert('Please fill out all required fields correctly.');
+      this.toastr.error('Please fill out all required fields correctly.');
       return;
     }
     console.log('Form Submitted', this.uploadForm.value);
