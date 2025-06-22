@@ -12,8 +12,8 @@ import { MapConfig } from '../_config/MapConfig';
 })
 export class MapComponent {
   
-  mapState = inject(MapStateService);
-
+  private readonly mapState = inject(MapStateService);
+  private readonly mapSignal = signal<L.Map | undefined>(undefined);
 
   options = {
     layers: [
@@ -24,9 +24,18 @@ export class MapComponent {
   };
 
 
+  constructor() {
+    effect(() => {
+      const map = this.mapSignal();
+      if (map && this.mapState.posSignal()) {
+        map.setView(this.mapState.center, this.mapState.zoom);
+      }
+    });
+  }
+
+
   onMapReady(map: L.Map) {
-    this.mapState.mapSignal.set(map);
-    map.setView(this.mapState.center, this.mapState.zoom);
+    this.mapSignal.set(map);
 
     map.on('moveend', () => {
       this.mapState.center = map.getCenter();

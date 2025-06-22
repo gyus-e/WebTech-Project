@@ -11,9 +11,7 @@ export class MapStateService {
 
   public center: LatLng = MapConfig.DEFAULT_CENTER;
   public zoom: number = MapConfig.DEFAULT_ZOOM;
-  public readonly mapSignal = signal<L.Map | undefined>(undefined);
-  private readonly posSignal = signal<LatLng | undefined>(undefined);
-  private initialized = false;
+  public posSignal = signal<LatLng | undefined>(undefined);
 
 
   private readonly currentPositionObservable = new Observable<LatLng>((subscriber) => {
@@ -30,15 +28,9 @@ export class MapStateService {
 
   constructor() {
     effect(() => {
-      if (this.initialized) {
-        return;
-      }
       const pos = this.posSignal();
-      const map = this.mapSignal();
-      if (pos && map) {
-        map.setView(pos);
+      if (pos) {
         this.center = pos;
-        this.initialized = true;
       }
     });
 
@@ -46,7 +38,6 @@ export class MapStateService {
       next: (pos) => { this.posSignal.set(pos); },
       error: (error) => { console.error('Error getting current position:', error); }
     });
-
   }
 
 
