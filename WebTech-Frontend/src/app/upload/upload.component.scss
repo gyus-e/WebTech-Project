@@ -40,8 +40,8 @@ form.upload-form {
     @apply bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5;
   }
 
-  input#file.file-input {
-    @apply max-w-[40vh];
+  input.file-input {
+    @apply max-w-[40vh] bg-gray-200 hover:bg-gray-400;
   }
 
   button.upload-submit {
