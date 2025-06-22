@@ -1,11 +1,29 @@
-<section>
-  <div class="hero">
-    <h1 class="title">WebTech Streetcats</h1>
-    <h2 class="subtitle">
-      Select the position of the cat you want to upload!
-    </h2>
-    <div class="map-container">
-      <app-map></app-map>
+<section class="upload-section">
+  <div class="first">
+    <div class="second">
+      <div class="third">
+        <h1 class="upload-title">
+          Upload
+        </h1>
+        <form class="upload-form">
+          <div>
+            <label for="title" class="upload-label">Title</label>
+            <input type="text" id="title" class="title-input" placeholder="Enter the title" required="">
+          </div>
+          <div>
+            <label for="descr" class="upload-label">Description</label>
+            <textarea id="descr" placeholder="Enter the photo description..." class="descr-input"></textarea>
+          </div>
+          <div>
+            <label for="map" class="upload-label">Position</label>
+            <app-map id="map" class="map-component"></app-map>
+          </div>
+          <div>
+            <input type="file" id="file" class="file-input" accept="image/*" required="">
+          </div>
+          <button type="submit" class="upload-submit">Upload</button>
+        </form>
+      </div>
     </div>
   </div>
 </section>

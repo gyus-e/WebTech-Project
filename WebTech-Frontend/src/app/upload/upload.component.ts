@@ -8,5 +8,6 @@ import { MapComponent } from '../map/map.component';
   styleUrl: './upload.component.scss'
 })
 export class UploadComponent {
-
+  onSubmit(): void {}
+  onFileSelected(event: any): void {}
 }

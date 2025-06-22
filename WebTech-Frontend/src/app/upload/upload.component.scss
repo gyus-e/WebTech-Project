@@ -4,21 +4,47 @@
 @tailwind components;
 @tailwind utilities;
 
-section {
-    @apply flex items-center justify-center m-4 z-30  text-white;
 
-    div.hero { 
-        @apply flex flex-col items-center justify-center;
-        h1.title {
-            @apply text-4xl font-bold text-center mb-2;
-        }
+section.upload-section {
+  @apply bg-gray-900 p-10;
+
+  div.first {
+    @apply flex flex-col items-center justify-center px-6 py-8 mx-auto h-full;
     
-        .subtitle {
-            @apply max-w-md mx-auto text-center font-medium text-lg mb-5 text-gray-50;
-        }
+    div.second {
+      @apply w-full bg-gray-800 rounded-lg shadow border md:mt-0  xl:p-0 border-gray-700;
 
-        div.map-container {
-            @apply w-[80vh] max-w-5xl h-[60vh] top-[2vh] relative;
-        }
+      div.third {
+        @apply p-6 space-y-4 md:space-y-6 sm:p-8;
+      }
     }
+  }
+}
+
+h1.upload-title {
+  @apply text-xl font-bold leading-tight tracking-tight text-white md:text-2xl text-center;
+}
+
+form.upload-form {
+  @apply space-y-4 md:space-y-6 grid text-white;
+    
+  label.upload-label {
+    @apply block mb-2 font-bold text-xl;
+  }
+
+  #map.map-component {
+    @apply max-w-2xl h-100 mb-4 rounded-lg border border-gray-700;
+  }
+
+  input, textarea {
+    @apply bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg block w-full p-2.5;
+  }
+
+  input#file.file-input {
+    @apply max-w-[40vh];
+  }
+
+  button.upload-submit {
+    @apply w-full text-white bg-teal-700 hover:bg-teal-800 rounded-lg text-sm px-5 py-2.5 text-center;
+  }
 }
