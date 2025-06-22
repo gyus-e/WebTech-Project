@@ -5,21 +5,21 @@
         <h1 class="upload-title">
           Upload
         </h1>
-        <form class="upload-form">
+        <form class="upload-form" [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
           <div>
             <label for="title" class="upload-label">Title</label>
-            <input type="text" id="title" class="title-input" placeholder="Enter the title" required="">
+            <input type="text" formControlName="title" id="title" class="title-input" placeholder="Enter the title" required="">
           </div>
           <div>
             <label for="descr" class="upload-label">Description</label>
-            <textarea id="descr" placeholder="Enter the photo description..." class="descr-input"></textarea>
+            <textarea formControlName="description" id="descr" class="descr-input" placeholder="Enter the photo description..."></textarea>
           </div>
           <div>
             <label for="map" class="upload-label">Position</label>
             <app-map id="map" class="map-component"></app-map>
           </div>
           <div>
-            <input type="file" id="file" class="file-input" accept="image/*" required="">
+            <input type="file" formControlName="image" id="file" class="file-input" accept="image/*" required="">
           </div>
           <button type="submit" class="upload-submit">Upload</button>
         </form>
