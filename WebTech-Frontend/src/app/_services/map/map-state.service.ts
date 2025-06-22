@@ -1,6 +1,7 @@
 import { effect, Injectable, signal } from '@angular/core';
 import { LatLng, latLng } from 'leaflet';
 import { MapConfig } from '../../_config/MapConfig';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,14 +11,26 @@ export class MapStateService {
 
   public center: LatLng = MapConfig.DEFAULT_CENTER;
   public zoom: number = MapConfig.DEFAULT_ZOOM;
-  public mapSignal = signal<L.Map | undefined>(undefined);
-  private posSignal = signal<LatLng | undefined>(undefined);
+  public readonly mapSignal = signal<L.Map | undefined>(undefined);
+  private readonly posSignal = signal<LatLng | undefined>(undefined);
   private initialized = false;
+
+
+  private readonly currentPositionObservable = new Observable<LatLng>((subscriber) => {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        subscriber.next(latLng(position.coords.latitude, position.coords.longitude));
+      },
+      (error) => {
+        subscriber.error(error);
+      }
+    );
+  });
 
 
   constructor() {
     effect(() => {
-      if (this.initialized){
+      if (this.initialized) {
         return;
       }
       const pos = this.posSignal();
@@ -29,19 +42,11 @@ export class MapStateService {
       }
     });
 
-    this.getCurrentPosition();
-  }
+    this.currentPositionObservable.subscribe({
+      next: (pos) => { this.posSignal.set(pos); },
+      error: (error) => { console.error('Error getting current position:', error); }
+    });
 
-
-  getCurrentPosition(){
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        this.posSignal.set(latLng(position.coords.latitude, position.coords.longitude));
-      },
-      (error) => {
-        console.error('Error getting location:', error);
-      }
-    );
   }
 
 
