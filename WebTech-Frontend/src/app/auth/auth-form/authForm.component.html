@@ -20,7 +20,7 @@
                   </div>
                   <div>
                     <label for="pass" class="auth-label">Password</label>
-                    <input type="password" formControlName="password" id="pass" placeholder="••••••••" class="auth-input" required="">
+                    <input type="password" formControlName="password" id="pass" class="auth-input" placeholder="••••••••" required="">
                     @if(submitted && authForm.controls.password.errors){
                       @if(authForm.controls.password.errors['required']){
                         <p class="form-error">Password is required.</p>
@@ -30,6 +30,15 @@
                       }
                     }
                   </div>
+                  @if(require_password_confirmation){
+                    <div>
+                    <label for="pass_confirm" class="auth-label">Confirm password</label>
+                    <input type="password" formControlName="password_confirmation" id="pass_confirm" class="auth-input" placeholder="••••••••" required="">
+                    @if(authForm.value.password !== authForm.value.password_confirmation){
+                        <p class="form-error">Passwords don't match.</p>
+                    }
+                    </div>
+                  }
                 <button type="submit" class="auth-submit">{{ button_text }}</button>
             </form>
         </div>

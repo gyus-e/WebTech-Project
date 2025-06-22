@@ -19,6 +19,7 @@ type restServiceAuthFun = (req: AuthRequest) => Observable<string>;
 export class AuthFormComponent {
   @Input() title: string = '';
   @Input() button_text: string = '';
+  @Input() require_password_confirmation: boolean = false;
   @Input() restservice_auth_fun: restServiceAuthFun | null = null;
 
   toastr = inject(ToastrService);
@@ -28,25 +29,33 @@ export class AuthFormComponent {
   submitted: boolean = false;
   authForm = new FormGroup({
     user: new FormControl('', [
-      Validators.required, 
+      Validators.required,
       Validators.email
     ]),
     password: new FormControl('', [
       Validators.required,
       Validators.minLength(8),
       Validators.maxLength(32)
-    ])
+    ]),
+    password_confirmation: new FormControl('', [])
   });
 
 
   handleAuth() {
     if (!this.restservice_auth_fun) {
-      throw new Error ("No authentication function provided!");
+      throw new Error("No authentication function provided!");
     }
 
     this.submitted = true;
 
-    if(this.authForm.invalid){
+    if (
+      this.require_password_confirmation && this.authForm.value.password !== this.authForm.value.password_confirmation
+    ) {
+      this.toastr.error("Passwords do not match!", "Error: invalid form data");
+      return;
+    }
+
+    if (this.authForm.invalid) {
       this.toastr.error("The data you provided is invalid!", "Error: invalid form data");
       return;
     }
