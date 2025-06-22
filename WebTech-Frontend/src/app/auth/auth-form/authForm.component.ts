@@ -2,7 +2,7 @@ import { Component, Input, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../../_services/auth/auth.service';
-import { AuthRequest } from '../../_services/rest-backend/auth-request.type';
+import { AuthRequest } from '../../_types/auth-request.type';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 

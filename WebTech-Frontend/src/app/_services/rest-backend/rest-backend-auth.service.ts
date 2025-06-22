@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { REST_BACKEND_URL } from './rest-backend-url';
+import { REST_BACKEND_URL } from '../../_config/rest-backend-url';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AuthRequest } from './auth-request.type';
+import { AuthRequest } from '../../_types/auth-request.type';
 
 @Injectable({
   providedIn: 'root'

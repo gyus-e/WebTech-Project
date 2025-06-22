@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MapProviderService } from './map-provider.service';
+import { MapStateService } from './map-state.service';
 
-describe('MapProviderService', () => {
-  let service: MapProviderService;
+describe('MapStateService', () => {
+  let service: MapStateService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(MapProviderService);
+    service = TestBed.inject(MapStateService);
   });
 
   it('should be created', () => {

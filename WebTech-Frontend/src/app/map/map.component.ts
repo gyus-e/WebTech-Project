@@ -1,40 +1,38 @@
-import { Component } from '@angular/core';
+import { Component, inject, effect, signal, computed } from '@angular/core';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
-import { latLng, tileLayer, icon, Icon } from 'leaflet';
-import { MapProviderService } from '../_services/map-provider/map-provider.service';
+import { tileLayer } from 'leaflet';
+import { MapStateService } from '../_services/map/map-state.service';
+import { MapConfig } from '../_config/MapConfig';
 
 @Component({
   selector: 'app-map',
   imports: [LeafletModule],
   templateUrl: './map.component.html',
-  styleUrl: './map.component.scss'
+  styleUrl: './map.component.scss',
 })
 export class MapComponent {
-  static readonly DEFAULT_CENTER = latLng(40.8343, 14.1810);
-  static readonly MARKER_ICON = icon({
-    ...Icon.Default.prototype.options,
-    iconUrl: 'assets/marker-icon.png',
-    iconRetinaUrl: 'assets/marker-icon-2x.png',
-    shadowUrl: 'assets/marker-shadow.png'
-  })
+  
+  mapState = inject(MapStateService);
+
 
   options = {
     layers: [
-      tileLayer(MapProviderService.PROVIDER_URL, { maxZoom: 18, attribution: MapProviderService.PROVIDER_ATTRIBUTION })
+      tileLayer(MapConfig.PROVIDER_URL, { maxZoom: MapConfig.MAX_ZOOM, attribution: MapConfig.PROVIDER_ATTRIBUTION }),
     ],
-    zoom: 13,
-    center: MapComponent.DEFAULT_CENTER
+    center: MapConfig.DEFAULT_CENTER,
+    zoom: MapConfig.DEFAULT_ZOOM,
   };
 
-  ngOnInit() {
-    navigator.geolocation?.getCurrentPosition(
-      (position) => {
-        return latLng(position.coords.latitude, position.coords.longitude);
-      },
-      (error) => {
-        console.error('Geolocation error:', error);
-        return MapComponent.DEFAULT_CENTER;
-      });
 
+  onMapReady(map: L.Map) {
+    this.mapState.mapSignal.set(map);
+    map.setView(this.mapState.center, this.mapState.zoom);
+
+    map.on('moveend', () => {
+      this.mapState.center = map.getCenter();
+      this.mapState.zoom = map.getZoom();
+    });
   }
+
+
 }
