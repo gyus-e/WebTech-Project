@@ -44,4 +44,9 @@ export class MapComponent {
   }
 
 
+  resetPosition(){
+    this.mapSignal()?.setView(this.mapState.posSignal() ?? MapConfig.DEFAULT_CENTER, MapConfig.DEFAULT_ZOOM);
+  }
+
+
 }
