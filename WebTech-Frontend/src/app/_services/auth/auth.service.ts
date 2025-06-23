@@ -13,7 +13,7 @@ export class AuthService {
     token: this.getToken(),
     isAuthenticated: this.isUserAuthenticated(),
   });
-
+  
 
   user = computed(() => this.authState().user);
   token = computed(() => this.authState().token);
@@ -41,7 +41,7 @@ export class AuthService {
 
 
   updateLocalStorage(dataNameInLocalStorage: string, dataFromAuthState: string | null) {
-    if (dataFromAuthState !== null && dataFromAuthState !== undefined) {
+    if (dataFromAuthState) {
       localStorage.setItem(dataNameInLocalStorage, dataFromAuthState);
     } else {
       localStorage.removeItem(dataNameInLocalStorage);
