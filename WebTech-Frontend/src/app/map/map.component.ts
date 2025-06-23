@@ -1,8 +1,9 @@
-import { Component, inject, effect, signal } from '@angular/core';
+import { Component, inject, effect, signal, Input } from '@angular/core';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
-import { tileLayer } from 'leaflet';
+import { marker, tileLayer } from 'leaflet';
 import { MapStateService } from '../_services/map/map-state.service';
 import { MapConfig } from '../_config/MapConfig';
+
 
 @Component({
   selector: 'app-map',
@@ -12,8 +13,12 @@ import { MapConfig } from '../_config/MapConfig';
 })
 export class MapComponent {
   
+
+  @Input() showCatMarkers: boolean = true;
+  
   private readonly mapState = inject(MapStateService);
   private readonly mapSignal = signal<L.Map | undefined>(undefined);
+
 
   options = {
     layers: [
@@ -22,6 +27,12 @@ export class MapComponent {
     center: MapConfig.DEFAULT_CENTER,
     zoom: MapConfig.DEFAULT_ZOOM,
   };
+
+
+  layers = [
+    marker(this.mapState.posSignal() ?? MapConfig.DEFAULT_CENTER, {icon: MapConfig.MARKER_ICON}),
+    //TODO: fetch all photos from database and set a marker for each photo's geolocation
+  ];
 
 
   constructor() {

@@ -16,7 +16,11 @@
           </div>
           <div>
             <label for="map" class="upload-label">Position</label>
-            <app-map id="map" class="map-component"></app-map>
+            <app-map 
+              id="map" 
+              class="map-component"
+              [showCatMarkers]="false">
+            </app-map>
           </div>
           <div>
             <input type="file" formControlName="image" id="file" class="file-input" accept="image/*" required="">
