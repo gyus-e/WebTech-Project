@@ -21,6 +21,14 @@ div.top-container {
 
     button {
         @apply inline-flex items-center p-1 w-7 h-7 justify-center text-sm text-gray-400 rounded-lg md:hidden hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 mx-2;
+    
+        span {
+            @apply sr-only;
+        }
+
+        svg {
+            @apply w-5 h-5;
+        }
     }
 
     div#navbar-default {

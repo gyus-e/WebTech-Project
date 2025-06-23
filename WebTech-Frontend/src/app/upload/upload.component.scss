@@ -1,34 +1,64 @@
-@use 'tailwindcss';
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@use '../../styles' as *;
 
 section.upload-section {
-    @apply flex flex-col items-center justify-center;
+    @include flexColumn();
 
     h1.upload-title {
-        @apply text-white text-4xl font-bold mb-10;
+        @include formTitle();
     }
 
     form.upload-form {
-        @apply flex-grow p-4 bg-gray-800 border border-gray-700 rounded-b-lg w-full max-w-200 mb-10;
-        @apply flex flex-col items-stretch;
+        flex-grow: 1;
+        padding: 1rem;
+        background-color: $form-bg-color;
+        border: 1px solid;
+        border-radius: 0.5rem;
+        width: 100%;
+        max-width: 50rem;
+        margin-bottom: 2.5rem;
+
+        @include flexColumn(stretch);
 
         div {
-            @apply flex flex-col items-stretch justify-center mb-4;
+            @include flexColumn(stretch);
+            margin-bottom: 1rem;
 
             label.upload-label {
-                @apply text-lg font-semibold text-gray-300;
+                font-size: 1.5rem;
+                font-weight: $semibold;
+                color: whitesmoke;
             }
 
-            input.title-input, textarea.descr-input {
-                @apply w-full bg-gray-200 border border-gray-300 rounded-b-lg text-gray-900 w-full;
+            input.title-input, textarea.descr-input, input.file-input {
+                width: 100%;
+                background-color: whitesmoke;
+                border: 2px solid darkgray;
+                border-radius: 0.5rem;
+                color: black;
+            }
+
+            input.file-input {
+                max-width: 300px;
+                max-height: 40px;
+                padding: 0.5rem;
+                
+                &:hover {
+                    background-color: darkgray;
+                }
             }
         }
 
         button.upload-submit {
-            @apply  mt-5 text-white font-bold bg-teal-700 hover:bg-teal-800 p-2 rounded-md;
+            margin-top: 1.25rem;
+            color: white;
+            font-weight: bold;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            background-color: teal;
+            
+            &:hover {
+                background-color: #115e59;
+            }
         }
     }
 

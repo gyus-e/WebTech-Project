@@ -1,8 +1,7 @@
+@use '../../styles' as *;
+
 div.map-container{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    @include flexColumn();
 
     .leaflet {
         flex-grow: 1;
@@ -21,7 +20,6 @@ div.map-container{
         border: 1px solid;
         color: white;
         background-color: transparent;
-        // transition: background-color 0.2s ease;
 
         &:hover {
             background-color: darkgrey;

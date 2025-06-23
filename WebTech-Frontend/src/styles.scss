@@ -2,6 +2,19 @@
 @use 'tailwindcss';
 @use 'ngx-toastr/toastr';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+$form-bg-color: #2d3748;
+$semibold: 600;
+
+@mixin flexColumn($align: center, $justify: center) {
+    display: flex;
+    flex-direction: column;
+    align-items: $align;
+    justify-content: $justify;
+}
+
+@mixin formTitle(){
+    color: white;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 2.5rem;
+}
