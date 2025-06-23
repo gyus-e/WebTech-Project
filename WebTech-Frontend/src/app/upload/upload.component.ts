@@ -14,6 +14,9 @@ export class UploadComponent {
 
 
   uploadForm = new FormGroup({
+    cat: new FormControl('', [
+      Validators.required,
+    ]),
     title: new FormControl('', [
       Validators.required,
     ]),

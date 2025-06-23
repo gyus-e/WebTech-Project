@@ -5,11 +5,15 @@
   </h1>
   
   <form class="upload-form" [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
+
+    <div>
+      <label for="cat" class="upload-label">Cat name</label>
+      <input type="text" formControlName="cat" id="cat" class="cat-input" placeholder="Enter cat name" required="">
+    </div>
   
     <div>
       <label for="title" class="upload-label">Title</label>
-      <input type="text" formControlName="title" id="title" class="title-input" placeholder="Enter title"
-        required="">
+      <input type="text" formControlName="title" id="title" class="title-input" placeholder="Enter title" required="">
     </div>
   
     <div>
