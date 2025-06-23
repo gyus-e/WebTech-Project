@@ -1,4 +1,4 @@
-import { Component, inject, effect, signal, computed } from '@angular/core';
+import { Component, inject, effect, signal } from '@angular/core';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import { tileLayer } from 'leaflet';
 import { MapStateService } from '../_services/map/map-state.service';
@@ -27,7 +27,8 @@ export class MapComponent {
   constructor() {
     effect(() => {
       const map = this.mapSignal();
-      if (map && this.mapState.posSignal()) {
+      const pos = this.mapState.posSignal();
+      if (map && pos) {
         map.setView(this.mapState.center, this.mapState.zoom);
       }
     });
