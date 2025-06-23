@@ -5,32 +5,3 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-html {
-  @apply bg-gray-900;
-}
-
-.toast-success {
-  background-color: #0fc396;
-}
-.toast-error {
-  background-color: #BD362F;
-}
-.toast-info {
-  background-color: #2F96B4;
-}
-.toast-warning {
-  background-color: #F89406;
-}
-
-a.link {
-  @apply underline text-teal-400 hover:text-teal-700 visited:text-blue-400 visited:hover:text-blue-700;
-}
-
-.form-error{
-  @apply text-red-400 text-sm pt-2;
-}
-
-img.yamamaya {
-    @apply w-full h-auto rounded-lg shadow-lg;
-}

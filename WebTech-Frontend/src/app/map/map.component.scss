@@ -1,3 +1,17 @@
-div.leaflet {
-    @apply h-[70vh] bottom-[2vh];
+@use 'tailwindcss';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+div.map-container{
+    @apply flex flex-col items-center justify-center;
+
+    .leaflet {
+        @apply flex-grow w-full max-w-200 h-auto min-h-100 rounded-lg p-4 mb-2;
+    }
+
+    button {
+        @apply rounded-md p-2 border text-white bg-transparent hover:bg-gray-600;
+    }
 }

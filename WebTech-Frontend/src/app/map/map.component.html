@@ -1,7 +1,9 @@
-<div  class="leaflet"  leaflet [leafletOptions]="options" (leafletMapReady)="onMapReady($event)">
-    @if (showCatMarkers){
-        <div [leafletLayers]="layers"></div>
-    }
-</div>
+<div class="map-container">
+    <div  class="leaflet"  leaflet [leafletOptions]="options" (leafletMapReady)="onMapReady($event)">
+        @if (showCatMarkers){
+            <div [leafletLayers]="layers"></div>
+        }
+    </div>
 
-<button (click)="resetPosition()">Reset position</button>
+    <button (click)="resetPosition()">Reset position</button>
+</div>

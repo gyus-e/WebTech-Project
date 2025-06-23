@@ -1,33 +1,33 @@
 <section class="upload-section">
-  <div class="first">
-    <div class="second">
-      <div class="third">
-        <h1 class="upload-title">
-          Upload
-        </h1>
-        <form class="upload-form" [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
-          <div>
-            <label for="title" class="upload-label">Title</label>
-            <input type="text" formControlName="title" id="title" class="title-input" placeholder="Enter the title" required="">
-          </div>
-          <div>
-            <label for="descr" class="upload-label">Description</label>
-            <textarea formControlName="description" id="descr" class="descr-input" placeholder="Enter the photo description..."></textarea>
-          </div>
-          <div>
-            <label for="map" class="upload-label">Position</label>
-            <app-map 
-              id="map" 
-              class="map-component"
-              [showCatMarkers]="false">
-            </app-map>
-          </div>
-          <div>
-            <input type="file" formControlName="image" id="file" class="file-input" accept="image/*" required="">
-          </div>
-          <button type="submit" class="upload-submit">Upload</button>
-        </form>
-      </div>
+
+  <h1 class="upload-title">
+    Upload
+  </h1>
+  
+  <form class="upload-form" [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
+  
+    <div>
+      <label for="title" class="upload-label">Title</label>
+      <input type="text" formControlName="title" id="title" class="title-input" placeholder="Enter the title"
+        required="">
     </div>
-  </div>
+  
+    <div>
+      <label for="descr" class="upload-label">Description</label>
+      <textarea formControlName="description" id="descr" class="descr-input"
+        placeholder="Enter the photo description..."></textarea>
+    </div>
+  
+    <div>
+      <label for="map" class="upload-label">Position</label>
+      <app-map id="map" class="map-component" [showCatMarkers]="false">
+      </app-map>
+    </div>
+  
+    <div>
+      <input type="file" formControlName="image" id="file" class="file-input" accept="image/*" required="">
+    </div>
+  
+    <button type="submit" class="upload-submit">Upload</button>
+  </form>
 </section>

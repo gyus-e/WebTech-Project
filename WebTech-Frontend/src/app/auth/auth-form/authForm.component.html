@@ -1,47 +1,55 @@
 <section class="auth-section">
-  <div class="first">
-    <div class="second">
-        <div class="third">
-            <h1 class="auth-title">
-                {{ title }}
-            </h1>
-            <form class="auth-form" [formGroup]="authForm" (ngSubmit)="handleAuth()">
-                <div>
-                    <label for="user" class="auth-label">Email</label>
-                    <input type="text" formControlName="user" id="user" class="auth-input" placeholder="example@domain.com" required="">
-                    @if(submitted && authForm.controls.user.errors){
-                      @if(authForm.controls.user.errors['required']){
-                        <p class="form-error">Email is required.</p>
-                      }
-                      @if(authForm.controls.user.errors['email']){
-                        <p class="form-error">Please enter a valid email address.</p>
-                      }
-                    }
-                  </div>
-                  <div>
-                    <label for="pass" class="auth-label">Password</label>
-                    <input type="password" formControlName="password" id="pass" class="auth-input" placeholder="••••••••" required="">
-                    @if(submitted && authForm.controls.password.errors){
-                      @if(authForm.controls.password.errors['required']){
-                        <p class="form-error">Password is required.</p>
-                      }
-                      @if(authForm.controls.password.errors['minlength']){
-                        <p class="form-error">Password should contain at least 8 characters</p>
-                      }
-                    }
-                  </div>
-                  @if(require_password_confirmation){
-                    <div>
-                    <label for="pass_confirm" class="auth-label">Confirm password</label>
-                    <input type="password" formControlName="password_confirmation" id="pass_confirm" class="auth-input" placeholder="••••••••" required="">
-                    @if(authForm.value.password !== authForm.value.password_confirmation){
-                        <p class="form-error">Passwords don't match.</p>
-                    }
-                    </div>
-                  }
-                <button type="submit" class="auth-submit">{{ button_text }}</button>
-            </form>
-        </div>
+
+  <h1 class="auth-title">
+    {{ title }}
+  </h1>
+
+  <form class="auth-form" [formGroup]="authForm" (ngSubmit)="handleAuth()">
+
+    <div>
+      <label for="user" class="auth-label">Email</label>
+      <input type="text" formControlName="user" id="user" class="auth-input" placeholder="example@domain.com"
+        required="">
+      <div class="auth-error">
+      @if(submitted && authForm.controls.user.errors){
+      @if(authForm.controls.user.errors['required']){
+      <p class="form-error">Email is required.</p>
+      }
+      @if(authForm.controls.user.errors['email']){
+      <p class="form-error">Please enter a valid email address.</p>
+      }
+      }
       </div>
-  </div>
+    </div>
+
+    <div>
+      <label for="pass" class="auth-label">Password</label>
+      <input type="password" formControlName="password" id="pass" class="auth-input" placeholder="••••••••" required="">
+      <div class="auth-error">
+      @if(submitted && authForm.controls.password.errors){
+      @if(authForm.controls.password.errors['required']){
+      <p class="form-error">Password is required.</p>
+      }
+      @if(authForm.controls.password.errors['minlength']){
+      <p class="form-error">Password should contain at least 8 characters</p>
+      }
+      }
+      </div>
+    </div>
+
+    @if(require_password_confirmation){
+    <div>
+      <label for="pass_confirm" class="auth-label">Confirm password</label>
+      <input type="password" formControlName="password_confirmation" id="pass_confirm" class="auth-input"
+        placeholder="••••••••" required="">
+      <div class="auth-error">
+      @if(authForm.value.password !== authForm.value.password_confirmation){
+      <p class="form-error">Passwords don't match.</p>
+      }
+      </div>
+    </div>
+    }
+
+    <button type="submit" class="auth-submit">{{ button_text }}</button>
+  </form>
 </section>
