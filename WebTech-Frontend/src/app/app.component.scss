@@ -1,17 +1,15 @@
-@use 'tailwindcss';
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 div.app {
-    @apply h-screen bg-gray-900 flex flex-col;
+    height: 100vh;
+    background-color: #1a202c;
+    display: flex;
+    flex-direction: column;
 
     .navbar {
-        @apply mb-20;
+        margin-bottom: 5rem;
     }
 
     main.main {
-        @apply flex-grow overflow-auto;
+        flex-grow: 1;
+        overflow: auto;
     }
 }
