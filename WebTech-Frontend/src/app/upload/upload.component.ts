@@ -20,9 +20,9 @@ export class UploadComponent {
 
 
   uploadForm = new FormGroup({
-    cat: new FormControl('', [
-      Validators.required,
-    ]),
+    // cat: new FormControl('', [
+    //   Validators.required,
+    // ]),
     title: new FormControl('', [
       Validators.required,
     ]),
@@ -63,6 +63,7 @@ export class UploadComponent {
 
 
   onFileSelected(event: any): void {
+    //TODO: Refactor this as an Interceptor
     const file = event.target.files[0];
     if (file) {
       this.uploadForm.patchValue({photo: file});
@@ -78,15 +79,16 @@ export class UploadComponent {
       return;
     }
 
-    this.uploadService.postCat(this.uploadForm.value.cat!).subscribe({
-      next: (response) => {
-        this.catId.set(response.id);
-      },
-      error: (error) => {
-        console.error('Error uploading cat:', error);
-        this.toastr.error('Failed to upload cat. Please try again.');
-      }
-    });
+    // this.uploadService.postCat(this.uploadForm.value.cat!).subscribe({
+    //   next: (response) => {
+    //     this.catId.set(response.id);
+    //   },
+    //   error: (error) => {
+    //     console.error('Error uploading cat:', error);
+    //     this.toastr.error('Failed to upload cat. Please try again.');
+    //   }
+    // });
+    this.catId.set(1); // For testing purposes, set a static catId
 
     const formData = new FormData();
     formData.append('title', this.uploadForm.value.title!);

@@ -1,0 +1,19 @@
+@use '../../styles' as *;
+
+ul {
+    @include flexColumn(stretch);
+    padding: 10rem;
+
+    li {
+        border: 1px solid;
+        border-radius: 0.5rem;
+        padding: 0.5rem;
+        background-color: $form-bg-color;
+        h1 {
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+        }
+    }
+}

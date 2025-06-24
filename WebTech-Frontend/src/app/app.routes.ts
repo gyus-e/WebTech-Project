@@ -4,6 +4,7 @@ import { SignupComponent } from './auth/signup/signup.component';
 import { LoginComponent } from './auth/login/login.component';
 import { LogoutComponent } from './auth/logout/logout.component';
 import { UploadComponent } from './upload/upload.component';
+import { CatsComponent } from './cats/cats.component';
 import { authGuard } from './_guards/auth/auth.guard';
 
 export const routes: Routes = [
@@ -29,9 +30,15 @@ export const routes: Routes = [
         canActivate: [authGuard],
     },
     {
+        path: 'cats',
+        component: CatsComponent,
+        title: 'Cats',
+    },
+    {
         path: 'upload',
         component: UploadComponent,
         title: 'Upload',
         canActivate: [authGuard],
     }
+
 ];
