@@ -4,8 +4,6 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ToastrService } from 'ngx-toastr';
 import { RestBackendUploadService } from '../_services/rest-backend/rest-backend-upload.service';
 import { Router } from '@angular/router';
-import { CatResponse } from '../_types/cat-response.type';
-import { ErrResponse } from '../_types/err-response.type';
 
 @Component({
   selector: 'app-upload',
@@ -75,7 +73,6 @@ export class UploadComponent {
 
   onSubmit(): void {
     if (this.uploadForm.invalid) {
-      // this.uploadForm.markAllAsTouched();
       console.error('Form is invalid');
       this.toastr.error('Please fill out all required fields correctly.');
       return;
