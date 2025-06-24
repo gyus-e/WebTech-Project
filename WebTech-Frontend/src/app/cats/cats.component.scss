@@ -2,23 +2,33 @@
 
 ul {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
     padding: 10rem;
 
     li {
         border: 1px solid;
-        border-radius: 0.5rem;
+        border-radius: 4rem;
         padding: 0.5rem;
         background-color: $form-bg-color;
-        max-width: 30rem;
-        max-height: 30rem;
+        width: auto;
+        height: auto;
+        overflow: hidden;
+        @include flexColumn();
+        
         h1 {
             color: white;
             font-size: 2rem;
             font-weight: bold;
             text-align: center;
+            
         }
         img {
-
+            border: 1px;
+            border-radius: 0.5rem;
+            max-height: 30rem;
         }
     }
 }

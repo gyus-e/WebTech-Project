@@ -31,9 +31,9 @@ export class RestBackendFetchService {
     return this.http.get(url) as Observable<PhotoResponse>;
   }
 
-  downloadCatPhotoById(catId: number, photoId: number): Observable<Blob> {
-    const url = REST_BACKEND_URL + `/cats/${catId}/photos/${photoId}/send`;
-    return this.http.get(url, { responseType: 'blob' });
-  }
+  // downloadCatPhotoById(catId: number, photoId: number): Observable<Blob> {
+  //   const url = REST_BACKEND_URL + `/cats/${catId}/photos/${photoId}/send`;
+  //   return this.http.get(url, { responseType: 'blob' });
+  // }
 
 }
