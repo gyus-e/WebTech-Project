@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { REST_BACKEND_URL } from '../../_config/rest-backend-url';
 import { Observable } from 'rxjs';
 import { CatResponse } from '../../_types/cat-response.type';
+import { PhotoResponse } from '../../_types/photo-response.type';
 
 @Injectable({
   providedIn: 'root'
@@ -20,16 +21,19 @@ export class RestBackendFetchService {
     return this.http.get(url) as Observable<CatResponse>;
   }
 
-  //TODO: Refactor to use a Photo type instead of Object
-
-  getCatPhotos(catId: number): Observable<Object[]> {
+  getCatPhotos(catId: number): Observable<PhotoResponse[]> {
     const url = REST_BACKEND_URL + `/cats/${catId}/photos`;
-    return this.http.get(url) as Observable<Object[]>;
+    return this.http.get(url) as Observable<PhotoResponse[]>;
   }
 
-  getCatPhotoById(catId: number, photoId: number): Observable<Object> {
+  getCatPhotoById(catId: number, photoId: number): Observable<PhotoResponse> {
     const url = REST_BACKEND_URL + `/cats/${catId}/photos/${photoId}`;
-    return this.http.get(url);
+    return this.http.get(url) as Observable<PhotoResponse>;
+  }
+
+  downloadCatPhotoById(catId: number, photoId: number): Observable<Blob> {
+    const url = REST_BACKEND_URL + `/cats/${catId}/photos/${photoId}/send`;
+    return this.http.get(url, { responseType: 'blob' });
   }
 
 }
