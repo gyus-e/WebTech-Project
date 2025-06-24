@@ -15,7 +15,7 @@ async function main() {
     const COOKIE_PARSER_SECRET: string = process.env.COOKIE_PARSER_SECRET ?? (() => { throw new Error("Cookie parser secret is not set in environment variables"); })();
 
     const database = await initializeDatabase();
-    await database.sync();
+    await database.sync({ alter: true });
 
     const app = express();
 

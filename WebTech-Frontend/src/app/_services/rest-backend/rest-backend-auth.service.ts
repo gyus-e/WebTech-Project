@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { REST_BACKEND_URL } from '../../_config/rest-backend-url';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthRequest } from '../../_types/auth-request.type';
@@ -7,9 +7,8 @@ import { AuthRequest } from '../../_types/auth-request.type';
   providedIn: 'root'
 })
 export class RestBackendAuthService {
-  url = REST_BACKEND_URL + '/auth';
-
-  constructor(private readonly http: HttpClient) {}
+  private readonly url = REST_BACKEND_URL + '/auth';
+  private readonly http = inject(HttpClient);
 
   httpOptions = {
     headers: new HttpHeaders({

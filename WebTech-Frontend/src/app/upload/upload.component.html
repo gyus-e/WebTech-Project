@@ -6,10 +6,10 @@
   
   <form class="upload-form" [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
 
-    <div>
+    <!-- <div>
       <label for="cat" class="upload-label">Cat name</label>
       <input type="text" formControlName="cat" id="cat" class="cat-input" placeholder="Enter cat name" required="">
-    </div>
+    </div> -->
   
     <div>
       <label for="title" class="upload-label">Title</label>
@@ -30,7 +30,7 @@
   
     <div>
       <label for="file" class="upload-label">Photo</label>
-      <input type="file" formControlName="image" id="file" class="file-input" accept="image/*" required="">
+      <input type="file" (change)="onFileSelected($event)" id="file" class="file-input" accept="image/*" required="">
     </div>
   
     <button type="submit" class="upload-submit">Upload</button>

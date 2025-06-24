@@ -25,7 +25,7 @@ export const catPhotosRouter = express.Router({ mergeParams: true });
  *        - application/json
  *   
  *      requestBody:
- *        description: title, description, and geolocalization of the photo
+ *        description: title, description, and geolocation of the photo
  *        required: true
  *        content:
  *          application/json:
@@ -38,7 +38,7 @@ export const catPhotosRouter = express.Router({ mergeParams: true });
  *                description:
  *                  type: string
  *                  example: This is a photo of my cat.
- *                geolocalization:
+ *                geolocation:
  *                  type: string
  *                  example: 37.7749,-122.4194
  *      responses:

@@ -22,7 +22,7 @@ export async function postPhotos(req: express.Request, res: express.Response) {
         const photo = await Photo.create({
             title: req.body.title,
             description: req.body.description,
-            geolocalization: req.body.geolocalization,
+            geolocation: req.body.geolocation,
             uploader: req.username,
             catId: req.params.cat_id,
             path: req.file!.path,
@@ -63,7 +63,7 @@ export async function deletePhotoById(req: express.Request, res: express.Respons
         res.status(204).send();
     } catch (error) {
         console.error(error);
-        res.status(500).send(`Failed to delete photo.`);
+        res.status(500).json({error: `Failed to delete photo.`});
         console.error(error);
     }
 }
