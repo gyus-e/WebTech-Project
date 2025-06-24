@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class MapStateService {
 
-
+  public layers: Array<any> = [];
   public center: LatLng = MapConfig.DEFAULT_CENTER;
   public zoom: number = MapConfig.DEFAULT_ZOOM;
   public posSignal = signal<LatLng | undefined>(undefined);

@@ -12,12 +12,11 @@ import { MapConfig } from '../_config/MapConfig';
   styleUrl: './map.component.scss',
 })
 export class MapComponent {
-  
 
   @Input() showCatMarkers: boolean = true;
-  
-  private readonly mapState = inject(MapStateService);
-  private readonly mapSignal = signal<L.Map | undefined>(undefined);
+
+
+  mapState = inject(MapStateService);
 
 
   options = {
@@ -28,11 +27,8 @@ export class MapComponent {
     zoom: MapConfig.DEFAULT_ZOOM,
   };
 
-
-  layers = [
-    marker(this.mapState.posSignal() ?? MapConfig.DEFAULT_CENTER, {icon: MapConfig.MARKER_ICON}),
-    //TODO: fetch all photos from database and set a marker for each photo's geolocation
-  ];
+  
+  private readonly mapSignal = signal<L.Map | undefined>(undefined);
 
 
   constructor() {
@@ -41,6 +37,13 @@ export class MapComponent {
       const pos = this.mapState.posSignal();
       if (map && pos) {
         map.setView(this.mapState.center, this.mapState.zoom);
+      }
+    });
+
+    effect(() => {
+      const pos = this.mapState.posSignal();
+      if (pos) {
+        this.mapState.layers.push(marker(pos, {icon: MapConfig.MARKER_ICON}));
       }
     });
   }
