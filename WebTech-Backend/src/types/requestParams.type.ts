@@ -1,3 +1,5 @@
+import express from 'express';
+
 export interface CatRequestParams {
     cat_id: string;
 }

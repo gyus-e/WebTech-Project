@@ -85,3 +85,5 @@ catPhotosRouter.route(`/:photo_id`)
     .all(photoIdValidator())
     .get(getPhotoById)
     .delete([enforceAuthentication, checkPhotoOwnership, validateRequest], deletePhotoById);
+
+// catPhotosRouter.get

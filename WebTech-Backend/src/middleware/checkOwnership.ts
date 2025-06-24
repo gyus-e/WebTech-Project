@@ -2,7 +2,6 @@ import express from "express";
 import { Photo } from "../models/Photo.js";
 import { Cat } from "../models/Cat.js";
 
-
 type UploadedItem = Photo | Cat;
 
 

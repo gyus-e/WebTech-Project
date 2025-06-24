@@ -3,7 +3,7 @@ import { getCats, postCats, getCatById, putCatById, deleteCatById } from '../con
 import { catPhotosRouter } from './catPhotosRouter.js';
 import { enforceAuthentication } from '../middleware/enforceAuthentication.js';
 import { checkCatOwnership } from '../middleware/checkOwnership.js';
-import { catNameValidator, catIdValidator, validateRequest } from '../middleware/validators.js';
+import { catNameValidator, catIdValidator, validateRequest, findCatById } from '../middleware/validators.js';
 
 export const catsRouter = express.Router();
 
@@ -12,9 +12,9 @@ catsRouter.route(`/`)
     .post([enforceAuthentication, catNameValidator(), validateRequest], postCats);
 
 catsRouter.route(`/:cat_id`)
-    .all(catIdValidator())
+    .all(catIdValidator(), findCatById)
     .get([validateRequest], getCatById)
     .put([enforceAuthentication, checkCatOwnership, catNameValidator(), validateRequest], putCatById)
-    .delete([enforceAuthentication, checkCatOwnership, validateRequest], deleteCatById)
+    .delete([enforceAuthentication, checkCatOwnership, validateRequest], deleteCatById);
 
-catsRouter.use(`/:cat_id/photos`, [catIdValidator()], catPhotosRouter);
+catsRouter.use(`/:cat_id/photos`, [catIdValidator(), findCatById], catPhotosRouter);

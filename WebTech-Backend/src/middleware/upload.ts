@@ -1,6 +1,7 @@
 import multer from "multer";
 import fs from 'fs';
 import path from 'path';
+import express from "express";
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -10,7 +11,7 @@ const storage = multer.diskStorage({
         }
         cb(null, dirName);
     },
-    filename: function (req, file, cb) {
+    filename: function (req: express.Request, file, cb) {
         const filename = `${req.username}-${Date.now()}.png`;
         cb(null, filename);
     }

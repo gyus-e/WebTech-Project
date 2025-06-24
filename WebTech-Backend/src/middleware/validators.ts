@@ -1,6 +1,9 @@
 import express from "express";
 import { body, param, validationResult } from "express-validator";
 import fs from "fs";
+import { Cat } from "../models/Cat.js";
+import { CatRequest } from "../types/request.type.js";
+import { CatRequestParams } from "../types/requestParams.type.js";
 
 export const usrValidator = () => body('usr').trim().notEmpty().isEmail().escape();
 export const pwdValidator = () => body('pwd').trim().notEmpty().isLength({ min: 8, max: 32 }).escape();
@@ -24,6 +27,21 @@ export function validateRequest(req: express.Request, res: express.Response, nex
         return;
     }
     next();
+}
+
+export async function findCatById(req: express.Request, res: express.Response, next: express.NextFunction) {
+    try {
+        const cat = await Cat.findByPk(req.params.cat_id);
+        if (!cat) {
+            res.status(404).json({ error: `Cat with ID ${req.params.cat_id} not found.` });
+            return;
+        }
+        (req as CatRequest<any>).cat = cat;
+        next();
+    } catch (error) {
+        res.status(500).send(`Failed to fetch cat.`);
+        console.error(error);
+    }
 }
 
 export function reqHasFile(req: express.Request, res: express.Response, next: express.NextFunction) {
