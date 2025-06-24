@@ -2,8 +2,9 @@
     @for (cat of catsState.cats(); track cat){
         <li>
             <h1>{{cat.name}}</h1>
-            <a href="{{catPhotosUrls.get(cat.id)}}">{{catPhotosUrls.get(cat.id)}}</a>
-            <img [src]="catPhotosUrls.get(cat.id)" alt="{{cat.name}}" />
+            <a href="{{catPhotosUrls.get(cat.id)}}">
+                <img [src]="catPhotosUrls.get(cat.id)" alt="{{cat.name}}" />
+            </a>
         </li>
     }
 </ul>

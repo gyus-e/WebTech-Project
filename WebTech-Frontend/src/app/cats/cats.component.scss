@@ -1,7 +1,7 @@
 @use '../../styles' as *;
 
 ul {
-    @include flexColumn(stretch);
+    display: flex;
     padding: 10rem;
 
     li {
@@ -9,11 +9,16 @@ ul {
         border-radius: 0.5rem;
         padding: 0.5rem;
         background-color: $form-bg-color;
+        max-width: 30rem;
+        max-height: 30rem;
         h1 {
             color: white;
             font-size: 2rem;
             font-weight: bold;
             text-align: center;
+        }
+        img {
+
         }
     }
 }
