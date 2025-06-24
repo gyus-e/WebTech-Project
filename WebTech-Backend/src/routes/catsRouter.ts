@@ -3,7 +3,8 @@ import { getCats, postCats, getCatById, putCatById, deleteCatById } from '../con
 import { catPhotosRouter } from './catPhotosRouter.js';
 import { enforceAuthentication } from '../middleware/enforceAuthentication.js';
 import { checkCatOwnership } from '../middleware/checkOwnership.js';
-import { catNameValidator, catIdValidator, validateRequest, findCatById } from '../middleware/validators.js';
+import { catNameValidator, catIdValidator, validateRequest } from '../middleware/validators.js';
+import { findCatById } from "../middleware/fetchers.js";
 
 export const catsRouter = express.Router();
 

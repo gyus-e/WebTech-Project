@@ -1,6 +1,8 @@
 import express from "express";
 import fs from "fs";
 import { Photo } from "../models/Photo.js";
+import { PhotoRequest } from "../types/request.type.js";
+import { CatPhotoRequestParams } from "../types/requestParams.type.js";
 
 export async function getPhotos(req: express.Request, res: express.Response) {
     const photos = await Photo.findAll({
@@ -30,27 +32,22 @@ export async function postPhotos(req: express.Request, res: express.Response) {
 }
 
 export async function getPhotoById(req: express.Request, res: express.Response) {
-    const photo = await Photo.findByPk(req.params.photo_id);
-    if (!photo) {
-        res.status(404).send(`Photo not found.`);
-        return;
-    }
+    const photo = (req as PhotoRequest<any>).photo!;
     res.json(photo);
 }
 
-// export async function downloadPhotoById()(req: express.Request, res: express.Response) {
-//     const photo = await Photo.findByPk(req.params.photo_id);
-//     if (!photo) {
-//         res.status(404).send(`Photo not found.`);
-//         return;
-//     }
-//     const filePath = photo.path;
-//     if (!fs.existsSync(filePath)) {
-//         res.status(404).send(`File not found.`);
-//         return;
-//     }
-//     res.sendFile(filePath, { root: process.cwd() });
-// }
+export async function sendPhotoById(req: express.Request, res: express.Response) {
+    const photo = (req as PhotoRequest<any>).photo!;
+    const filePath = photo.path;
+    if (!fs.existsSync(filePath)) {
+        console.error(`File not found: ${filePath}`);
+        console.log(`Deleting the photo with ID ${req.params.photo_id} from the database.`);
+        await photo.destroy();
+        res.status(404).send(`File not found.`);
+        return;
+    }
+    res.sendFile(filePath, { root: process.cwd() });
+}
 
 export async function deletePhotoById(req: express.Request, res: express.Response) {
     try {

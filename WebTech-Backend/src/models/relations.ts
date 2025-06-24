@@ -6,7 +6,7 @@ export function initializeRelations() {
     Cat.belongsTo(User, { foreignKey: "uploader", onDelete: "SET NULL" });
     User.hasMany(Cat, { foreignKey: "uploader" });
 
-    Photo.belongsTo(User, { foreignKey: "uploader", onDelete: "SET NULL" });
+    Photo.belongsTo(User, { foreignKey: "uploader", onDelete: "CASCADE" });
     User.hasMany(Photo, { foreignKey: "uploader" });
 
     Photo.belongsTo(Cat, { foreignKey: "catId", onDelete: "CASCADE" });

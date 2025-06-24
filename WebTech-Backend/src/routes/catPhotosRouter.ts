@@ -1,9 +1,10 @@
 import express from 'express';
-import { getPhotos, postPhotos, getPhotoById, deletePhotoById } from '../controllers/catPhotosController.js';
+import { getPhotos, postPhotos, getPhotoById, deletePhotoById, sendPhotoById } from '../controllers/catPhotosController.js';
 import { enforceAuthentication } from '../middleware/enforceAuthentication.js';
 import { checkPhotoOwnership } from '../middleware/checkOwnership.js';
 import { uploadSinglePhoto } from '../middleware/upload.js';
 import { photoDescriptionValidator, photoGeolocalizationValidator, reqHasFile, photoIdValidator, photoTitleValidator, validateRequest } from '../middleware/validators.js';
+import { findPhotoById } from '../middleware/fetchers.js';
 
 export const catPhotosRouter = express.Router({ mergeParams: true });
 
@@ -82,8 +83,8 @@ catPhotosRouter.route(`/`)
  *       responses:
  */
 catPhotosRouter.route(`/:photo_id`)
-    .all(photoIdValidator())
-    .get(getPhotoById)
+    .all(findPhotoById, photoIdValidator())
+    .get([validateRequest], getPhotoById)
     .delete([enforceAuthentication, checkPhotoOwnership, validateRequest], deletePhotoById);
 
-// catPhotosRouter.get
+catPhotosRouter.get(`/:photo_id/send`, [findPhotoById, photoIdValidator(), validateRequest], sendPhotoById);
