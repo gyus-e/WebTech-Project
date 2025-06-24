@@ -3,7 +3,6 @@ import { inject, Injectable } from '@angular/core';
 import { REST_BACKEND_URL } from '../../_config/rest-backend-url';
 import { CatResponse } from '../../_types/cat-response.type';
 import { Observable } from 'rxjs';
-import { UploadForm } from '../../_types/upload-form.type';
 import { AuthService } from '../auth/auth.service';
 import { ErrResponse } from '../../_types/err-response.type';
 
@@ -27,7 +26,7 @@ export class RestBackendUploadService {
     })
   };
 
-  postCat(catName: string): Observable<CatResponse|ErrResponse> {
+  postCat(catName: string): Observable<any> {
     const url = REST_BACKEND_URL + '/cats';
     return this.http.post(url, { name: catName }, this.httpOptions_applicationjson) as Observable<CatResponse>;
   }

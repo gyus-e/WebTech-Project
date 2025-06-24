@@ -3,6 +3,9 @@ import { MapComponent } from '../map/map.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { RestBackendUploadService } from '../_services/rest-backend/rest-backend-upload.service';
+import { Router } from '@angular/router';
+import { CatResponse } from '../_types/cat-response.type';
+import { ErrResponse } from '../_types/err-response.type';
 
 @Component({
   selector: 'app-upload',
@@ -12,15 +15,16 @@ import { RestBackendUploadService } from '../_services/rest-backend/rest-backend
 })
 export class UploadComponent {
   toastr = inject(ToastrService);
+  router = inject(Router);
   uploadService = inject(RestBackendUploadService);
-  // catId = signal<number | undefined>(undefined);
-  // submitted = signal<boolean>(false);
+  catId = signal<number | undefined>(undefined);
+  multipartFormData = signal<FormData|undefined>(undefined);
 
 
   uploadForm = new FormGroup({
-    // cat: new FormControl('', [
-    //   Validators.required,
-    // ]),
+    cat: new FormControl('', [
+      Validators.required,
+    ]),
     title: new FormControl('', [
       Validators.required,
     ]),
@@ -36,14 +40,27 @@ export class UploadComponent {
 
 
   constructor() {
-    // effect(() => {
-    //   if (this.submitted() /*&& this.catId()*/) {
-    //     this.uploadService.postPhoto(1, this.uploadForm).subscribe({
-    //       next: (response: any) => {},
-    //       error: (error: any) => {}
-    //     });
-    //   }
-    // });
+    effect(() => {
+
+      if (this.catId() && this.multipartFormData()?.has('photo')) {
+        this.uploadService.postPhoto(this.catId()!, this.multipartFormData()!).subscribe({
+
+          next: (response: any) => {
+            this.toastr.success('Photo uploaded successfully!'); 
+            console.log(response);
+            this.uploadForm.reset();
+            setTimeout(() => { this.router.navigateByUrl("/") }, 10);
+          },
+
+          error: (error: any) => {
+            this.toastr.error('Failed to upload photo.');
+            console.log(error);
+          }
+
+        });
+      }
+
+    });
   }
 
 
@@ -64,33 +81,22 @@ export class UploadComponent {
       return;
     }
 
-    // this.uploadService.postCat(this.uploadForm.value.cat!).subscribe({
-    //   next: (response: CatResponse) => {
-    //     this.catId.set(response.id);
-    //   },
-    //   error: (error) => {
-    //     console.error('Error uploading cat:', error);
-    //     this.toastr.error('Failed to upload cat. Please try again.');
-    //   }
-    // });
-
-    // this.submitted.set(true);
-
-    const multipartFormData = new FormData();
-    multipartFormData.append('title', this.uploadForm.value.title!);
-    multipartFormData.append('description', this.uploadForm.value.description ?? '');
-    multipartFormData.append('geolocation', this.uploadForm.value.geolocation ?? '');
-    multipartFormData.append('photo', this.uploadForm.value.photo!);
-
-    this.uploadService.postPhoto(1, multipartFormData).subscribe({
-      next: (response: any) => {
-        this.toastr.success('Photo uploaded successfully!'); 
-        console.log(response);
+    this.uploadService.postCat(this.uploadForm.value.cat!).subscribe({
+      next: (response) => {
+        this.catId.set(response.id);
       },
-      error: (error: any) => {
-        this.toastr.error('Failed to upload photo.');
-        console.log(error);
+      error: (error) => {
+        console.error('Error uploading cat:', error);
+        this.toastr.error('Failed to upload cat. Please try again.');
       }
     });
+
+    const formData = new FormData();
+    formData.append('title', this.uploadForm.value.title!);
+    formData.append('description', this.uploadForm.value.description ?? '');
+    formData.append('geolocation', this.uploadForm.value.geolocation ?? '');
+    formData.append('photo', this.uploadForm.value.photo!);
+
+    this.multipartFormData.set(formData);
   }
 }
