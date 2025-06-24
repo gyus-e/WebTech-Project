@@ -3,7 +3,7 @@
         <li>
             <h1>{{cat.name}}</h1>
             <a href="{{catsState.catPhotosUrls.get(cat.id)}}">
-                <img [src]="catsState.catPhotosUrls.get(cat.id)" alt="{{cat.name}}" />
+                <img [src]="catsState.catPhotosUrls.get(cat.id)" alt="{{cat.name}}" loading="lazy" />
             </a>
         </li>
     }
