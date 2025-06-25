@@ -12,9 +12,15 @@ export class CatsComponent {
 
   catsState = inject(CatsStateService);
   fetchService = inject(RestBackendFetchService);
-  catPhotosUrls = new Map<number, string>();
 
-  constructor() {
-    
+  getCatProfilePicUrl(catId: number): string {
+    const catPhotosUrls = this.catsState.catPhotosUrls();
+    if (catPhotosUrls?.has(catId)) {
+      return catPhotosUrls.get(catId)![0];
+    } else {
+      throw new Error(`No photos found for cat with ID ${catId}. Default photo should have been set.`);
+    }
+
   }
+
 }
