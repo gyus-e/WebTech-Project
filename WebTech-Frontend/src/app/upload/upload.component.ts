@@ -63,7 +63,6 @@ export class UploadComponent {
 
 
   onFileSelected(event: any): void {
-    //TODO: Refactor this as an Interceptor
     const file = event.target.files[0];
     if (file) {
       this.uploadForm.patchValue({photo: file});
