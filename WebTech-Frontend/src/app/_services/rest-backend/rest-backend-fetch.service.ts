@@ -16,6 +16,11 @@ export class RestBackendFetchService {
     return this.http.get(url) as Observable<CatResponse[]>;
   }
 
+  getPhotos(): Observable<PhotoResponse[]> {
+    const url = REST_BACKEND_URL + '/photos';
+    return this.http.get(url) as Observable<PhotoResponse[]>;
+  }
+
   getCatById(catId: number): Observable<CatResponse> {
     const url = REST_BACKEND_URL + `/cats/${catId}`;
     return this.http.get(url) as Observable<CatResponse>;

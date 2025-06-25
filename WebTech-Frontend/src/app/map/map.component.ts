@@ -37,13 +37,7 @@ export class MapComponent {
       const pos = this.mapState.posSignal();
       if (map && pos) {
         map.setView(this.mapState.center, this.mapState.zoom);
-      }
-    });
-
-    effect(() => {
-      const pos = this.mapState.posSignal();
-      if (pos) {
-        this.mapState.layers.push(marker(pos, {icon: MapConfig.MARKER_ICON}));
+        this.mapState.layers[0] = marker(pos, {icon: MapConfig.MARKER_ICON});
       }
     });
   }
