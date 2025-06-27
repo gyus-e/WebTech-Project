@@ -4,6 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ToastrService } from 'ngx-toastr';
 import { RestBackendUploadService } from '../_services/rest-backend/rest-backend-upload.service';
 import { Router } from '@angular/router';
+import { RestBackendErrorHandlerService } from '../_services/rest-backend/rest-backend-error-handler.service';
 
 @Component({
   selector: 'app-upload',
@@ -14,9 +15,10 @@ import { Router } from '@angular/router';
 export class UploadComponent {
   toastr = inject(ToastrService);
   router = inject(Router);
+  errHandler = inject(RestBackendErrorHandlerService);
   uploadService = inject(RestBackendUploadService);
   catId = signal<number | undefined>(undefined);
-  multipartFormData = signal<FormData|undefined>(undefined);
+  multipartFormData = signal<FormData | undefined>(undefined);
 
 
   uploadForm = new FormGroup({
@@ -44,14 +46,15 @@ export class UploadComponent {
         this.uploadService.postPhoto(this.catId()!, this.multipartFormData()!).subscribe({
 
           next: (response: any) => {
-            this.toastr.success('Photo uploaded successfully!'); 
+            this.toastr.success('Photo uploaded successfully!');
             console.log(response);
             this.uploadForm.reset();
             setTimeout(() => { this.router.navigateByUrl("/") }, 10);
           },
 
           error: (error: any) => {
-            this.toastr.error('Failed to upload photo.');
+            // this.toastr.error('Failed to upload photo.');
+            this.errHandler.handleError(error);
             console.log(error);
           }
 
@@ -65,7 +68,7 @@ export class UploadComponent {
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file) {
-      this.uploadForm.patchValue({photo: file});
+      this.uploadForm.patchValue({ photo: file });
       this.uploadForm.get('photo')?.updateValueAndValidity();
     }
   }

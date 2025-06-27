@@ -2,6 +2,7 @@ import express from "express";
 import { body, param, validationResult } from "express-validator";
 import fs from "fs";
 import { CatRequestParams } from "../types/requestParams.type.js";
+import { ErrorsJson } from "../ErrorsJson.js";
 
 export const usrValidator = () => body('usr').trim().notEmpty().isEmail().escape();
 export const pwdValidator = () => body('pwd').trim().notEmpty().isLength({ min: 8, max: 32 }).escape();
@@ -21,7 +22,7 @@ export function validateRequest(req: express.Request, res: express.Response, nex
         if (req.file?.path) {
             fs.unlinkSync(req.file.path);
         }
-        res.status(400).json({ errors: errors.array() });
+        res.status(400).json(new ErrorsJson(errors.array()));
         return;
     }
     next();
@@ -29,7 +30,7 @@ export function validateRequest(req: express.Request, res: express.Response, nex
 
 export function reqHasFile(req: express.Request, res: express.Response, next: express.NextFunction) {
     if (!req.file) {
-        res.status(400).json({ error: 'Photo file is required.' });
+        res.status(400).json(ErrorsJson.fromMessage('Photo file is required.'));
         return;
     }
     next();

@@ -1,6 +1,7 @@
 import express from "express";
 import { Photo } from "../models/Photo.js";
 import { Cat } from "../models/Cat.js";
+import { ErrorsJson } from "../ErrorsJson.js";
 
 type UploadedItem = Photo | Cat;
 
@@ -9,10 +10,10 @@ function checkOwnership(item: UploadedItem | null) {
     return (req: express.Request, res: express.Response, next: express.NextFunction) => {
         const user = req.username;
         if (!item) {
-            return res.status(404).json({ error: "Item not found" });
+            return res.status(404).json(ErrorsJson.fromMessage("Item not found"));
         }
         if (item.uploader !== user) {
-            return res.status(403).json({ error: "Forbidden" });
+            return res.status(403).json(ErrorsJson.fromMessage("Forbidden"));
         }
         next();
     }

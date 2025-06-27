@@ -5,6 +5,7 @@ import { AuthService } from '../../_services/auth/auth.service';
 import { AuthRequest } from '../../_types/auth-request.type';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { RestBackendErrorHandlerService } from '../../_services/rest-backend/rest-backend-error-handler.service';
 
 
 export type authFormData = { user: string, password: string };
@@ -25,6 +26,7 @@ export class AuthFormComponent {
   toastr = inject(ToastrService);
   router = inject(Router);
   authService = inject(AuthService);
+  errHandler = inject(RestBackendErrorHandlerService);
 
   submitted: boolean = false;
   authForm = new FormGroup({
@@ -64,22 +66,18 @@ export class AuthFormComponent {
       usr: this.authForm.value.user!,
       pwd: this.authForm.value.password!,
     }).subscribe({
+
       next: (token) => {
         this.authService.updateToken(token).then(() => {
+
           this.toastr.success(`Welcome ${this.authForm.value.user}!`, `Success!`);
           setTimeout(() => { this.router.navigateByUrl("/") }, 10);
+
         });
       },
+
       error: (err) => {
-        console.log('Backend error:', err.error); // Debug line
-        const errors: Array<any> = err.error?.errors;
-
-        let message = "Unknown error";
-        if (Array.isArray(errors) && errors.length > 0) {
-          message = errors.map(e => e.msg).join('\n');
-        }
-
-        this.toastr.error(message);
+        this.errHandler.handleError(err);
       },
 
       complete: () => {

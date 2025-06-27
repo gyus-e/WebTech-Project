@@ -4,6 +4,7 @@ import path from "path";
 import { Cat } from "../models/Cat.js";
 import { CatRequestParams } from '../types/requestParams.type.js';
 import { CatRequest } from "../types/request.type.js";
+import { ErrorsJson } from "../ErrorsJson.js";
 
 
 export async function getCats(req: express.Request, res: express.Response) {
@@ -11,7 +12,7 @@ export async function getCats(req: express.Request, res: express.Response) {
         const cats = await Cat.findAll();
         res.json(cats);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch cats.' });
+        res.status(500).json(ErrorsJson.fromMessage('Failed to fetch cats.'));
         console.error(error);
     }
 }
@@ -20,12 +21,12 @@ export async function getCats(req: express.Request, res: express.Response) {
 export async function postCats(req: express.Request, res: express.Response) {
     try {
         const cat = await Cat.create({
-            name: req.body.name ?? (() => { res.status(400).json({ error: `cat name required` }) })(),
+            name: req.body.name,
             uploader: req.username,
         });
         res.status(201).json(cat);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to create cat.' });
+        res.status(500).json(ErrorsJson.fromMessage('Failed to create cat.'));
         console.error(error);
     }
 }
@@ -41,7 +42,7 @@ export async function putCatById(req: express.Request<CatRequestParams>, res: ex
         const cat = (req as CatRequest<CatRequestParams>).cat!;
         const name = req.body.name
         if (!name || cat.name === name) {
-            res.status(400).json({ error: `cat name could not be changed` });
+            res.status(400).json(ErrorsJson.fromMessage(`cat name could not be changed`));
             return;
         }
         cat.name = name;

@@ -1,7 +1,8 @@
 import express from "express";
-import { User } from "../models/User.js"
 import Jwt from "jsonwebtoken";
 import argon2 from "argon2";
+import { User } from "../models/User.js"
+import { ErrorsJson } from "../ErrorsJson.js";
 
 
 export async function postSignup(req: express.Request, res: express.Response) {
@@ -13,7 +14,7 @@ export async function postSignup(req: express.Request, res: express.Response) {
         });
         res.json(issueToken(user.username));
     } catch (error) {
-        res.status(500).json({ errors: [{ msg: "Failed to create user." }] });
+        res.status(500).json(ErrorsJson.fromMessage("Failed to create user."));
         console.error(error);
     }
 }
@@ -27,7 +28,7 @@ export async function postLogin(req: express.Request, res: express.Response) {
             return;
         }
     }
-    res.status(401).json({ errors: [{ msg: "Bad credentials." }] });
+    res.status(401).json(ErrorsJson.fromMessage("Bad credentials."));
 }
 
 
