@@ -73,7 +73,6 @@ export class CatsStateService {
         this.catGeolocations.set(cat.id, photo.geolocation ? new LatLng(photo.geolocation[0], photo.geolocation[1]) : null);
       },
       error: (err) => {
-        this.errHandler.handleError(err);
         this.catProfilePicUrls.set(cat.id, undefined);
         this.catGeolocations.set(cat.id, null);
       }
