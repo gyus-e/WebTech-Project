@@ -13,8 +13,9 @@ export class CatsStateService {
 
   cats = computed(() => this.catsSignal());
   catProfilePicUrls = new Map<number, string | undefined>();
-  catPhotosUrls = new Map<number, Array<string>>();
-  catPhotosGeolocations = new Map<number, Array<LatLng | null>>();
+  catGeolocations = new Map<number, LatLng | null>();
+  // catPhotosUrls = new Map<number, Array<string>>();
+  // catPhotosGeolocations = new Map<number, Array<LatLng | null>>();
   new_cat = signal<number | null>(null);
 
   private readonly catsSignal = signal<CatResponse[] | null>(null);
@@ -40,7 +41,7 @@ export class CatsStateService {
         return;
       }
       for (const cat of cats) {
-        this.getCatsDataFromPhotos(cat);
+        this.getCatMetadata(cat);
       }
     });
 
@@ -53,7 +54,7 @@ export class CatsStateService {
         this.restFetchService.getCatById(new_cat).subscribe({
           next: (cat) => {
             this.catsSignal()!.push(cat);
-            this.getCatsDataFromPhotos(cat);
+            this.getCatMetadata(cat);
           },
           error: (err) => {
             this.errHandler.handleError(err);
@@ -65,38 +66,50 @@ export class CatsStateService {
 
   }
 
-
-  private getCatsDataFromPhotos(cat: CatResponse) {
-    this.catProfilePicUrls.set(cat.id, `${REST_BACKEND_URL}/cats/${cat.id}/photos/${cat.profilePicture}/send`);
-
-    this.restFetchService.getCatPhotos(cat.id).subscribe({
-      next: (photos) => {
-        this.setPhotosUrlsAndGeolocations(cat.id, photos);
+  private getCatMetadata(cat: CatResponse) {
+    this.restFetchService.getCatPhotoById(cat.id, cat.profilePicture).subscribe({
+      next: (photo) => {
+        this.catProfilePicUrls.set(cat.id, `${REST_BACKEND_URL}/cats/${cat.id}/photos/${cat.profilePicture}/send`);
+        this.catGeolocations.set(cat.id, photo.geolocation ? new LatLng(photo.geolocation[0], photo.geolocation[1]) : null);
       },
       error: (err) => {
         this.errHandler.handleError(err);
+        this.catProfilePicUrls.set(cat.id, undefined);
+        this.catGeolocations.set(cat.id, null);
       }
     });
-
   }
-
-
-  setPhotosUrlsAndGeolocations(cat_id: number, photos: PhotoResponse[]) {
-    if (!photos || photos.length === 0) {
-      return;
-    }
-
-    let photosUrls = new Array<string>();
-    let photosGeolocations = new Array<LatLng | null>();
-
-    for (const photo of photos) {
-      photosUrls.push(`${REST_BACKEND_URL}/cats/${cat_id}/photos/${photo.id}/send`);
-      photosGeolocations.push(photo.geolocation ? new LatLng(photo.geolocation[0], photo.geolocation[1]) : null);
-    }
-
-    this.catPhotosUrls.set(cat_id, photosUrls);
-    this.catPhotosGeolocations.set(cat_id, photosGeolocations);
-  }
-
 
 }
+
+
+/*
+getAllPhotos(cat: CatResponse) {
+  this.restFetchService.getCatPhotos(cat.id).subscribe({
+    next: (photos) => {
+      this.setPhotosUrlsAndGeolocations(cat.id, photos);
+    },
+    error: (err) => {
+      this.errHandler.handleError(err);
+    }
+  });
+}
+
+
+setPhotosUrlsAndGeolocations(cat_id: number, photos: PhotoResponse[]) {
+  if (!photos || photos.length === 0) {
+    return;
+  }
+
+  let photosUrls = new Array<string>();
+  let photosGeolocations = new Array<LatLng | null>();
+
+  for (const photo of photos) {
+    photosUrls.push(`${REST_BACKEND_URL}/cats/${cat_id}/photos/${photo.id}/send`);
+    photosGeolocations.push(photo.geolocation ? new LatLng(photo.geolocation[0], photo.geolocation[1]) : null);
+  }
+
+  this.catPhotosUrls.set(cat_id, photosUrls);
+  this.catPhotosGeolocations.set(cat_id, photosGeolocations);
+}
+*/
