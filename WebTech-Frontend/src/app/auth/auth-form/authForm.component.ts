@@ -71,7 +71,7 @@ export class AuthFormComponent {
         });
       },
       error: (err) => {
-        this.toastr.error("An error occured.", "Error!");
+        this.toastr.error(err.error?.error ?? "Unknown error", "Error!");
       },
       complete: () => {
 
