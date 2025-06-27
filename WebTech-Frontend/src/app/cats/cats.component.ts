@@ -21,8 +21,6 @@ export class CatsComponent {
   router = inject(Router);
   toastr = inject(ToastrService);
 
-  hideUploadComponent = signal<boolean>(true);
-
   uploadCatForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
   });
@@ -50,7 +48,7 @@ export class CatsComponent {
 
 
   getCatProfilePicUrl(catId: number): string {
-    const catPhotosUrls = this.catsState.catPhotosUrls();
+    const catPhotosUrls = this.catsState.catPhotosUrls;
     if (catPhotosUrls?.has(catId)) {
       return catPhotosUrls.get(catId)![0];
     } else {

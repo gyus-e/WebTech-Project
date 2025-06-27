@@ -6,6 +6,7 @@ import { RestBackendUploadService } from '../_services/rest-backend/rest-backend
 import { ActivatedRoute, Router } from '@angular/router';
 import { RestBackendErrorHandlerService } from '../_services/rest-backend/rest-backend-error-handler.service';
 import { RestBackendFetchService } from '../_services/rest-backend/rest-backend-fetch.service';
+import { CatsStateService } from '../_services/cats/cats-state.service';
 
 @Component({
   selector: 'app-upload',
@@ -16,6 +17,7 @@ import { RestBackendFetchService } from '../_services/rest-backend/rest-backend-
 export class UploadComponent {
   toastr = inject(ToastrService);
   router = inject(Router);
+  catState = inject(CatsStateService);
   errHandler = inject(RestBackendErrorHandlerService);
   uploadService = inject(RestBackendUploadService);
   fetchService = inject(RestBackendFetchService);
@@ -78,6 +80,7 @@ export class UploadComponent {
             this.toastr.success('Photo uploaded successfully!');
             console.log(response);
             this.uploadForm.reset();
+            this.catState.new_cat.set(this.cat_id()!);
             setTimeout(() => { this.router.navigateByUrl("/") }, 10);
           },
 

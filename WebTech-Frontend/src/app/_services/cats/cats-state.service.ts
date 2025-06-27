@@ -12,9 +12,9 @@ import { RestBackendErrorHandlerService } from '../rest-backend/rest-backend-err
 export class CatsStateService {
 
   cats = computed(() => this.catsSignal());
-  catPhotosUrls = signal<Map<number, Array<string>> | null>(null);
-  catPhotosGeolocations = signal<Map<number, Array<LatLng | null>> | null>(null);
-
+  catPhotosUrls = new Map<number, Array<string>>();
+  catPhotosGeolocations = new Map<number, Array<LatLng | null>>();
+  new_cat = signal<number | null>(null);
 
   private readonly catsSignal = signal<CatResponse[] | null>(null);
   private readonly restFetchService = inject(RestBackendFetchService);
@@ -32,6 +32,7 @@ export class CatsStateService {
       }
     });
 
+
     effect(() => {
       const cats = this.cats();
       if (!cats) {
@@ -39,6 +40,25 @@ export class CatsStateService {
       }
       for (const cat of cats) {
         this.getCatsDataFromPhotos(cat);
+      }
+    });
+
+
+    effect(() => {
+      if (this.new_cat()) {
+        const new_cat = this.new_cat()!;
+        this.new_cat.set(null);
+
+        this.restFetchService.getCatById(new_cat).subscribe({
+          next: (cat) => {
+            this.catsSignal()!.push(cat);
+            this.getCatsDataFromPhotos(cat);
+          },
+          error: (err) => {
+            this.errHandler.handleError(err);
+          }
+        });
+
       }
     });
 
@@ -59,31 +79,25 @@ export class CatsStateService {
 
 
   setPhotosUrlsAndGeolocations(cat_id: number, photos: PhotoResponse[]) {
-    let photosUrlsMap = new Map<number, Array<string>>();
-    let photosGeolocationsMap = new Map<number, Array<LatLng | null>>();
+    let photosUrls = new Array<string>();
+    let photosGeolocations = new Array<LatLng | null>();
 
     if (!photos || photos.length === 0) {
 
-      photosUrlsMap.set(cat_id, ['assets/yamamaya.jpg']);
-      photosGeolocationsMap.set(cat_id, [null]);
+      photosUrls.push('assets/yamamaya.jpg');
+      photosGeolocations.push(null);
 
     } else {
 
       for (const photo of photos) {
-        const photosUrls = new Array<string>();
-        const photosGeolocations = new Array<LatLng | null>();
-
         photosUrls.push(`${REST_BACKEND_URL}/cats/${cat_id}/photos/${photo.id}/send`);
         photosGeolocations.push(photo.geolocation ? new LatLng(photo.geolocation[0], photo.geolocation[1]) : null);
-
-        photosUrlsMap.set(cat_id, photosUrls);
-        photosGeolocationsMap.set(cat_id, photosGeolocations);
       }
 
     }
 
-    this.catPhotosUrls.set(photosUrlsMap);
-    this.catPhotosGeolocations.set(photosGeolocationsMap);
+    this.catPhotosUrls.set(cat_id, photosUrls);
+    this.catPhotosGeolocations.set(cat_id, photosGeolocations);
   }
 
 

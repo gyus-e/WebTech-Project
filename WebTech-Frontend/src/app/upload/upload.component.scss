@@ -23,6 +23,13 @@ section.upload-section {
             @include flexColumn(stretch);
             margin-bottom: 1rem;
 
+            h2 {
+                font-size: 1.5rem;
+                font-weight: $semibold;
+                color: whitesmoke;
+                margin-bottom: 0.5rem;
+            }
+
             label.upload-label {
                 font-size: 1.5rem;
                 font-weight: $semibold;
