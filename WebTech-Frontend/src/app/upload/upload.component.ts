@@ -1,10 +1,11 @@
-import { Component, effect, inject, Input, signal } from '@angular/core';
+import { Component, effect, inject, Input, Output, signal } from '@angular/core';
 import { MapComponent } from '../map/map.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { RestBackendUploadService } from '../_services/rest-backend/rest-backend-upload.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { RestBackendErrorHandlerService } from '../_services/rest-backend/rest-backend-error-handler.service';
+import { RestBackendFetchService } from '../_services/rest-backend/rest-backend-fetch.service';
 
 @Component({
   selector: 'app-upload',
@@ -17,14 +18,13 @@ export class UploadComponent {
   router = inject(Router);
   errHandler = inject(RestBackendErrorHandlerService);
   uploadService = inject(RestBackendUploadService);
-  catId = signal<number | undefined>(undefined);
-  multipartFormData = signal<FormData | undefined>(undefined);
+  fetchService = inject(RestBackendFetchService);
 
+  multipartFormData = signal<FormData | undefined>(undefined);
+  cat_id = signal<number | undefined>(undefined);
+  cat_name = signal<string>('');
 
   uploadForm = new FormGroup({
-    // cat: new FormControl('', [
-    //   Validators.required,
-    // ]),
     title: new FormControl('', [
       Validators.required,
     ]),
@@ -34,16 +34,45 @@ export class UploadComponent {
     ]),
     photo: new FormControl(null, [
       Validators.required,
-      // Validators.pattern('^.*\.(jpg|jpeg|png|gif)$') // Example pattern for image files
+      // Validators.pattern('^.*\.(jpg|jpeg|png|gif)$')
     ])
   });
 
 
-  constructor() {
+  constructor(route: ActivatedRoute) {
+    //get cat_id from route parameters
+    route.paramMap.subscribe(params => {
+      const cat_id_param = params.get('cat_id')
+      if (!cat_id_param) {
+        this.toastr.error('No cat id provided in the route parameters.');
+        this.router.navigateByUrl("/");
+      };
+
+      this.cat_id.set(Number(cat_id_param));
+    });
+
+    //get cat_name from backend when cat_id is set
+    effect(() => {
+      if (!this.cat_id()) {
+        return;
+      }
+      this.fetchService.getCatById(this.cat_id()!).subscribe({
+        next: (response: any) => {
+          this.cat_name.set(response.name);
+        },
+
+        error: (error: any) => {
+          this.errHandler.handleError(error);
+          this.router.navigateByUrl("/");
+        }
+      });
+    });
+
+    //upload photo when multipartFormData is set
     effect(() => {
 
-      if (this.catId() && this.multipartFormData()?.has('photo')) {
-        this.uploadService.postPhoto(this.catId()!, this.multipartFormData()!).subscribe({
+      if (this.cat_id() && this.multipartFormData()?.has('photo')) {
+        this.uploadService.postPhoto(this.cat_id()!, this.multipartFormData()!).subscribe({
 
           next: (response: any) => {
             this.toastr.success('Photo uploaded successfully!');
@@ -53,7 +82,6 @@ export class UploadComponent {
           },
 
           error: (error: any) => {
-            // this.toastr.error('Failed to upload photo.');
             this.errHandler.handleError(error);
             console.log(error);
           }
@@ -80,17 +108,6 @@ export class UploadComponent {
       this.toastr.error('Please fill out all required fields correctly.');
       return;
     }
-
-    // this.uploadService.postCat(this.uploadForm.value.cat!).subscribe({
-    //   next: (response) => {
-    //     this.catId.set(response.id);
-    //   },
-    //   error: (error) => {
-    //     console.error('Error uploading cat:', error);
-    //     this.toastr.error('Failed to upload cat. Please try again.');
-    //   }
-    // });
-    this.catId.set(1); // For testing purposes, set a static catId
 
     const formData = new FormData();
     formData.append('title', this.uploadForm.value.title!);

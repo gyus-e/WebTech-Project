@@ -29,7 +29,8 @@ section.upload-section {
                 color: whitesmoke;
             }
 
-            input, textarea {
+            input,
+            textarea {
                 width: 100%;
                 background-color: whitesmoke;
                 border: 2px solid darkgray;
@@ -41,7 +42,7 @@ section.upload-section {
                 max-width: 300px;
                 max-height: 40px;
                 padding: 0.5rem;
-                
+
                 &:hover {
                     background-color: darkgray;
                 }
@@ -55,9 +56,9 @@ section.upload-section {
             padding: 0.5rem;
             border-radius: 0.5rem;
             background-color: teal;
-            
+
             &:hover {
-                background-color: #115e59;
+                background-color: $button-hover-bg-color;
             }
         }
     }

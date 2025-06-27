@@ -3,6 +3,7 @@
 @use 'ngx-toastr/toastr';
 
 $form-bg-color: #2d3748;
+$button-hover-bg-color: #115e59;
 $semibold: 600;
 
 @mixin flexColumn($align: center, $justify: center) {
@@ -12,7 +13,7 @@ $semibold: 600;
     justify-content: $justify;
 }
 
-@mixin formTitle(){
+@mixin formTitle() {
     color: white;
     font-size: 2.5rem;
     font-weight: bold;

@@ -3,36 +3,35 @@
   <h1 class="upload-title">
     Upload
   </h1>
-  
+
   <form class="upload-form" [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
 
-    <!-- <div>
-      <label for="cat" class="upload-label">Cat name</label>
-      <input type="text" formControlName="cat" id="cat" class="cat-input" placeholder="Enter cat name" required="">
-    </div> -->
-  
+    <div>
+      <h2>{{cat_name()}}</h2>
+    </div>
+
     <div>
       <label for="title" class="upload-label">Title</label>
       <input type="text" formControlName="title" id="title" class="title-input" placeholder="Enter title" required="">
     </div>
-  
+
     <div>
       <label for="descr" class="upload-label">Description</label>
       <textarea formControlName="description" id="descr" class="descr-input"
         placeholder="Enter photo description..."></textarea>
     </div>
-  
+
     <div>
       <label for="map" class="upload-label">Position</label>
       <app-map id="map" class="map-component" [showCatMarkers]="false">
       </app-map>
     </div>
-  
+
     <div>
       <label for="file" class="upload-label">Photo</label>
       <input type="file" (change)="onFileSelected($event)" id="file" class="file-input" accept="image/*" required="">
     </div>
-  
+
     <button type="submit" class="upload-submit">Upload</button>
   </form>
 </section>

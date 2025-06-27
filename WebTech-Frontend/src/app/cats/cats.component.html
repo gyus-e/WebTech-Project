@@ -1,10 +1,23 @@
-<ul>
-    @for (cat of catsState.cats(); track cat){
+<section class="cats-section">
+    <h1 class="title">Cats</h1>
+    @if (authState.isAuthenticated()){
+    <form class="upload-cat-form" [formGroup]="uploadCatForm" (ngSubmit)="onSubmit()">
+        <div>
+            <!-- <label for="name">Name</label> -->
+            <input type="text" formControlName="name" id="name" placeholder="Enter cat name" required />
+        </div>
+        <button type="submit">Upload New Cat</button>
+    </form>
+    }
+
+    <ul>
+        @for (cat of catsState.cats(); track cat){
         <li>
             <h1>{{cat.name}}</h1>
             <a href="{{getCatProfilePicUrl(cat.id)}}">
                 <img [src]="getCatProfilePicUrl(cat.id)" alt="{{cat.name}}" loading="lazy" />
             </a>
         </li>
-    }
-</ul>
+        }
+    </ul>
+</section>

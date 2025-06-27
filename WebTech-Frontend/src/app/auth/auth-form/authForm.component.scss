@@ -36,7 +36,7 @@ section.auth-section {
                 color: black;
             }
 
-            div.auth-error{
+            div.auth-error {
                 min-height: 10px;
 
                 p.form-error {
@@ -55,7 +55,7 @@ section.auth-section {
             background-color: teal;
 
             &:hover {
-                background-color: #115e59;
+                background-color: $button-hover-bg-color;
             }
         }
     }

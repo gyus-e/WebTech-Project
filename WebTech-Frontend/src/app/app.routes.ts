@@ -35,7 +35,7 @@ export const routes: Routes = [
         title: 'Cats',
     },
     {
-        path: 'upload',
+        path: 'upload/:cat_id',
         component: UploadComponent,
         title: 'Upload',
         canActivate: [authGuard],

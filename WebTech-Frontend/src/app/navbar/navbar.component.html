@@ -3,34 +3,38 @@
     <a routerLink="/" class="logo">
       <span>WebTech Streetcats</span>
     </a>
-    <button (click)="toggle()" data-collapse-toggle="navbar-default" type="button" aria-controls="navbar-default" aria-expanded="false">
-        <span>Open main menu</span>
-        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
-        </svg>
+    <button (click)="toggle()" data-collapse-toggle="navbar-default" type="button" aria-controls="navbar-default"
+      aria-expanded="false">
+      <span>Open main menu</span>
+      <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M1 1h15M1 7h15M1 13h15" />
+      </svg>
     </button>
     <div class="{{isOpen ? 'block' : 'hidden'}}" id="navbar-default">
       <ul class="buttons-ul">
         <li>
-          <a (click)="handleNavigationClick()" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="navbar-button" aria-current="page">Home</a>
+          <a (click)="handleNavigationClick()" routerLink="/" routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }" class="navbar-button" aria-current="page">Home</a>
         </li>
         <li>
-          <a (click)="handleNavigationClick()" routerLink="/cats" routerLinkActive="active" class="navbar-button">Cats</a>
+          <a (click)="handleNavigationClick()" routerLink="/cats" routerLinkActive="active"
+            class="navbar-button">Cats</a>
         </li>
         @if(! this.authService.isAuthenticated()){
-          <li>
-            <a (click)="handleNavigationClick()" routerLink="/login" routerLinkActive="active" class="navbar-button">Login</a>
-          </li>
-          <li>
-            <a (click)="handleNavigationClick()" routerLink="/signup" routerLinkActive="active" class="navbar-button">Sign up</a>
-          </li>
+        <li>
+          <a (click)="handleNavigationClick()" routerLink="/login" routerLinkActive="active"
+            class="navbar-button">Login</a>
+        </li>
+        <li>
+          <a (click)="handleNavigationClick()" routerLink="/signup" routerLinkActive="active" class="navbar-button">Sign
+            up</a>
+        </li>
         } @else {
-          <li>
-            <a (click)="handleNavigationClick()" routerLink="/upload" routerLinkActive="active" class="navbar-button upload-button">Upload</a>
-          </li>
-          <li>
-            <a (click)="handleNavigationClick()" routerLink="/logout" routerLinkActive="active" class="navbar-button">Logout</a>
-          </li>
+        <li>
+          <a (click)="handleNavigationClick()" routerLink="/logout" routerLinkActive="active"
+            class="navbar-button">Logout</a>
+        </li>
         }
       </ul>
     </div>

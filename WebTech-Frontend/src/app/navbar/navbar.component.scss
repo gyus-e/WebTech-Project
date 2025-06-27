@@ -21,7 +21,7 @@ div.top-container {
 
     button {
         @apply inline-flex items-center p-1 w-7 h-7 justify-center text-sm text-gray-400 rounded-lg md:hidden hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600 mx-2;
-    
+
         span {
             @apply sr-only;
         }
@@ -43,14 +43,6 @@ ul.buttons-ul {
     a.navbar-button {
         @apply block py-2 px-3 rounded text-white hover:bg-gray-700;
 
-    }
-
-    a.navbar-button.upload-button {
-        @apply text-white;
-    }
-
-    a.navbar-button.upload-button.active {
-        @apply text-white bg-gradient-to-r from-orange-500 to-orange-700 hover:bg-orange-600;
     }
 
     a.navbar-button.active {
