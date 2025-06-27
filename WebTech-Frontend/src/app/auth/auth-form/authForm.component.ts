@@ -71,8 +71,17 @@ export class AuthFormComponent {
         });
       },
       error: (err) => {
-        this.toastr.error(err.error?.error ?? "Unknown error", "Error!");
+        console.log('Backend error:', err.error); // Debug line
+        const errors: Array<any> = err.error?.errors;
+
+        let message = "Unknown error";
+        if (Array.isArray(errors) && errors.length > 0) {
+          message = errors.map(e => e.msg).join('\n');
+        }
+
+        this.toastr.error(message);
       },
+
       complete: () => {
 
       }

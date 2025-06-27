@@ -13,7 +13,7 @@ export async function postSignup(req: express.Request, res: express.Response) {
         });
         res.json(issueToken(user.username));
     } catch (error) {
-        res.status(500).json({ error: 'Failed to create user.' });
+        res.status(500).json({ errors: [{ msg: "Failed to create user." }] });
         console.error(error);
     }
 }
@@ -27,7 +27,7 @@ export async function postLogin(req: express.Request, res: express.Response) {
             return;
         }
     }
-    res.status(401).json({ error: "Bad credentials." });
+    res.status(401).json({ errors: [{ msg: "Bad credentials." }] });
 }
 
 
