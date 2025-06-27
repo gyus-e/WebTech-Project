@@ -12,6 +12,7 @@ import { RestBackendErrorHandlerService } from '../rest-backend/rest-backend-err
 export class CatsStateService {
 
   cats = computed(() => this.catsSignal());
+  catProfilePicUrls = new Map<number, string | undefined>();
   catPhotosUrls = new Map<number, Array<string>>();
   catPhotosGeolocations = new Map<number, Array<LatLng | null>>();
   new_cat = signal<number | null>(null);
@@ -66,6 +67,8 @@ export class CatsStateService {
 
 
   private getCatsDataFromPhotos(cat: CatResponse) {
+    this.catProfilePicUrls.set(cat.id, `${REST_BACKEND_URL}/cats/${cat.id}/photos/${cat.profilePicture}/send`);
+
     this.restFetchService.getCatPhotos(cat.id).subscribe({
       next: (photos) => {
         this.setPhotosUrlsAndGeolocations(cat.id, photos);
@@ -79,21 +82,16 @@ export class CatsStateService {
 
 
   setPhotosUrlsAndGeolocations(cat_id: number, photos: PhotoResponse[]) {
+    if (!photos || photos.length === 0) {
+      return;
+    }
+
     let photosUrls = new Array<string>();
     let photosGeolocations = new Array<LatLng | null>();
 
-    if (!photos || photos.length === 0) {
-
-      photosUrls.push('assets/yamamaya.jpg');
-      photosGeolocations.push(null);
-
-    } else {
-
-      for (const photo of photos) {
-        photosUrls.push(`${REST_BACKEND_URL}/cats/${cat_id}/photos/${photo.id}/send`);
-        photosGeolocations.push(photo.geolocation ? new LatLng(photo.geolocation[0], photo.geolocation[1]) : null);
-      }
-
+    for (const photo of photos) {
+      photosUrls.push(`${REST_BACKEND_URL}/cats/${cat_id}/photos/${photo.id}/send`);
+      photosGeolocations.push(photo.geolocation ? new LatLng(photo.geolocation[0], photo.geolocation[1]) : null);
     }
 
     this.catPhotosUrls.set(cat_id, photosUrls);

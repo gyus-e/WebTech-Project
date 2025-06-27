@@ -23,6 +23,7 @@ export async function postCats(req: express.Request, res: express.Response) {
         const cat = await Cat.create({
             name: req.body.name,
             uploader: req.username,
+            profilePicture: req.body.profilePicture ?? null
         });
         res.status(201).json(cat);
     } catch (error) {
@@ -41,11 +42,21 @@ export async function putCatById(req: express.Request<CatRequestParams>, res: ex
     try {
         const cat = (req as CatRequest<CatRequestParams>).cat!;
         const name = req.body.name
-        if (!name || cat.name === name) {
-            res.status(400).json(ErrorsJson.fromMessage(`cat name could not be changed`));
-            return;
+        const profilePicture = req.body.profilePicture;
+        let updated = false;
+
+        if (name && cat.name !== name) {
+            cat.name = name;
+            updated = true;
         }
-        cat.name = name;
+        if (profilePicture && cat.profilePicture !== profilePicture) {
+            cat.profilePicture = profilePicture;
+            updated = true;
+        }
+        if (!updated) {
+            return res.status(400).json(ErrorsJson.fromMessage(`No changes detected.`));
+        }
+
         await cat.save();
         res.json(cat);
     } catch (error) {

@@ -11,4 +11,7 @@ export function initializeRelations() {
 
     Photo.belongsTo(Cat, { foreignKey: "catId", onDelete: "CASCADE" });
     Cat.hasMany(Photo, { foreignKey: "catId" });
+
+    Cat.belongsTo(Photo, { foreignKey: "profilePhoto", onDelete: "SET NULL" });
+    Photo.hasOne(Cat, { foreignKey: "profilePhoto" });
 }

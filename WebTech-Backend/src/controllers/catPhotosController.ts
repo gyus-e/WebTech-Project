@@ -1,5 +1,6 @@
 import express from "express";
 import fs from "fs";
+import { Cat } from "../models/Cat.js";
 import { Photo } from "../models/Photo.js";
 import { PhotoRequest } from "../types/request.type.js";
 import { CatPhotoRequestParams } from "../types/requestParams.type.js";
@@ -22,6 +23,13 @@ export async function postPhotos(req: express.Request, res: express.Response) {
             catId: req.params.cat_id,
             path: req.file!.path,
         });
+
+        let cat = (req as any).cat as Cat;
+        if (cat.profilePicture === null) {
+            cat.profilePicture = photo.id;
+            await cat.save();
+        }
+
         res.status(201).json(photo);
     } catch (error) {
         if (fs.existsSync(req.file!.path)) {
