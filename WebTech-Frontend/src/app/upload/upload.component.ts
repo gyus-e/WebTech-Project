@@ -7,10 +7,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { RestBackendErrorHandlerService } from '../_services/rest-backend/rest-backend-error-handler.service';
 import { RestBackendFetchService } from '../_services/rest-backend/rest-backend-fetch.service';
 import { CatsStateService } from '../_services/cats/cats-state.service';
+import { QuillModule } from 'ngx-quill';
 
 @Component({
   selector: 'app-upload',
-  imports: [ReactiveFormsModule, MapComponent],
+  imports: [ReactiveFormsModule, MapComponent, QuillModule],
   templateUrl: './upload.component.html',
   styleUrl: './upload.component.scss'
 })

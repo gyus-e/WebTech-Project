@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @use 'tailwindcss';
 @use 'ngx-toastr/toastr';
+@use 'quill/dist/quill.snow';
 
 $form-bg-color: #2d3748;
 $button-hover-bg-color: #115e59;

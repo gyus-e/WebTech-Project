@@ -51,17 +51,18 @@ section.cats-section {
         flex-wrap: wrap;
         justify-content: center;
         align-items: center;
-        gap: 5rem;
-        padding: 10rem;
+        gap: 2rem;
+        padding: 5rem;
 
         li {
             flex: 0 1 20vw;
-            height: 25vw;
-            min-height: 10vw;
+            // height: 25vw;
+            // min-height: 10vw;
             border: 1px;
             border-radius: 0.5rem;
             padding: 0.5rem;
             // background-color: $form-bg-color;
+            overflow: hidden;
 
             display: flex;
             flex-direction: column;
@@ -81,8 +82,8 @@ section.cats-section {
                 flex: 1 1 auto;
                 border: 1px;
                 border-radius: 0.5rem;
-                max-height: 20vw;
-                min-height: 10vw;
+                // max-height: 20vw;
+                // min-height: 10vw;
             }
         }
     }
