@@ -1,11 +1,42 @@
+@use '../../styles' as *;
+
 section {
-    color: white;
+    @include flexColumn();
+
+    h1 {
+        @include formTitle();
+    }
 
     ul {
+        @include flexColumn();
+        justify-content: stretch;
+        padding: 2rem;
+
         li {
-            img {
-                // width: 100px;
-                // height: 100px;
+            @include flexColumn();
+            color: white;
+            background-color: $form-bg-color;
+            padding: 1rem;
+            border-radius: 0.5rem;
+
+            div {
+                display: flex;
+
+                h2 {
+                    flex-grow: 1;
+                    font-weight: bold;
+                }
+
+                quill-view {
+                    padding: 2rem;
+                    color: whitesmoke;
+                }
+
+                img {
+                    padding: 1rem;
+                    border-radius: 0.5rem;
+                    max-width: 50%;
+                }
             }
         }
     }
