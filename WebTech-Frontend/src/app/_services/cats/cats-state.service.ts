@@ -13,6 +13,7 @@ export class CatsStateService {
   cats = computed(() => this.catsSignal());
   catProfilePicUrls = new Map<number, string | undefined>();
   catGeolocations = new Map<number, LatLng | null>();
+  catGeolocationsSignal = signal<Map<number, LatLng | null> | null>(null);
   new_cat = signal<number | null>(null);
 
   private readonly catsSignal = signal<CatResponse[] | null>(null);
@@ -40,6 +41,7 @@ export class CatsStateService {
       for (const cat of cats) {
         this.getCatMetadata(cat);
       }
+      this.catGeolocationsSignal.set(this.catGeolocations);
     });
 
 

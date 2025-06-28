@@ -3,6 +3,7 @@ import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import { marker, tileLayer } from 'leaflet';
 import { MapStateService } from '../_services/map/map-state.service';
 import { MapConfig } from '../_config/MapConfig';
+import { CatsStateService } from '../_services/cats/cats-state.service';
 
 
 @Component({
@@ -17,6 +18,7 @@ export class MapComponent {
 
 
   mapState = inject(MapStateService);
+  catState = inject(CatsStateService);
 
 
   options = {
@@ -27,7 +29,7 @@ export class MapComponent {
     zoom: MapConfig.DEFAULT_ZOOM,
   };
 
-  
+
   private readonly mapSignal = signal<L.Map | undefined>(undefined);
 
 
@@ -37,11 +39,25 @@ export class MapComponent {
       const pos = this.mapState.posSignal();
       if (map && pos) {
         map.setView(this.mapState.center, this.mapState.zoom);
-        this.mapState.layers[0] = marker(pos, {icon: MapConfig.MARKER_ICON});
+      }
+    });
+
+    effect(() => {
+      const map = this.mapSignal();
+      const catsPos = this.catState.catGeolocationsSignal();
+      if (map && catsPos) {
+        this.addCatMarkers(map, catsPos);
       }
     });
   }
 
+  addCatMarkers(map: L.Map, catsPos: Map<number, L.LatLng | null>) {
+    for (const pos of catsPos.values()) {
+      if (pos) {
+        this.mapState.layers.push(marker(pos, { icon: MapConfig.MARKER_ICON }));
+      }
+    }
+  }
 
   onMapReady(map: L.Map) {
     this.mapSignal.set(map);
@@ -53,7 +69,7 @@ export class MapComponent {
   }
 
 
-  resetPosition(){
+  resetPosition() {
     this.mapSignal()?.setView(this.mapState.posSignal() ?? MapConfig.DEFAULT_CENTER, MapConfig.DEFAULT_ZOOM);
   }
 
