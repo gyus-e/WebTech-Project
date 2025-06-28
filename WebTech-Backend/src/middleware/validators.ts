@@ -1,6 +1,6 @@
+import fs from "fs";
 import express from "express";
 import { body, param, validationResult } from "express-validator";
-import fs from "fs";
 import { CatRequestParams } from "../types/requestParams.type.js";
 import { ErrorsJson } from "../ErrorsJson.js";
 
@@ -11,7 +11,7 @@ export const catNameValidator = () => body('name').trim().notEmpty().escape();
 
 export const photoTitleValidator = () => body('title').trim().notEmpty().escape();
 export const photoDescriptionValidator = () => body('description').trim().optional().escape();
-export const photoGeolocalizationValidator = () => body('geolocation').trim().optional().escape(); //TODO: isLatLong, notEmpty
+export const photoGeolocalizationValidator = () => body('geolocation').trim().isLatLong().optional().escape();
 
 export const catIdValidator = () => param('cat_id').trim().notEmpty().isInt().escape();
 export const photoIdValidator = () => param('photo_id').trim().notEmpty().isInt().escape();

@@ -36,7 +36,7 @@ export class MapComponent {
   constructor() {
     effect(() => {
       const map = this.mapSignal();
-      const pos = this.mapState.posSignal();
+      const pos = this.mapState.userPositionSignal();
       if (map && pos) {
         map.setView(this.mapState.center, this.mapState.zoom);
       }
@@ -66,11 +66,15 @@ export class MapComponent {
       this.mapState.center = map.getCenter();
       this.mapState.zoom = map.getZoom();
     });
+
+    map.on('click', (event: L.LeafletMouseEvent) => {
+      this.mapState.clickPositionSignal.set(event.latlng);
+    });
   }
 
 
   resetPosition() {
-    this.mapSignal()?.setView(this.mapState.posSignal() ?? MapConfig.DEFAULT_CENTER, MapConfig.DEFAULT_ZOOM);
+    this.mapSignal()?.setView(this.mapState.userPositionSignal() ?? MapConfig.DEFAULT_CENTER, MapConfig.DEFAULT_ZOOM);
   }
 
 

@@ -21,7 +21,7 @@ export async function initializePhotoModel() {
             uploader: { type: DataTypes.TEXT, allowNull: false },
             catId: { type: DataTypes.INTEGER, allowNull: false, },
             title: { type: DataTypes.TEXT, allowNull: false },
-            // geolocation: { type: DataTypes.GEOMETRY("POINT"), allowNull: true }, //TODO: uncomment and fix
+            geolocation: { type: DataTypes.JSON, allowNull: true },
             date: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
             description: { type: DataTypes.TEXT("long"), allowNull: true },
         },

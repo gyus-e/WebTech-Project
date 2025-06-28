@@ -8,6 +8,7 @@ import { RestBackendErrorHandlerService } from '../_services/rest-backend/rest-b
 import { RestBackendFetchService } from '../_services/rest-backend/rest-backend-fetch.service';
 import { CatsStateService } from '../_services/cats/cats-state.service';
 import { QuillModule } from 'ngx-quill';
+import { MapStateService } from '../_services/map/map-state.service';
 
 @Component({
   selector: 'app-upload',
@@ -19,11 +20,12 @@ export class UploadComponent {
   toastr = inject(ToastrService);
   router = inject(Router);
   catState = inject(CatsStateService);
+  mapState = inject(MapStateService);
   errHandler = inject(RestBackendErrorHandlerService);
   uploadService = inject(RestBackendUploadService);
   fetchService = inject(RestBackendFetchService);
 
-  multipartFormData = signal<FormData | undefined>(undefined);
+  multipartFormDataSignal = signal<FormData | undefined>(undefined);
   cat_id = signal<number | undefined>(undefined);
   cat_name = signal<string>('');
 
@@ -54,7 +56,7 @@ export class UploadComponent {
       this.cat_id.set(Number(cat_id_param));
     });
 
-    //get cat_name from backend when cat_id is set
+    //get cat_name from backend when cat_id is set (from route parameters observable)
     effect(() => {
       if (!this.cat_id()) {
         return;
@@ -71,11 +73,19 @@ export class UploadComponent {
       });
     });
 
-    //upload photo when multipartFormData is set
+    //set geolocation when user clicks on map
+    effect(() => {
+      const clickPosition = this.mapState.clickPositionSignal();
+      if (clickPosition) {
+        this.uploadForm.patchValue({ geolocation: `${clickPosition.lat},${clickPosition.lng}` });
+      }
+    });
+
+    //upload photo when multipartFormDataSignal is set (on form submit)
     effect(() => {
 
-      if (this.cat_id() && this.multipartFormData()?.has('photo')) {
-        this.uploadService.postPhoto(this.cat_id()!, this.multipartFormData()!).subscribe({
+      if (this.cat_id() && this.multipartFormDataSignal()?.has('photo')) {
+        this.uploadService.postPhoto(this.cat_id()!, this.multipartFormDataSignal()!).subscribe({
 
           next: (response: any) => {
             this.toastr.success('Photo uploaded successfully!');
@@ -119,6 +129,8 @@ export class UploadComponent {
     formData.append('geolocation', this.uploadForm.value.geolocation ?? '');
     formData.append('photo', this.uploadForm.value.photo!);
 
-    this.multipartFormData.set(formData);
+    console.log('Form Data:', formData);
+
+    this.multipartFormDataSignal.set(formData);
   }
 }

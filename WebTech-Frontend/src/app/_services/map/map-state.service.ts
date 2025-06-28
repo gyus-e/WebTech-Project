@@ -1,5 +1,5 @@
 import { effect, Injectable, signal } from '@angular/core';
-import { LatLng, latLng } from 'leaflet';
+import { LatLng, latLng, marker } from 'leaflet';
 import { MapConfig } from '../../_config/MapConfig';
 import { Observable } from 'rxjs';
 
@@ -9,9 +9,11 @@ import { Observable } from 'rxjs';
 export class MapStateService {
 
   public layers: Array<any> = [];
+  public userMarkerLayer: Array<any> = [];
   public center: LatLng = MapConfig.DEFAULT_CENTER;
   public zoom: number = MapConfig.DEFAULT_ZOOM;
-  public posSignal = signal<LatLng | undefined>(undefined);
+  public userPositionSignal = signal<LatLng | undefined>(undefined);
+  public clickPositionSignal = signal<LatLng | undefined>(undefined);
 
 
   private readonly currentPositionObservable = new Observable<LatLng>((subscriber) => {
@@ -28,14 +30,21 @@ export class MapStateService {
 
   constructor() {
     effect(() => {
-      const pos = this.posSignal();
+      const pos = this.userPositionSignal();
       if (pos) {
         this.center = pos;
       }
     });
 
+    effect(() => {
+      const clickPos = this.clickPositionSignal();
+      if (clickPos) {
+        this.userMarkerLayer[0] = marker(clickPos, { icon: MapConfig.MARKER_ICON });
+      }
+    });
+
     this.currentPositionObservable.subscribe({
-      next: (pos) => { this.posSignal.set(pos); },
+      next: (pos) => { this.userPositionSignal.set(pos); },
       error: (error) => { console.error('Error getting current position:', error); }
     });
   }
