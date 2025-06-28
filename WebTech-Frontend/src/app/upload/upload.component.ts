@@ -1,4 +1,4 @@
-import { Component, effect, inject, Input, Output, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { MapComponent } from '../map/map.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';

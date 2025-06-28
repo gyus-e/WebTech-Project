@@ -14,10 +14,10 @@ export class LogoutComponent {
   toastr = inject(ToastrService);
   router = inject(Router);
 
-  ngOnInit() {
+  constructor() {
     if (this.authService.isAuthenticated()) {
       this.authService.logout();
-    } else {    
+    } else {
       this.toastr.warning("Stop messing with the URL!", "Warning: not logged in");
     }
     this.router.navigateByUrl('/');;
