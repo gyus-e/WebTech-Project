@@ -8,12 +8,12 @@ import { AuthState } from './AuthState.type';
 export class AuthService {
 
 
-  authState: WritableSignal<AuthState> = signal<AuthState>({
+  private readonly authState: WritableSignal<AuthState> = signal<AuthState>({
     user: this.getUser(),
     token: this.getToken(),
     isAuthenticated: this.isUserAuthenticated(),
   });
-  
+
 
   user = computed(() => this.authState().user);
   token = computed(() => this.authState().token);
@@ -30,7 +30,7 @@ export class AuthService {
     });
   }
 
-  
+
   logout() {
     this.authState.set({
       user: null,
@@ -93,5 +93,5 @@ export class AuthService {
     })
   }
 
-  
+
 }

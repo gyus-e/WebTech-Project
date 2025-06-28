@@ -1,4 +1,4 @@
-import { computed, effect, inject, Injectable, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, signal, WritableSignal } from '@angular/core';
 import { LatLng } from 'leaflet';
 import { CatResponse } from '../../_types/cat-response.type';
 import { RestBackendFetchService } from '../rest-backend/rest-backend-fetch.service';
@@ -11,10 +11,11 @@ import { RestBackendErrorHandlerService } from '../rest-backend/rest-backend-err
 export class CatsStateService {
 
   cats = computed(() => this.catsSignal());
-  catProfilePicUrls = new Map<number, string | undefined>();
-  catGeolocations = new Map<number, LatLng | null>();
-  catGeolocationsSignal = signal<Map<number, LatLng | null> | null>(null);
   new_cat = signal<number | null>(null);
+  new_geo = signal<boolean>(false);
+
+  catProfilePicUrls = new Map<number, string | undefined>();
+  catGeolocations = new Map<number, LatLng | null>(); //ONLY USES GEOLOCATION OF PROFILE PICTURE
 
   private readonly catsSignal = signal<CatResponse[] | null>(null);
   private readonly restFetchService = inject(RestBackendFetchService);
@@ -41,7 +42,6 @@ export class CatsStateService {
       for (const cat of cats) {
         this.getCatMetadata(cat);
       }
-      this.catGeolocationsSignal.set(this.catGeolocations);
     });
 
 
@@ -53,6 +53,7 @@ export class CatsStateService {
         this.restFetchService.getCatById(new_cat).subscribe({
           next: (cat) => {
             this.catsSignal()!.push(cat);
+            this.catGeolocations.set(cat.id, null);
             this.getCatMetadata(cat);
           },
           error: (err) => {
@@ -66,14 +67,18 @@ export class CatsStateService {
   }
 
   private getCatMetadata(cat: CatResponse) {
+    this.catProfilePicUrls.set(cat.id, `${REST_BACKEND_URL}/cats/${cat.id}/photos/${cat.profilePicture}/send`);
     this.restFetchService.getCatPhotoById(cat.id, cat.profilePicture).subscribe({
       next: (photo) => {
-        this.catProfilePicUrls.set(cat.id, `${REST_BACKEND_URL}/cats/${cat.id}/photos/${cat.profilePicture}/send`);
-        this.catGeolocations.set(cat.id, photo.geolocation ? new LatLng(photo.geolocation[0], photo.geolocation[1]) : null);
+        const geolocation = photo.geolocation;
+        if (geolocation && geolocation.length >= 2) {
+          this.catGeolocations.set(cat.id, new LatLng(geolocation[0], geolocation[1]));
+          console.log(`getCatMetadata: catGeolocations for ${cat.id} set to:`, this.catGeolocations.get(cat.id));
+          this.new_geo.set(true);
+        }
       },
       error: (err) => {
         this.catProfilePicUrls.set(cat.id, undefined);
-        this.catGeolocations.set(cat.id, null);
       }
     });
   }

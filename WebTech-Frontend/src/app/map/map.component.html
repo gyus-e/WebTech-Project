@@ -1,7 +1,7 @@
 <div class="map-container">
     <div class="leaflet" leaflet [leafletOptions]="options" (leafletMapReady)="onMapReady($event)">
         @if (showCatMarkers){
-        <div [leafletLayers]="mapState.layers"></div>
+        <div [leafletLayers]="viewLayers()"></div>
         }
         @else {
         <div [leafletLayers]="mapState.userMarkerLayer"></div>
