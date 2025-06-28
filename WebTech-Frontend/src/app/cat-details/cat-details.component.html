@@ -1,1 +1,12 @@
-<p>cat-details works!</p>
+<section>
+    <h1>{{cat()?.name}}</h1>
+    <ul>
+        @for (photo of photos(); track photo){
+        <li>
+            <h2>{{photo.title}}</h2>
+            <quill-view [content]="getDescription(photo)"></quill-view>
+            <img [src]="photosUrls.get(photo.id)" loading="lazy" />
+        </li>
+        }
+    </ul>
+</section>
