@@ -70,7 +70,7 @@ export class MapComponent {
     if (!this.showCatMarkers) {
       map.on('click', (event: L.LeafletMouseEvent) => {
         this.mapState.clickPositionSignal.set(event.latlng);
-        console.log('Map clicked at:', event.latlng);
+        // console.log('Map clicked at:', event.latlng);
       });
     }
   }
@@ -78,29 +78,29 @@ export class MapComponent {
 
   initMarkersLayer(cats: Array<CatResponse>) {
     for (const cat of cats) {
-      if (cat && this.getCatGeolocations(cat.id)) {
-        this.addCatMarker(cat);
+      const catGeo = this.getCatGeolocations(cat.id);
+      if (catGeo) {
+        this.addCatMarker(cat, catGeo);
       }
     }
   }
 
 
-  private addCatMarker(cat: CatResponse) {
-    const catMarker = this.getMarker(cat.id);
+  private addCatMarker(cat: CatResponse, catGeo: LatLng) {
+    const catMarker = this.getMarker(cat.id, catGeo);
     if (catMarker) {
       catMarker.on('click', () => {
         this.router.navigate(['/cats', cat.id]);
       });
       this.mapState.layers().push(catMarker);
       this.updatedView.set(!this.updatedView());
-      console.log('Added marker at:', catMarker.getLatLng());
+      // console.log('Added marker at:', catMarker.getLatLng());
     }
   }
 
 
-  getMarker(catId: number): L.Marker | null {
-    const catGeolocation = this.getCatGeolocations(catId);
-    console.log('getMarker: catGeolocation for cat ', catId, ' is ', catGeolocation);
+  getMarker(catId: number, catGeolocation: LatLng): L.Marker | null {
+    // console.log('getMarker: catGeolocation for cat ', catId, ' is ', catGeolocation);
     if (!catGeolocation) {
       return null;
     }
@@ -110,7 +110,7 @@ export class MapComponent {
 
   getCatGeolocations(catId: number): LatLng | null {
     const catGeoSignal = this.catsState.catGeolocations.get(catId);
-    console.log('getCatGeolocations: catGeoSignal for cat ', catId, ' is ', catGeoSignal);
+    // console.log('getCatGeolocations: catGeoSignal for cat ', catId, ' is ', catGeoSignal);
     return catGeoSignal ?? null;
   }
 
