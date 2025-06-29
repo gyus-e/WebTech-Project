@@ -1,6 +1,7 @@
 <section>
     <h1>{{cat()?.name}}</h1>
     <button type="button" (click)="router.navigate([`/upload`, cat()?.id]);">Post new photo</button>
+
     <ul>
         @for (photo of photos(); track photo){
         <li>
@@ -27,8 +28,15 @@
                     </li>
                     }
                 </ul>
+                @if (authService.isAuthenticated() && verifyPhotoUploader(photo)){
+                <button type="button" (click)="deletePhoto(photo)">Delete Photo</button>
+                }
             </div>
         </li>
         }
     </ul>
+
+    @if (authService.isAuthenticated() && verifyCatUploader()){
+    <button type="button" (click)="deleteCat()">Delete Cat</button>
+    }
 </section>

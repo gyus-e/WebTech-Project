@@ -169,5 +169,25 @@ export class CatDetailsComponent {
     });
   }
 
+  verifyCatUploader(): boolean {
+    if (!this.cat() || !this.authService.isAuthenticated()) {
+      return false;
+    }
+    return this.authService.user() === this.cat()!.uploader;
+  }
 
+  verifyPhotoUploader(photo: PhotoResponse): boolean {
+    if (!photo || !this.authService.isAuthenticated()) {
+      return false;
+    }
+    return this.authService.user() === photo.uploader;
+  }
+
+  deleteCat() {
+    console.log("deleteCat called");
+  }
+
+  deletePhoto(photo: PhotoResponse) {
+    console.log("deletePhoto called");
+  }
 }
