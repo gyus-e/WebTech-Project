@@ -7,6 +7,25 @@
             <div>
                 <img [src]="photosUrls.get(photo.id)" loading="lazy" />
                 <quill-view [content]="getDescription(photo)"></quill-view>
+                <!-- <quill-editor [content]="getDescription(photo)" (contentChanged)="updateDescription($event, photo)"></quill-editor> -->
+
+                @if (authService.isAuthenticated()){
+                <form class="comment-form" [formGroup]="commentForm" (ngSubmit)="postComment(photo.id)">
+                    <!-- <input type="hidden" formControlName="photoId" [value]="photo.id" /> -->
+                    <quill-editor formControlName="comment" placeholder="Add a comment..."></quill-editor>
+                    <button type="submit" class="comment-submit">Post</button>
+                </form>
+                }
+
+                <ul class="comments-list">
+                    @for (comment of comments(); track comment){
+                    <li class="comment-item">
+                        <p class="comment-author">{{comment.uploader}}</p>
+                        <quill-view [content]="comment.text"></quill-view>
+                        <!-- <p class="comment-date">{{comment.date | date:'short'}}</p> -->
+                    </li>
+                    }
+                </ul>
             </div>
         </li>
         }

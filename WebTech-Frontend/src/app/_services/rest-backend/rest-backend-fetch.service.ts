@@ -41,4 +41,9 @@ export class RestBackendFetchService {
   //   return this.http.get(url, { responseType: 'blob' });
   // }
 
+  getComments(catId: number, photoId: number): Observable<any[]> {
+    const url = REST_BACKEND_URL + `/cats/${catId}/photos/${photoId}/comments`;
+    return this.http.get(url) as Observable<any[]>;
+  }
+
 }

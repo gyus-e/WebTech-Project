@@ -9,26 +9,37 @@ import { PhotoResponse } from '../_types/photo-response.type';
 import { LatLng } from 'leaflet';
 import { REST_BACKEND_URL } from '../_config/rest-backend-url';
 import { QuillModule } from 'ngx-quill';
+import { AuthService } from '../_services/auth/auth.service';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RestBackendUploadService } from '../_services/rest-backend/rest-backend-upload.service';
 
 @Component({
   selector: 'app-cat-details',
-  imports: [QuillModule],
+  imports: [QuillModule, ReactiveFormsModule],
   templateUrl: './cat-details.component.html',
   styleUrl: './cat-details.component.scss'
 })
 export class CatDetailsComponent {
-  fetchService = inject(RestBackendFetchService);
-  errHandler = inject(RestBackendErrorHandlerService);
   router = inject(Router);
   toastr = inject(ToastrService);
+  authService = inject(AuthService);
+  fetchService = inject(RestBackendFetchService);
+  uploadService = inject(RestBackendUploadService);
+  errHandler = inject(RestBackendErrorHandlerService);
   catsState = inject(CatsStateService);
 
   photosUrls = new Map<number, string>();
   photos = signal<PhotoResponse[] | null>(null);
   cat_id = signal<number | undefined>(undefined);
   cat = computed(() => this.catSignal());
+  comments = signal<any[]>([]);
 
   private readonly catSignal = signal<CatResponse | undefined>(undefined);
+
+  commentForm = new FormGroup({
+    // photoId: new FormControl<number | undefined>(undefined, [Validators.required]),
+    comment: new FormControl('', [Validators.required]),
+  });
 
 
   constructor(route: ActivatedRoute) {
@@ -105,6 +116,57 @@ export class CatDetailsComponent {
     const txt = document.createElement('textarea');
     txt.innerHTML = photo.description ?? '';
     return txt.value;
+  }
+
+  getComments(photoId: number) {
+    this.fetchService.getComments(this.cat_id()!, photoId).subscribe({
+      next: (comments) => {
+        this.comments.set(comments);
+      },
+      error: (err) => {
+        this.errHandler.handleError(err);
+      }
+    });
+  }
+
+  postComment(photoId: number) {
+    if (!this.authService.isAuthenticated()) {
+      this.toastr.error('You must be logged in to post a comment.');
+      return;
+    }
+
+    if (this.commentForm.invalid) {
+      this.toastr.error('Comment cannot be empty.');
+      return;
+    }
+    ;
+    if (!photoId || isNaN(photoId)) {
+      this.toastr.error('Photo ID is not set or invalid.');
+      return;
+    }
+
+    const comment = this.commentForm.value.comment;
+    if (!comment) {
+      this.toastr.error('Comment cannot be empty.');
+      return;
+    }
+
+    const catId = this.cat_id();
+    if (!catId) {
+      this.toastr.error('Cat ID is not set.');
+      return;
+    }
+
+    this.uploadService.postComment(catId, photoId, comment).subscribe({
+      next: () => {
+        this.toastr.success('Comment posted successfully.');
+        this.commentForm.reset();
+        // Optionally, refresh the comments or update the UI
+      },
+      error: (err) => {
+        this.errHandler.handleError(err);
+      }
+    });
   }
 
 

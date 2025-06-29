@@ -5,6 +5,7 @@ import { checkPhotoOwnership } from '../middleware/checkOwnership.js';
 import { uploadSinglePhoto } from '../middleware/upload.js';
 import { photoDescriptionValidator, photoGeolocalizationValidator, reqHasFile, photoIdValidator, photoTitleValidator, validateRequest } from '../middleware/validators.js';
 import { findPhotoById } from '../middleware/fetchers.js';
+import { commentsRouter } from './commentsRouter.js';
 
 export const catPhotosRouter = express.Router({ mergeParams: true });
 
@@ -88,3 +89,5 @@ catPhotosRouter.route(`/:photo_id`)
     .delete([enforceAuthentication, checkPhotoOwnership, validateRequest], deletePhotoById);
 
 catPhotosRouter.get(`/:photo_id/send`, [findPhotoById, photoIdValidator(), validateRequest], sendPhotoById);
+
+catPhotosRouter.use(`/:photo_id/comments`, [findPhotoById, photoIdValidator()], commentsRouter);

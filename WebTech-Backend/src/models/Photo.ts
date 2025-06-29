@@ -7,7 +7,7 @@ export class Photo extends Model {
     public uploader!: string;
     public catId!: number;
     public title!: string;
-    public geolocation!: { type: string; coordinates: number[] } | null;
+    public geolocation!: { type: string; coordinates: number[] };
     public description!: string | null;
 };
 
@@ -21,7 +21,7 @@ export async function initializePhotoModel() {
             uploader: { type: DataTypes.TEXT, allowNull: false },
             catId: { type: DataTypes.INTEGER, allowNull: false, },
             title: { type: DataTypes.TEXT, allowNull: false },
-            geolocation: { type: DataTypes.JSON, allowNull: true },
+            geolocation: { type: DataTypes.JSON, allowNull: false },
             date: { type: DataTypes.DATE, allowNull: false, defaultValue: DataTypes.NOW },
             description: { type: DataTypes.TEXT("long"), allowNull: true },
         },

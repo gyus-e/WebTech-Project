@@ -28,5 +28,9 @@ export class RestBackendUploadService {
     return this.http.post(url, formValues) as Observable<any>;
   }
 
+  postComment(catId: number, photoId: number, comment: string): Observable<any> {
+    const url = REST_BACKEND_URL + `/cats/${catId}/photos/${photoId}/comments`;
+    return this.http.post(url, { text: comment, photoId: photoId }) as Observable<any>;
+  }
 
 }

@@ -4,6 +4,7 @@ import { initializeCatModel } from "./models/Cat.js";
 import { initializePhotoModel } from "./models/Photo.js";
 import { initializeRelations } from "./models/relations.js";
 import { Sequelize } from 'sequelize';
+import { initializeCommentModel } from './models/Comment.js';
 
 export async function initializeDatabase() {
     const database = await DatabaseConnectionManager.getInstance();
@@ -16,6 +17,7 @@ async function initializeModels() {
     await initializeUserModel();
     await initializeCatModel();
     await initializePhotoModel();
+    await initializeCommentModel();
     initializeRelations();
 }
 

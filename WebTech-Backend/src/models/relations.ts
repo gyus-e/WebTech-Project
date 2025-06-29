@@ -1,6 +1,7 @@
 import { User } from "./User.js";
 import { Cat } from "./Cat.js";
 import { Photo } from "./Photo.js";
+import { Comment } from "./Comment.js";
 
 export function initializeRelations() {
     Cat.belongsTo(User, { foreignKey: "uploader", onDelete: "SET NULL" });
@@ -14,4 +15,9 @@ export function initializeRelations() {
 
     Cat.belongsTo(Photo, { foreignKey: "profilePhoto", onDelete: "SET NULL" });
     Photo.hasOne(Cat, { foreignKey: "profilePhoto" });
+
+    Comment.belongsTo(Photo, { foreignKey: "photoId", onDelete: "CASCADE" });
+    Photo.hasMany(Comment, { foreignKey: "photoId" });
+    Comment.belongsTo(User, { foreignKey: "uploader", onDelete: "CASCADE" });
+    User.hasMany(Comment, { foreignKey: "uploader" });
 }
