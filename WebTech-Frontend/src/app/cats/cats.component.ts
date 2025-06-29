@@ -1,4 +1,4 @@
-import { Component, inject, Output, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CatsStateService } from '../_services/cats/cats-state.service';
 import { RestBackendFetchService } from '../_services/rest-backend/rest-backend-fetch.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -36,7 +36,7 @@ export class CatsComponent {
     this.uploadService.postCat(this.uploadCatForm.value.name!).subscribe({
       next: (response) => {
         const cat_id = response.id;
-        this.catsState.new_cat.set(cat_id);
+        this.catsState.new_cat.set(response);
         this.toastr.success(`You added ${this.uploadCatForm.value.name}!`, `Success!`);
         this.router.navigate([`/upload`, cat_id]);
       },
@@ -49,6 +49,7 @@ export class CatsComponent {
 
 
   getCatProfilePicUrl(catId: number): string {
+    console.log(`getCatProfilePicUrl`, this.catsState.catProfilePicUrls.get(catId));
     return this.catsState.catProfilePicUrls.get(catId) ?? 'assets/yamamaya.jpg';
   }
 

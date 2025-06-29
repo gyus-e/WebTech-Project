@@ -1,4 +1,4 @@
-import { computed, effect, inject, Injectable, signal, WritableSignal } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { LatLng } from 'leaflet';
 import { CatResponse } from '../../_types/cat-response.type';
 import { RestBackendFetchService } from '../rest-backend/rest-backend-fetch.service';
@@ -12,7 +12,7 @@ import { PhotoResponse } from '../../_types/photo-response.type';
 export class CatsStateService {
 
   cats = computed(() => this.catsSignal());
-  new_cat = signal<number | null>(null);
+  new_cat = signal<CatResponse | null>(null);
   new_photo = signal<PhotoResponse | null>(null);
   new_geo = signal<boolean>(false);
 
@@ -35,7 +35,7 @@ export class CatsStateService {
       }
     });
 
-
+    // initialize all cats data on when the cats are fetched
     effect(() => {
       const cats = this.cats();
       if (!cats) {
@@ -46,13 +46,13 @@ export class CatsStateService {
       }
     });
 
-
+    // fetch and initialize new cat data when one is uploaded
     effect(() => {
       if (this.new_cat()) {
         const new_cat = this.new_cat()!;
         this.new_cat.set(null);
 
-        this.restFetchService.getCatById(new_cat).subscribe({
+        this.restFetchService.getCatById(new_cat.id).subscribe({
           next: (newCat) => {
             this.catsSignal()!.push(newCat);
             this.initializeCatData(newCat);
@@ -76,12 +76,9 @@ export class CatsStateService {
   }
 
   private initializeCatData(cat: CatResponse) {
-    this.catProfilePicUrls.set(cat.id, `${REST_BACKEND_URL}/cats/${cat.id}/photos/${cat.profilePicture}/send`);
-
     this.restFetchService.getCatPhotos(cat.id).subscribe({
       next: (photos) => {
         for (const photo of photos) {
-
           this.initializePhotoData(photo);
         }
       },
@@ -93,6 +90,10 @@ export class CatsStateService {
 
 
   private initializePhotoData(photo: PhotoResponse) {
+    if (!this.catProfilePicUrls.has(photo.catId)) {
+      this.catProfilePicUrls.set(photo.catId, `${REST_BACKEND_URL}/cats/${photo.catId}/photos/${photo.id}/send`);
+    }
+
     this.photoGeolocations.set(photo.id, null);
 
     const geolocation = photo.geolocation?.split(',').map(Number);
