@@ -10,6 +10,7 @@ import { CatsStateService } from '../_services/cats/cats-state.service';
 import { QuillModule } from 'ngx-quill';
 import { MapStateService } from '../_services/map/map-state.service';
 import { PhotoResponse } from '../_types/photo-response.type';
+import { CatResponse } from '../_types/cat-response.type';
 
 @Component({
   selector: 'app-upload',
@@ -66,7 +67,7 @@ export class UploadComponent {
       }
 
       this.fetchService.getCatById(cat_id).subscribe({
-        next: (response: any) => {
+        next: (response: CatResponse) => {
           this.cat_name.set(response.name); //used in the template
         },
 
