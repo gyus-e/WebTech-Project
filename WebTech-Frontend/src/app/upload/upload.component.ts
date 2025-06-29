@@ -57,14 +57,17 @@ export class UploadComponent {
       this.cat_id.set(Number(cat_id_param));
     });
 
-    //get cat_name from backend when cat_id is set (from route parameters observable)
+    //get cat_name from backend when cat_id is set
     effect(() => {
-      if (!this.cat_id()) {
+      const cat_id = this.cat_id();
+
+      if (!cat_id) {
         return;
       }
-      this.fetchService.getCatById(this.cat_id()!).subscribe({
+
+      this.fetchService.getCatById(cat_id).subscribe({
         next: (response: any) => {
-          this.cat_name.set(response.name);
+          this.cat_name.set(response.name); //used in the template
         },
 
         error: (error: any) => {
@@ -84,17 +87,17 @@ export class UploadComponent {
 
     //upload photo when multipartFormDataSignal is set (on form submit)
     effect(() => {
+      const cat_id = this.cat_id();
+      const multipartFormData = this.multipartFormDataSignal();
 
-      if (this.cat_id() && this.multipartFormDataSignal()?.has('photo')) {
-        this.uploadService.postPhoto(this.cat_id()!, this.multipartFormDataSignal()!).subscribe({
+      if (cat_id && multipartFormData?.has('photo')) {
+        this.uploadService.postPhoto(cat_id, multipartFormData).subscribe({
 
           next: (response: PhotoResponse) => {
             this.toastr.success('Photo uploaded successfully!');
-            console.log(response);
             this.uploadForm.reset();
-            //   this.catState.new_cat.set(this.cat_id()!);
-            this.catState.new_photo.set(response);
-            setTimeout(() => { this.router.navigateByUrl("/") }, 10);
+            this.catState.new_photo.set(response); //trigger catsState.initializePhotoData
+            setTimeout(() => { this.router.navigateByUrl(`/cats/${this.cat_id()}`) }, 10);
           },
 
           error: (error: any) => {
@@ -133,6 +136,6 @@ export class UploadComponent {
 
     console.log('Form Data:', formData);
 
-    this.multipartFormDataSignal.set(formData);
+    this.multipartFormDataSignal.set(formData); //trigger the effect to upload the photo
   }
 }

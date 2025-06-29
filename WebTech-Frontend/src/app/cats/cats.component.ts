@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { CatsStateService } from '../_services/cats/cats-state.service';
 import { RestBackendFetchService } from '../_services/rest-backend/rest-backend-fetch.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -35,10 +35,9 @@ export class CatsComponent {
 
     this.uploadService.postCat(this.uploadCatForm.value.name!).subscribe({
       next: (response) => {
-        const cat_id = response.id;
-        this.catsState.new_cat.set(response);
+        this.catsState.new_cat.set(response); // trigger catsState.initializeCatData NOTE: at this time no photos are uploaded yet
         this.toastr.success(`You added ${this.uploadCatForm.value.name}!`, `Success!`);
-        this.router.navigate([`/upload`, cat_id]);
+        this.router.navigate([`/upload`, response.id]);
       },
       error: (error) => {
         console.error('Error uploading cat:', error);
@@ -46,12 +45,5 @@ export class CatsComponent {
       }
     });
   }
-
-
-  getCatProfilePicUrl(catId: number): string {
-    console.log(`getCatProfilePicUrl`, this.catsState.catProfilePicUrls.get(catId));
-    return this.catsState.catProfilePicUrls.get(catId) ?? 'assets/yamamaya.jpg';
-  }
-
 
 }

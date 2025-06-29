@@ -5,6 +5,7 @@ import { RestBackendFetchService } from '../rest-backend/rest-backend-fetch.serv
 import { REST_BACKEND_URL } from '../../_config/rest-backend-url';
 import { RestBackendErrorHandlerService } from '../rest-backend/rest-backend-error-handler.service';
 import { PhotoResponse } from '../../_types/photo-response.type';
+import { CatsComponent } from '../../cats/cats.component';
 
 @Injectable({
   providedIn: 'root'
@@ -16,10 +17,11 @@ export class CatsStateService {
   new_photo = signal<PhotoResponse | null>(null);
   new_geo = signal<boolean>(false);
 
-  catProfilePicUrls = new Map<number, string | undefined>();
+  catProfilePicUrls = signal(new Map<number, string | undefined>());
   photoGeolocations = new Map<number, LatLng | null>();
 
   private readonly catsSignal = signal<CatResponse[] | null>(null);
+  // private readonly newProfilePicUrl = signal(0);
   private readonly restFetchService = inject(RestBackendFetchService);
   private readonly errHandler = inject(RestBackendErrorHandlerService);
 
@@ -49,6 +51,7 @@ export class CatsStateService {
     // fetch and initialize new cat data when one is uploaded
     effect(() => {
       if (this.new_cat()) {
+        //is this part really necessary? Just use the signal
         const new_cat = this.new_cat()!;
         this.new_cat.set(null);
 
@@ -76,6 +79,11 @@ export class CatsStateService {
   }
 
   private initializeCatData(cat: CatResponse) {
+    if (cat.profilePicture) {
+      this.catProfilePicUrls().set(cat.id, `${REST_BACKEND_URL}/cats/${cat.id}/photos/${cat.profilePicture}/send`);
+    }
+    console.log(`initializeCatData - cat ${cat.id} profile pic url is: ${this.catProfilePicUrls().get(cat.id)}`);
+
     this.restFetchService.getCatPhotos(cat.id).subscribe({
       next: (photos) => {
         for (const photo of photos) {
@@ -83,16 +91,22 @@ export class CatsStateService {
         }
       },
       error: (err) => {
-        this.catProfilePicUrls.set(cat.id, undefined);
+        this.catProfilePicUrls().set(cat.id, undefined);
       }
     });
   }
 
 
   private initializePhotoData(photo: PhotoResponse) {
-    if (!this.catProfilePicUrls.has(photo.catId)) {
-      this.catProfilePicUrls.set(photo.catId, `${REST_BACKEND_URL}/cats/${photo.catId}/photos/${photo.id}/send`);
+    const profilePicUrl = this.catProfilePicUrls().get(photo.catId);
+    if (!profilePicUrl) {
+      let map = new Map(this.catProfilePicUrls());
+      map.set(photo.catId, `${REST_BACKEND_URL}/cats/${photo.catId}/photos/${photo.id}/send`);
+      this.catProfilePicUrls.set(map);
+      // this.catProfilePicUrls().set(photo.catId, `${REST_BACKEND_URL}/cats/${photo.catId}/photos/${photo.id}/send`);
+      // this.newProfilePicUrl.set(this.newProfilePicUrl() + 1);
     }
+    console.log(`initializePhotoData: cat ${photo.catId} profile pic url is: ${this.catProfilePicUrls().get(photo.catId)}`);
 
     this.photoGeolocations.set(photo.id, null);
 
