@@ -4,6 +4,7 @@ import { CatResponse } from '../../_types/cat-response.type';
 import { RestBackendFetchService } from '../rest-backend/rest-backend-fetch.service';
 import { REST_BACKEND_URL } from '../../_config/rest-backend-url';
 import { RestBackendErrorHandlerService } from '../rest-backend/rest-backend-error-handler.service';
+import { PhotoResponse } from '../../_types/photo-response.type';
 
 @Injectable({
   providedIn: 'root'
@@ -12,10 +13,11 @@ export class CatsStateService {
 
   cats = computed(() => this.catsSignal());
   new_cat = signal<number | null>(null);
+  new_photo = signal<PhotoResponse | null>(null);
   new_geo = signal<boolean>(false);
 
   catProfilePicUrls = new Map<number, string | undefined>();
-  catGeolocations = new Map<number, LatLng | null>();
+  photoGeolocations = new Map<number, LatLng | null>();
 
   private readonly catsSignal = signal<CatResponse[] | null>(null);
   private readonly restFetchService = inject(RestBackendFetchService);
@@ -40,7 +42,7 @@ export class CatsStateService {
         return;
       }
       for (const cat of cats) {
-        this.getCatMetadata(cat);
+        this.initializeCatData(cat);
       }
     });
 
@@ -51,10 +53,9 @@ export class CatsStateService {
         this.new_cat.set(null);
 
         this.restFetchService.getCatById(new_cat).subscribe({
-          next: (cat) => {
-            this.catsSignal()!.push(cat);
-            this.catGeolocations.set(cat.id, null);
-            this.getCatMetadata(cat);
+          next: (newCat) => {
+            this.catsSignal()!.push(newCat);
+            this.initializeCatData(newCat);
           },
           error: (err) => {
             this.errHandler.handleError(err);
@@ -64,19 +65,24 @@ export class CatsStateService {
       }
     });
 
+    effect(() => {
+      if (this.new_photo()) {
+        const new_photo = this.new_photo()!;
+        this.new_photo.set(null);
+        this.initializePhotoData(new_photo);
+      }
+    });
+
   }
 
-  private getCatMetadata(cat: CatResponse) {
+  private initializeCatData(cat: CatResponse) {
     this.catProfilePicUrls.set(cat.id, `${REST_BACKEND_URL}/cats/${cat.id}/photos/${cat.profilePicture}/send`);
 
     this.restFetchService.getCatPhotos(cat.id).subscribe({
       next: (photos) => {
         for (const photo of photos) {
-          const geolocation = photo.geolocation?.split(',').map(Number);
-          if (geolocation && geolocation.length >= 2) {
-            this.catGeolocations.set(cat.id, new LatLng(geolocation[0], geolocation[1]));
-            this.new_geo.set(true);
-          }
+
+          this.initializePhotoData(photo);
         }
       },
       error: (err) => {
@@ -85,5 +91,15 @@ export class CatsStateService {
     });
   }
 
+
+  private initializePhotoData(photo: PhotoResponse) {
+    this.photoGeolocations.set(photo.id, null);
+
+    const geolocation = photo.geolocation?.split(',').map(Number);
+    if (geolocation && geolocation.length >= 2) {
+      this.photoGeolocations.set(photo.id, new LatLng(geolocation[0], geolocation[1]));
+      this.new_geo.set(true);
+    }
+  }
 }
 

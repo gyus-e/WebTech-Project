@@ -9,6 +9,7 @@ import { RestBackendFetchService } from '../_services/rest-backend/rest-backend-
 import { CatsStateService } from '../_services/cats/cats-state.service';
 import { QuillModule } from 'ngx-quill';
 import { MapStateService } from '../_services/map/map-state.service';
+import { PhotoResponse } from '../_types/photo-response.type';
 
 @Component({
   selector: 'app-upload',
@@ -87,11 +88,12 @@ export class UploadComponent {
       if (this.cat_id() && this.multipartFormDataSignal()?.has('photo')) {
         this.uploadService.postPhoto(this.cat_id()!, this.multipartFormDataSignal()!).subscribe({
 
-          next: (response: any) => {
+          next: (response: PhotoResponse) => {
             this.toastr.success('Photo uploaded successfully!');
             console.log(response);
             this.uploadForm.reset();
-            this.catState.new_cat.set(this.cat_id()!);
+            //   this.catState.new_cat.set(this.cat_id()!);
+            this.catState.new_photo.set(response);
             setTimeout(() => { this.router.navigateByUrl("/") }, 10);
           },
 

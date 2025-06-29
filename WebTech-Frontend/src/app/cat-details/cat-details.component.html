@@ -13,7 +13,6 @@
 
                 @if (authService.isAuthenticated()){
                 <form class="comment-form" [formGroup]="commentForm" (ngSubmit)="postComment(photo.id)">
-                    <!-- <input type="hidden" formControlName="photoId" [value]="photo.id" /> -->
                     <quill-editor formControlName="comment" placeholder="Add a comment..."></quill-editor>
                     <button type="submit" class="comment-submit">Post</button>
                 </form>
@@ -24,14 +23,13 @@
                     <li class="comment-item">
                         <p class="comment-author">{{comment.uploader}}</p>
                         <quill-view [content]="comment.text"></quill-view>
-                        <!-- <p class="comment-date">{{comment.date | date:'short'}}</p> -->
                     </li>
                     }
                 </ul>
-                @if (authService.isAuthenticated() && verifyPhotoUploader(photo)){
-                <button type="button" (click)="deletePhoto(photo)">Delete Photo</button>
-                }
             </div>
+            @if (authService.isAuthenticated() && verifyPhotoUploader(photo)){
+            <button type="button" (click)="deletePhoto(photo)">Delete Photo</button>
+            }
         </li>
         }
     </ul>

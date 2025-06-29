@@ -36,6 +36,7 @@ export class CatsComponent {
     this.uploadService.postCat(this.uploadCatForm.value.name!).subscribe({
       next: (response) => {
         const cat_id = response.id;
+        this.catsState.new_cat.set(cat_id);
         this.toastr.success(`You added ${this.uploadCatForm.value.name}!`, `Success!`);
         this.router.navigate([`/upload`, cat_id]);
       },
