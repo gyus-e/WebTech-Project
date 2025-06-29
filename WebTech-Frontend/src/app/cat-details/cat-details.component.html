@@ -1,5 +1,6 @@
 <section>
     <h1>{{cat()?.name}}</h1>
+    <button type="button" (click)="router.navigate([`/upload`, cat()?.id]);">Post new photo</button>
     <ul>
         @for (photo of photos(); track photo){
         <li>

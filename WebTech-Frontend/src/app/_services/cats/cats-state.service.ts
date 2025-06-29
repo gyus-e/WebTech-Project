@@ -15,7 +15,7 @@ export class CatsStateService {
   new_geo = signal<boolean>(false);
 
   catProfilePicUrls = new Map<number, string | undefined>();
-  catGeolocations = new Map<number, LatLng | null>(); //ONLY USES GEOLOCATION OF PROFILE PICTURE
+  catGeolocations = new Map<number, LatLng | null>();
 
   private readonly catsSignal = signal<CatResponse[] | null>(null);
   private readonly restFetchService = inject(RestBackendFetchService);
@@ -68,15 +68,15 @@ export class CatsStateService {
 
   private getCatMetadata(cat: CatResponse) {
     this.catProfilePicUrls.set(cat.id, `${REST_BACKEND_URL}/cats/${cat.id}/photos/${cat.profilePicture}/send`);
-    this.restFetchService.getCatPhotoById(cat.id, cat.profilePicture).subscribe({
-      next: (photo) => {
-        const geolocation = photo.geolocation?.split(',').map(Number);
-        // console.log(`getCatMetadata: geolocation for cat ${cat.id} is:`, geolocation);
-        if (geolocation && geolocation.length >= 2) {
-          // console.log(`getCatMetadata: lat=${geolocation[0]}, lng=${geolocation[1]}`);
-          this.catGeolocations.set(cat.id, new LatLng(geolocation[0], geolocation[1]));
-          // console.log(`getCatMetadata: catGeolocations for ${cat.id} set to:`, this.catGeolocations.get(cat.id));
-          this.new_geo.set(true);
+
+    this.restFetchService.getCatPhotos(cat.id).subscribe({
+      next: (photos) => {
+        for (const photo of photos) {
+          const geolocation = photo.geolocation?.split(',').map(Number);
+          if (geolocation && geolocation.length >= 2) {
+            this.catGeolocations.set(cat.id, new LatLng(geolocation[0], geolocation[1]));
+            this.new_geo.set(true);
+          }
         }
       },
       error: (err) => {
