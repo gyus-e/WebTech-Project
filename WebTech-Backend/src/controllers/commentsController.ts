@@ -12,7 +12,7 @@ export async function postComments(req: express.Request, res: express.Response) 
     try {
         const newComment = await Comment.create({
             text: req.body.text,
-            photoId: req.body.photo_id,
+            photoId: req.params.photo_id,
             uploader: req.username
         });
         res.status(201).json(newComment);
