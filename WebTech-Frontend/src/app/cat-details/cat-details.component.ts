@@ -6,12 +6,12 @@ import { CatResponse } from '../_types/cat-response.type';
 import { RestBackendErrorHandlerService } from '../_services/rest-backend/rest-backend-error-handler.service';
 import { CatsStateService } from '../_services/cats/cats-state.service';
 import { PhotoResponse } from '../_types/photo-response.type';
-import { LatLng } from 'leaflet';
 import { REST_BACKEND_URL } from '../_config/rest-backend-url';
 import { QuillModule } from 'ngx-quill';
 import { AuthService } from '../_services/auth/auth.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RestBackendUploadService } from '../_services/rest-backend/rest-backend-upload.service';
+import { RestBackendDeleteService } from '../_services/rest-backend/rest-backend-delete.service';
 
 @Component({
   selector: 'app-cat-details',
@@ -25,6 +25,7 @@ export class CatDetailsComponent {
   authService = inject(AuthService);
   fetchService = inject(RestBackendFetchService);
   uploadService = inject(RestBackendUploadService);
+  deleteService = inject(RestBackendDeleteService);
   errHandler = inject(RestBackendErrorHandlerService);
   catsState = inject(CatsStateService);
 
@@ -193,10 +194,38 @@ export class CatDetailsComponent {
   }
 
   deleteCat() {
-    console.log("deleteCat called");
+    const catId = this.cat_id();
+    if (!catId) {
+      this.toastr.error('Cat ID is not set.');
+      return;
+    }
+
+    this.deleteService.deleteCat(catId).subscribe({
+      next: () => {
+        this.toastr.success('Cat deleted successfully.');
+        this.router.navigateByUrl("/cats");
+      },
+      error: (err) => {
+        this.errHandler.handleError(err);
+      }
+    });
   }
 
   deletePhoto(photo: PhotoResponse) {
-    console.log("deletePhoto called");
+    const catId = this.cat_id();
+    if (!catId) {
+      this.toastr.error('Cat ID is not set.');
+      return;
+    }
+
+    this.deleteService.deleteCatPhoto(catId, photo.id).subscribe({
+      next: () => {
+        this.toastr.success('Photo deleted successfully.');
+        // Refresh the photo list or take any other action
+      },
+      error: (err) => {
+        this.errHandler.handleError(err);
+      }
+    });
   }
 }
