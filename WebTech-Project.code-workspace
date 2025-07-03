@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "WebTech-Frontend"
+		},
+		{
+			"path": "WebTech-Backend"
+		},
+		{
+			"path": "."
+		}
+	],
+	"settings": {}
+}
