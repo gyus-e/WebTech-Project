@@ -202,6 +202,7 @@ export class CatDetailsComponent {
 
     this.deleteService.deleteCat(catId).subscribe({
       next: () => {
+        this.catsState.removeCat(catId);
         this.toastr.success('Cat deleted successfully.');
         this.router.navigateByUrl("/cats");
       },

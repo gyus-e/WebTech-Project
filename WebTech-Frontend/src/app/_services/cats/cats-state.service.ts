@@ -21,7 +21,6 @@ export class CatsStateService {
   photoGeolocations = new Map<number, LatLng | null>();
 
   private readonly catsSignal = signal<CatResponse[] | null>(null);
-  // private readonly newProfilePicUrl = signal(0);
   private readonly restFetchService = inject(RestBackendFetchService);
   private readonly errHandler = inject(RestBackendErrorHandlerService);
 
@@ -50,14 +49,13 @@ export class CatsStateService {
 
     // fetch and initialize new cat data when one is uploaded
     effect(() => {
-      if (this.new_cat()) {
-        //is this part really necessary? Just use the signal
-        const new_cat = this.new_cat()!;
-        this.new_cat.set(null);
-
+      const new_cat = this.new_cat();
+      if (new_cat) {
         this.restFetchService.getCatById(new_cat.id).subscribe({
           next: (newCat) => {
-            this.catsSignal()!.push(newCat);
+            const catsArray = this.catsSignal() ?? new Array<CatResponse>();
+            catsArray.push(newCat);
+            this.catsSignal.set(catsArray);
             this.initializeCatData(newCat);
           },
           error: (err) => {
@@ -77,6 +75,13 @@ export class CatsStateService {
     });
 
   }
+
+
+  public removeCat(catId: number) {
+    const cats = this.catsSignal()!;
+    this.catsSignal.set(cats.filter(cat => cat.id !== catId));
+  }
+
 
   private initializeCatData(cat: CatResponse) {
     if (cat.profilePicture) {
