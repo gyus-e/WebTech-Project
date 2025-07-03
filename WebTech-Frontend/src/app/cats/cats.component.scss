@@ -2,82 +2,227 @@
 
 section.cats-section {
     @include flexColumn();
+    min-height: 100vh;
+    padding: 1rem;
 
     h1.title {
         @include formTitle();
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        margin-bottom: 2rem;
+        
+        @media (max-width: 768px) {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
     }
 
     form.upload-cat-form {
         @include flexColumn();
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 1rem;
+        padding: 2rem;
+        margin-bottom: 3rem;
+        width: 100%;
+        max-width: 500px;
+        // box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+        // border: 1px solid rgba(255, 255, 255, 0.18);
+
+        @media (max-width: 768px) {
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
 
         div {
             display: flex;
-            justify-content: stretch;
-            align-items: stretch;
-            margin-bottom: 1rem;
-
-            label {
-                font-size: 1.5rem;
-                font-weight: $semibold;
-                color: whitesmoke;
-            }
+            flex-direction: column;
+            margin-bottom: 1.5rem;
 
             input {
                 width: 100%;
-                background-color: whitesmoke;
-                border: 2px solid darkgray;
-                border-radius: 0.5rem;
-                color: black;
+                padding: 1rem;
+                background: rgba(255, 255, 255, 0.9);
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                border-radius: 0.75rem;
+                color: #333;
+                font-size: 1rem;
+                transition: all 0.3s ease;
+
+                &:focus {
+                    outline: none;
+                    border-color: #4fd1c7;
+                    box-shadow: 0 0 0 3px rgba(79, 209, 199, 0.2);
+                    background: rgba(255, 255, 255, 1);
+                }
+
+                &::placeholder {
+                    color: #666;
+                }
+
+                @media (max-width: 768px) {
+                    padding: 0.875rem;
+                    font-size: 0.9rem;
+                }
             }
         }
 
         button {
-            color: whitesmoke;
+            color: white;
             font-weight: bold;
-            background-color: teal;
-            padding: 0.5rem;
+            font-size: 1.1rem;
+            background:teal;
+            padding: 1rem 2rem;
             border: none;
-            border-radius: 0.5rem;
-            max-height: 3rem;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            // box-shadow: 0 4px 15px rgba(79, 209, 199, 0.4);
 
             &:hover {
-                background-color: $button-hover-bg-color;
+                background: linear-gradient(45deg, #06b6d4, #4fd1c7);
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(79, 209, 199, 0.6);
+            }
+
+            &:active {
+                transform: translateY(0);
+            }
+
+            @media (max-width: 768px) {
+                padding: 0.875rem 1.5rem;
+                font-size: 1rem;
             }
         }
     }
 
     ul {
-        display: flex;
-        justify-content: center;
-        align-items: stretch;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
         gap: 2rem;
-        padding: 5rem;
+        width: 100%;
+        max-width: 1200px;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+
+        @media (max-width: 768px) {
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 480px) {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
 
         li {
-            flex: 0 1 20vw;
-            border: 1px;
-            border-radius: 0.5rem;
-            padding: 0.5rem;
-            background-color: $form-bg-color;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            // box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            transition: all 0.3s ease;
             overflow: hidden;
 
             display: flex;
             flex-direction: column;
+            height: 100%;
+
+            &:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 12px 40px rgba(31, 38, 135, 0.5);
+            }
 
             h1 {
                 flex: 0 0 auto;
                 color: white;
-                font-size: 2rem;
+                font-size: 1.5rem;
                 font-weight: bold;
                 text-align: center;
+                margin-bottom: 1rem;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
 
+                @media (max-width: 768px) {
+                    font-size: 1.25rem;
+                    margin-bottom: 0.75rem;
+                }
+            }
+
+            a {
+                flex: 1 1 auto;
+                display: block;
+                border-radius: 0.75rem;
+                overflow: hidden;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+                transition: all 0.3s ease;
+
+                &:hover {
+                    transform: scale(1.02);
+                    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.3);
+                }
             }
 
             img {
-                flex: 1 1 auto;
-                border: 1px;
-                border-radius: 0.5rem;
+                width: 100%;
+                height: 200px;
+                object-fit: cover;
+                border-radius: 0.75rem;
+                transition: all 0.3s ease;
+
+                @media (max-width: 768px) {
+                    height: 180px;
+                }
+
+                @media (max-width: 480px) {
+                    height: 160px;
+                }
+
+                &:hover {
+                    transform: scale(1.05);
+                }
             }
+        }
+    }
+
+    // Loading state animation
+    .loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 200px;
+        
+        &::after {
+            content: '';
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    // Empty state styling
+    .empty-state {
+        text-align: center;
+        color: white;
+        padding: 3rem;
+        
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+        
+        p {
+            font-size: 1rem;
+            opacity: 0.6;
         }
     }
 }
