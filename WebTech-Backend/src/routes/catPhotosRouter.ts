@@ -20,17 +20,18 @@ export const catPhotosRouter = express.Router({ mergeParams: true });
  *       responses:
  *          200:
  *             description: List of photos for the specified cat
+ *          404:
+ *            description: Cat not found
  *       
  *    post:
  *      description: Post a new photo for a specific cat
  *      produces:
  *        - application/json
- *   
  *      requestBody:
- *        description: title, description, and geolocation of the photo
+ *        description: title, description, geolocation, catId and photo file for the new photo
  *        required: true
  *        content:
- *          application/json:
+ *          multipart/form-data:
  *            schema:
  *              type: object
  *              properties:
@@ -43,13 +44,16 @@ export const catPhotosRouter = express.Router({ mergeParams: true });
  *                geolocation:
  *                  type: string
  *                  example: 37.7749,-122.4194
+ *                photo:
+ *                  type: string
+ *                  format: binary
  *      responses:
  *        201:
  *          description: Photo posted successfully
  *        400:
  *          description: Bad request, missing required fields
- *        401:
- *          description: Forbidden, user not authenticated
+ *        403:
+ *          description: Forbidden, user not authorized to create photo
  *        500:
  *          description: Internal server error, failed to create photo
  */
@@ -72,22 +76,42 @@ catPhotosRouter.route(`/`)
  *             description: Photo not found
  *     delete:
  *       description: Delete specific photo of a specific cat
- *       produces:
- *         - application/json
  *       requestHeader:
  *         description: Authentication token
  *         required: true
  *         schema:
  *           type: string
  *           example: Bearer your-auth-token
- *       requestBody:
  *       responses:
- */
+ *          204:
+ *            description: Photo deleted successfully
+ *          401:
+ *            description: Unauthorized, user not authenticated
+ *          403:
+ *            description: Forbidden, user not authorized to delete this photo
+ *          404:
+ *            description: Photo not found
+ *          500:
+ *            description: Internal server error, failed to delete photo
+*/
 catPhotosRouter.route(`/:photo_id`)
     .all(findPhotoById, photoIdValidator())
     .get([validateRequest], getPhotoById)
     .delete([enforceAuthentication, checkPhotoOwnership, validateRequest], deletePhotoById);
 
+
+/**
+ * @swagger
+ *  /cats/{cat_id}/photos/{photo_id}/send:
+ *     get:
+ *       description: Send the file for a specific photo of a specific cat
+ *       responses:
+ *           200:
+ *             description: Photo file sent successfully
+ *           404:
+ *             description: Photo file not found
+ */
 catPhotosRouter.get(`/:photo_id/send`, [findPhotoById, photoIdValidator(), validateRequest], sendPhotoById);
+
 
 catPhotosRouter.use(`/:photo_id/comments`, [findPhotoById, photoIdValidator()], commentsRouter);

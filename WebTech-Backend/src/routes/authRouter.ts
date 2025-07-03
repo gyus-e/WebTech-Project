@@ -60,8 +60,8 @@ authRouter.route(`/login`)
  *      responses:
  *        200:
  *          description: User authenticated
- *        401:
- *          description: Invalid credentials
+ *        500:
+ *          description: Internal server error, failed to create user
  */
 authRouter.route(`/signup`)
     .post(postSignup);

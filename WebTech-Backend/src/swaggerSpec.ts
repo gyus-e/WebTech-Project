@@ -8,5 +8,5 @@ export const swaggerSpec = swaggerJSDoc({
             version: '1.0.0',
         }
     },
-    apis: ['./src/routers/*'],
+    apis: ['./src/routes/*'],
 });
