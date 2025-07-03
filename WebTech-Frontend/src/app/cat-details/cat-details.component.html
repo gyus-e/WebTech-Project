@@ -8,7 +8,7 @@
             <header class="photo-header">
                 <h2>{{photo.title}}</h2>
             </header>
-            
+
             <div class="photo-content">
                 <div class="image-container">
                     <img [src]="photosUrls.get(photo.id)" alt="Cat" loading="lazy" />
@@ -24,6 +24,10 @@
                     <li class="comment-item">
                         <p class="comment-author">{{comment.uploader}}</p>
                         <quill-view [content]="comment.text"></quill-view>
+                        @if (authService.isAuthenticated() && verifyCommentUploader(comment)){
+                        <button type="button" class="delete-comment-button"
+                            (click)="deleteComment(photo, comment)">Delete</button>
+                        }
                     </li>
                     }
                 </ul>

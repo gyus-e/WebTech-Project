@@ -193,6 +193,13 @@ export class CatDetailsComponent {
     return this.authService.user() === photo.uploader;
   }
 
+  verifyCommentUploader(comment: any): boolean {
+    if (!comment || !this.authService.isAuthenticated()) {
+      return false;
+    }
+    return this.authService.user() === comment.uploader;
+  }
+
   deleteCat() {
     const catId = this.cat_id();
     if (!catId) {
@@ -222,7 +229,26 @@ export class CatDetailsComponent {
     this.deleteService.deleteCatPhoto(catId, photo.id).subscribe({
       next: () => {
         this.toastr.success('Photo deleted successfully.');
-        // Refresh the photo list or take any other action
+        //TODO: Refresh the photo list or take any other action
+      },
+      error: (err) => {
+        this.errHandler.handleError(err);
+      }
+    });
+  }
+
+  deleteComment(photo: PhotoResponse, comment: any) {
+    const catId = this.cat_id();
+    if (!catId) {
+      this.toastr.error('Cat ID is not set.');
+      return;
+    }
+
+    this.deleteService.deleteComment(catId, photo.id, comment.id).subscribe({
+      next: () => {
+        this.toastr.success('Comment deleted successfully.');
+        // Refresh comments for this photo
+        this.getComments(photo.id);
       },
       error: (err) => {
         this.errHandler.handleError(err);

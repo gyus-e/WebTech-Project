@@ -17,4 +17,8 @@ export class RestBackendDeleteService {
     return this.http.delete(`${REST_BACKEND_URL}/cats/${catId}/photos/${photoId}`);
   }
 
+  deleteComment(catId: number, photoId: number, commentId: number) {
+    return this.http.delete(`${REST_BACKEND_URL}/cats/${catId}/photos/${photoId}/comments/${commentId}`);
+  }
+
 }

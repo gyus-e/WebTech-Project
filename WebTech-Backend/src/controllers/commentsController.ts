@@ -1,5 +1,6 @@
 import express from 'express';
 import { Comment } from '../models/Comment.js';
+import { ErrorsJson } from "../ErrorsJson.js";
 
 export async function getComments(req: express.Request, res: express.Response) {
     const comments = await Comment.findAll({
@@ -19,5 +20,21 @@ export async function postComments(req: express.Request, res: express.Response) 
     } catch (error) {
         console.error('Error creating comment:', error);
         res.status(500).json({ error: 'Failed to create comment.' });
+    }
+}
+
+export async function deleteComment(req: express.Request, res: express.Response) {
+    try {
+        const comment = await Comment.findByPk(req.params.comment_id);
+        if (!comment) {
+            res.status(404).json(ErrorsJson.fromMessage(`Comment not found.`));
+            return;
+        }
+        await comment.destroy();
+        res.status(204).send();
+
+    } catch (error) {
+        console.error('Error deleting comment:', error);
+        res.status(500).json(ErrorsJson.fromMessage('Failed to delete comment.'));
     }
 }
