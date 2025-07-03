@@ -32,7 +32,7 @@ export class CatDetailsComponent {
   photos = signal<PhotoResponse[] | null>(null);
   cat_id = signal<number | undefined>(undefined);
   cat = computed(() => this.catSignal());
-  comments = signal<any[]>([]);
+  commentsMap = new Map<number, any[]>(); // photoId -> comments array
 
   private readonly catSignal = signal<CatResponse | undefined>(undefined);
 
@@ -91,10 +91,18 @@ export class CatDetailsComponent {
   }
 
 
+  getCommentsForPhoto(photoId: number): any[] {
+    return this.commentsMap.get(photoId) || [];
+  }
+
   getAllPhotos(cat: CatResponse) {
     this.fetchService.getCatPhotos(cat.id).subscribe({
       next: (photos) => {
         this.photos.set(photos);
+        // Load comments for each photo
+        photos.forEach(photo => {
+          this.getComments(photo.id);
+        });
       },
       error: (err) => {
         this.errHandler.handleError(err);
@@ -121,7 +129,7 @@ export class CatDetailsComponent {
   getComments(photoId: number) {
     this.fetchService.getComments(this.cat_id()!, photoId).subscribe({
       next: (comments) => {
-        this.comments.set(comments);
+        this.commentsMap.set(photoId, comments);
       },
       error: (err) => {
         this.errHandler.handleError(err);
@@ -161,7 +169,8 @@ export class CatDetailsComponent {
       next: () => {
         this.toastr.success('Comment posted successfully.');
         this.commentForm.reset();
-        // Optionally, refresh the comments or update the UI
+        // Refresh comments for this photo
+        this.getComments(photoId);
       },
       error: (err) => {
         this.errHandler.handleError(err);

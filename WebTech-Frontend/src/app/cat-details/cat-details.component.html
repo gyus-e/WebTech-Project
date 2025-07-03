@@ -2,39 +2,51 @@
     <h1>{{cat()?.name}}</h1>
     <button type="button" (click)="router.navigate([`/upload`, cat()?.id]);">Post new photo</button>
 
-    <ul>
+    <div class="photos-grid">
         @for (photo of photos(); track photo){
-        <li>
-            <h2>{{photo.title}}</h2>
-            <div>
-                <img [src]="photosUrls.get(photo.id)" loading="lazy" />
-                <quill-view [content]="getDescription(photo)"></quill-view>
-                <!-- <quill-editor [content]="getDescription(photo)" (contentChanged)="updateDescription($event, photo)"></quill-editor> -->
+        <article class="photo-card">
+            <header class="photo-header">
+                <h2>{{photo.title}}</h2>
+            </header>
+            
+            <div class="photo-content">
+                <div class="image-container">
+                    <img [src]="photosUrls.get(photo.id)" alt="Cat" loading="lazy" />
+                </div>
+                <div class="description-container">
+                    <quill-view [content]="getDescription(photo)"></quill-view>
+                </div>
+            </div>
 
-                @if (authService.isAuthenticated()){
-                <form class="comment-form" [formGroup]="commentForm" (ngSubmit)="postComment(photo.id)">
-                    <quill-editor formControlName="comment" placeholder="Add a comment..."></quill-editor>
-                    <button type="submit" class="comment-submit">Post</button>
-                </form>
-                }
-
+            <div class="comment-section">
                 <ul class="comments-list">
-                    @for (comment of comments(); track comment){
+                    @for (comment of getCommentsForPhoto(photo.id); track comment){
                     <li class="comment-item">
                         <p class="comment-author">{{comment.uploader}}</p>
                         <quill-view [content]="comment.text"></quill-view>
                     </li>
                     }
                 </ul>
+
+                @if (authService.isAuthenticated()){
+                <form class="comment-form" [formGroup]="commentForm" (ngSubmit)="postComment(photo.id)">
+                    <quill-editor formControlName="comment" placeholder="Add a comment..."></quill-editor>
+                    <button type="submit" class="comment-submit">Post Comment</button>
+                </form>
+                }
+
             </div>
+
             @if (authService.isAuthenticated() && verifyPhotoUploader(photo)){
-            <button type="button" (click)="deletePhoto(photo)">Delete Photo</button>
+            <div class="photo-actions">
+                <button type="button" (click)="deletePhoto(photo)">Delete Photo</button>
+            </div>
             }
-        </li>
+        </article>
         }
-    </ul>
+    </div>
 
     @if (authService.isAuthenticated() && verifyCatUploader()){
-    <button type="button" (click)="deleteCat()">Delete Cat</button>
+    <button type="button" class="delete-cat-button" (click)="deleteCat()">Delete Cat</button>
     }
 </section>
