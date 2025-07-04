@@ -1,6 +1,5 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CatsStateService } from '../_services/cats/cats-state.service';
-import { RestBackendFetchService } from '../_services/rest-backend/rest-backend-fetch.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { RestBackendUploadService } from '../_services/rest-backend/rest-backend-upload.service';
@@ -16,7 +15,6 @@ import { Router, RouterLink } from '@angular/router';
 export class CatsComponent {
   catsState = inject(CatsStateService);
   authState = inject(AuthService);
-  fetchService = inject(RestBackendFetchService);
   uploadService = inject(RestBackendUploadService);
   router = inject(Router);
   toastr = inject(ToastrService);
