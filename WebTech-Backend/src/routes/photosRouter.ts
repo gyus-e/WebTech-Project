@@ -1,5 +1,5 @@
 import express from 'express';
-import { getPhotos } from '../controllers/photosController.js';
+import { getPhotos, getPhotosGeolocations } from '../controllers/photosController.js';
 
 export const photosRouter = express.Router();
 
@@ -19,3 +19,5 @@ export const photosRouter = express.Router();
  */
 photosRouter.route('/')
     .get(getPhotos);
+
+photosRouter.get('/geolocations', getPhotosGeolocations);

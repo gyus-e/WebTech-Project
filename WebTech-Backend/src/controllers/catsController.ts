@@ -78,6 +78,11 @@ export async function deleteCatById(req: express.Request<CatRequestParams>, res:
     }
 }
 
+export async function getCatProfilePicture(req: express.Request, res: express.Response) {
+        const cat = (req as CatRequest<any>).cat!;
+        res.json(cat.profilePicture);
+}
+
 async function removeCatDirectoryFromUploads(cat: Cat) {
     const dirPath = path.join(`uploads`, cat.id.toString());
     if (fs.existsSync(dirPath)) {

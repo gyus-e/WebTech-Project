@@ -1,5 +1,5 @@
 import express from 'express';
-import { getPhotos, postPhotos, getPhotoById, deletePhotoById, sendPhotoById } from '../controllers/catPhotosController.js';
+import { getPhotos, postPhotos, getPhotoById, deletePhotoById, sendPhotoById, getPhotoGeolocation, getPhotoDescription } from '../controllers/catPhotosController.js';
 import { enforceAuthentication } from '../middleware/enforceAuthentication.js';
 import { checkPhotoOwnership } from '../middleware/checkOwnership.js';
 import { uploadSinglePhoto } from '../middleware/upload.js';
@@ -112,6 +112,7 @@ catPhotosRouter.route(`/:photo_id`)
  *             description: Photo file not found
  */
 catPhotosRouter.get(`/:photo_id/send`, [findPhotoById, photoIdValidator(), validateRequest], sendPhotoById);
-
+catPhotosRouter.get(`/:photo_id/geolocation`, [findPhotoById, photoIdValidator(), validateRequest], getPhotoGeolocation);
+catPhotosRouter.get(`/:photo_id/description`, [findPhotoById, photoIdValidator(), validateRequest], getPhotoDescription);
 
 catPhotosRouter.use(`/:photo_id/comments`, [findPhotoById, photoIdValidator()], commentsRouter);

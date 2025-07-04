@@ -75,6 +75,24 @@ export async function deletePhotoById(req: express.Request, res: express.Respons
     }
 }
 
+export async function getPhotoGeolocation(req: express.Request, res: express.Response) {
+    const photo = (req as PhotoRequest<any>).photo!;
+    if (!photo.geolocation) {
+        res.status(404).json(ErrorsJson.fromMessage(`Geolocation not found for this photo.`));
+        return;
+    }
+    res.json(photo.geolocation);
+}
+
+export async function getPhotoDescription(req: express.Request, res: express.Response) {
+    const photo = (req as PhotoRequest<any>).photo!;
+    if (!photo.description) {
+        res.status(404).json(ErrorsJson.fromMessage(`Description not found for this photo.`));
+        return;
+    }
+    res.json(photo.description);
+}
+
 async function removePhotoFromUploads(photo: Photo) {
     const filePath = photo.path;
     if (fs.existsSync(filePath)) {
