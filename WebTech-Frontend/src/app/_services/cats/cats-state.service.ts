@@ -11,10 +11,15 @@ import { PhotoResponse } from '../../_types/photo-response.type';
 })
 export class CatsStateService {
 
+  catsResponses = new Array<CatResponse>();
+  catProfilePicUrls = new Map<number, string>();
+  catPhotos = new Map<number, Array<number>>();
+  photoGeolocations = new Map<number, LatLng | undefined>();
+
   cats = computed(() => {
     this.catsFetchedSignal();
     this.newCatInitializedSignal();
-    return this.catsResponses; 
+    return this.catsResponses;
   });
 
   catProfilePics = computed(() => {
@@ -22,21 +27,16 @@ export class CatsStateService {
     return this.catProfilePicUrls;
   });
 
-  newCatSignal = signal<CatResponse | undefined>(undefined);
-  newPhotoSignal = signal<PhotoResponse | undefined>(undefined);
-
-  catsResponses = new Array<CatResponse>();
-  catProfilePicUrls = new Map<number, string>();
-  catPhotos = new Map<number, Array<number>>();
-  photoGeolocations = new Map<number, LatLng | undefined>();
-
   catsFetchedSignal = signal<boolean>(false);
+  newCatSignal = signal<CatResponse | undefined>(undefined);
   newCatInitializedSignal = signal<CatResponse | undefined>(undefined);
+  newPhotoSignal = signal<PhotoResponse | undefined>(undefined);
   newPhotoInitializedSignal = signal<PhotoResponse | undefined>(undefined);
+
   private readonly profilePictureUrlUpdateSignal = signal<string | undefined>(undefined);
   private readonly catRemoveSignal = signal<number>(0);
   private readonly photoRemoveSignal = signal<number>(0);
-  
+
   private readonly restFetchService = inject(RestBackendFetchService);
   private readonly errHandler = inject(RestBackendErrorHandlerService);
 
@@ -134,7 +134,7 @@ export class CatsStateService {
       console.log("No profile picture yet, setting it now.");
       this.catProfilePicUrls.set(photo.catId, `${REST_BACKEND_URL}/cats/${photo.catId}/photos/${photo.id}/send`);
       console.log("profile picture set to: ", this.catProfilePicUrls.get(photo.catId));
-      
+
       this.profilePictureUrlUpdateSignal.set(this.catProfilePicUrls.get(photo.catId));
     }
 
@@ -144,6 +144,6 @@ export class CatsStateService {
       this.photoGeolocations.set(photo.id, new LatLng(geolocation[0], geolocation[1]));
     }
 
-    this.catPhotos.get(photo.catId)?.push(photo.id) ?? this.catPhotos.set(photo.catId, [photo.id]);
+    this.catPhotos.get(photo.catId)!.push(photo.id);
   }
 }
