@@ -35,7 +35,7 @@ export class CatsComponent {
 
     this.uploadService.postCat(this.uploadCatForm.value.name!).subscribe({
       next: (response) => {
-        this.catsState.new_cat.set(response); // trigger catsState.initializeCatData NOTE: at this time no photos are uploaded yet
+        this.catsState.newCatSignal.set(response);
         this.toastr.success(`You added ${this.uploadCatForm.value.name}!`, `Success!`);
         this.router.navigate([`/upload`, response.id]);
       },

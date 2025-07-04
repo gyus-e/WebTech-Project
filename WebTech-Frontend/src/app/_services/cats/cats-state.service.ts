@@ -5,89 +5,112 @@ import { RestBackendFetchService } from '../rest-backend/rest-backend-fetch.serv
 import { REST_BACKEND_URL } from '../../_config/rest-backend-url';
 import { RestBackendErrorHandlerService } from '../rest-backend/rest-backend-error-handler.service';
 import { PhotoResponse } from '../../_types/photo-response.type';
-import { CatsComponent } from '../../cats/cats.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CatsStateService {
 
-  cats = computed(() => this.catsSignal());
-  new_cat = signal<CatResponse | null>(null);
-  new_photo = signal<PhotoResponse | null>(null);
-  new_geo = signal<boolean>(false);
+  cats = computed(() => {
+    this.catsFetchedSignal();
+    this.newCatInitializedSignal();
+    return this.catsResponses; 
+  });
 
-  catProfilePicUrls = signal(new Map<number, string | undefined>());
-  photoGeolocations = new Map<number, LatLng | null>();
+  catProfilePics = computed(() => {
+    this.newPhotoInitializedSignal()
+    return this.catProfilePicUrls;
+  });
 
-  private readonly catsSignal = signal<CatResponse[] | null>(null);
+  newCatSignal = signal<CatResponse | undefined>(undefined);
+  newPhotoSignal = signal<PhotoResponse | undefined>(undefined);
+
+  catsResponses = new Array<CatResponse>();
+  catProfilePicUrls = new Map<number, string | undefined>();
+  catPhotos = new Map<number, Array<number>>();
+  photoGeolocations = new Map<number, LatLng | undefined>();
+
+  catsFetchedSignal = signal<boolean>(false);
+  newCatInitializedSignal = signal<CatResponse | undefined>(undefined);
+  newPhotoInitializedSignal = signal<PhotoResponse | undefined>(undefined);
+  private readonly catRemoveSignal = signal<number>(0);
+  private readonly photoRemoveSignal = signal<number>(0);
+  
   private readonly restFetchService = inject(RestBackendFetchService);
   private readonly errHandler = inject(RestBackendErrorHandlerService);
 
 
   constructor() {
+    effect(() => {
+      if (!this.catsFetchedSignal()) {
+        return;
+      }
+      for (const cat of this.catsResponses) {
+        this.initializeCatData(cat);
+      }
+    });
+
+    effect(() => {
+      const newCatResponse = this.newCatSignal();
+      if (!newCatResponse) {
+        return;
+      }
+      this.catsResponses.push(newCatResponse);
+      this.initializeCatData(newCatResponse);
+
+      this.newCatInitializedSignal.set(newCatResponse);
+    });
+
+    effect(() => {
+      const newPhotoUploaded = this.newPhotoSignal();
+      if (!newPhotoUploaded) {
+        return;
+      }
+      this.initializePhotoData(newPhotoUploaded);
+
+      this.newPhotoInitializedSignal.set(newPhotoUploaded);
+    });
 
     this.restFetchService.getCats().subscribe({
-      next: (cats: CatResponse[]) => {
-        this.catsSignal.set(cats);
+      next: (catsResponses: CatResponse[]) => {
+        this.catsResponses = catsResponses;
+        this.catsFetchedSignal.set(true);
       },
       error: (err) => {
         this.errHandler.handleError(err);
       }
     });
-
-    // initialize all cats data on when the cats are fetched
-    effect(() => {
-      const cats = this.cats();
-      if (!cats) {
-        return;
-      }
-      for (const cat of cats) {
-        this.initializeCatData(cat);
-      }
-    });
-
-    // fetch and initialize new cat data when one is uploaded
-    effect(() => {
-      const new_cat = this.new_cat();
-      if (new_cat) {
-        this.restFetchService.getCatById(new_cat.id).subscribe({
-          next: (newCat) => {
-            const catsArray = this.catsSignal() ?? new Array<CatResponse>();
-            catsArray.push(newCat);
-            this.catsSignal.set(catsArray);
-            this.initializeCatData(newCat);
-          },
-          error: (err) => {
-            this.errHandler.handleError(err);
-          }
-        });
-
-      }
-    });
-
-    effect(() => {
-      if (this.new_photo()) {
-        const new_photo = this.new_photo()!;
-        this.new_photo.set(null);
-        this.initializePhotoData(new_photo);
-      }
-    });
-
   }
 
 
   public removeCat(catId: number) {
-    const cats = this.catsSignal()!;
-    this.catsSignal.set(cats.filter(cat => cat.id !== catId));
+    this.catsResponses = this.catsResponses.filter(cat => cat.id !== catId);
+    this.catProfilePicUrls.delete(catId);
+    for (const photo of this.catPhotos.get(catId) ?? []) {
+      this.photoGeolocations.delete(photo);
+    }
+    this.catPhotos.delete(catId);
+    this.catRemoveSignal.set(catId);
+  }
+
+
+  public removePhoto(catId: number, photoId: number) {
+    if (this.catPhotos.has(catId)) {
+      this.catPhotos.set(catId, this.catPhotos.get(catId)!.filter(photo => photo !== photoId));
+    }
+    this.photoGeolocations.delete(photoId);
+    this.photoRemoveSignal.set(photoId);
   }
 
 
   private initializeCatData(cat: CatResponse) {
     if (cat.profilePicture) {
-      this.catProfilePicUrls().set(cat.id, `${REST_BACKEND_URL}/cats/${cat.id}/photos/${cat.profilePicture}/send`);
+      this.catProfilePicUrls.set(cat.id, `${REST_BACKEND_URL}/cats/${cat.id}/photos/${cat.profilePicture}/send`);
+    } else {
+      this.catProfilePicUrls.set(cat.id, undefined);
     }
-    console.log(`initializeCatData - cat ${cat.id} profile pic url is: ${this.catProfilePicUrls().get(cat.id)}`);
+
+    this.catPhotos.set(cat.id, []);
 
     this.restFetchService.getCatPhotos(cat.id).subscribe({
       next: (photos) => {
@@ -96,30 +119,24 @@ export class CatsStateService {
         }
       },
       error: (err) => {
-        this.catProfilePicUrls().set(cat.id, undefined);
+        this.errHandler.handleError(err);
       }
     });
+
   }
 
 
   private initializePhotoData(photo: PhotoResponse) {
-    const profilePicUrl = this.catProfilePicUrls().get(photo.catId);
-    if (!profilePicUrl) {
-      let map = new Map(this.catProfilePicUrls());
-      map.set(photo.catId, `${REST_BACKEND_URL}/cats/${photo.catId}/photos/${photo.id}/send`);
-      this.catProfilePicUrls.set(map);
-      // this.catProfilePicUrls().set(photo.catId, `${REST_BACKEND_URL}/cats/${photo.catId}/photos/${photo.id}/send`);
-      // this.newProfilePicUrl.set(this.newProfilePicUrl() + 1);
+    if (!this.catProfilePicUrls.get(photo.catId)) {
+      this.catProfilePicUrls.set(photo.catId, `${REST_BACKEND_URL}/cats/${photo.catId}/photos/${photo.id}/send`);
     }
-    console.log(`initializePhotoData: cat ${photo.catId} profile pic url is: ${this.catProfilePicUrls().get(photo.catId)}`);
 
-    this.photoGeolocations.set(photo.id, null);
-
+    this.photoGeolocations.set(photo.id, undefined);
     const geolocation = photo.geolocation?.split(',').map(Number);
     if (geolocation && geolocation.length >= 2) {
       this.photoGeolocations.set(photo.id, new LatLng(geolocation[0], geolocation[1]));
-      this.new_geo.set(true);
     }
+
+    this.catPhotos.get(photo.catId)?.push(photo.id) ?? this.catPhotos.set(photo.catId, [photo.id]);
   }
 }
-

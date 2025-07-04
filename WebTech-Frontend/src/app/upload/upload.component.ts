@@ -5,12 +5,10 @@ import { ToastrService } from 'ngx-toastr';
 import { RestBackendUploadService } from '../_services/rest-backend/rest-backend-upload.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RestBackendErrorHandlerService } from '../_services/rest-backend/rest-backend-error-handler.service';
-import { RestBackendFetchService } from '../_services/rest-backend/rest-backend-fetch.service';
 import { CatsStateService } from '../_services/cats/cats-state.service';
 import { QuillModule } from 'ngx-quill';
 import { MapStateService } from '../_services/map/map-state.service';
 import { PhotoResponse } from '../_types/photo-response.type';
-import { CatResponse } from '../_types/cat-response.type';
 
 @Component({
   selector: 'app-upload',
@@ -21,11 +19,10 @@ import { CatResponse } from '../_types/cat-response.type';
 export class UploadComponent {
   toastr = inject(ToastrService);
   router = inject(Router);
-  catState = inject(CatsStateService);
+  catsState = inject(CatsStateService);
   mapState = inject(MapStateService);
   errHandler = inject(RestBackendErrorHandlerService);
   uploadService = inject(RestBackendUploadService);
-  fetchService = inject(RestBackendFetchService);
 
   multipartFormDataSignal = signal<FormData | undefined>(undefined);
   cat_id = signal<number | undefined>(undefined);
@@ -37,7 +34,7 @@ export class UploadComponent {
     ]),
     description: new FormControl(''),
     geolocation: new FormControl('', [
-      // Validators.required,
+      Validators.required,
     ]),
     photo: new FormControl(null, [
       Validators.required,
@@ -58,24 +55,14 @@ export class UploadComponent {
       this.cat_id.set(Number(cat_id_param));
     });
 
-    //get cat_name from backend when cat_id is set
+    //get cat_name when cat_id is set
     effect(() => {
       const cat_id = this.cat_id();
-
       if (!cat_id) {
         return;
       }
-
-      this.fetchService.getCatById(cat_id).subscribe({
-        next: (response: CatResponse) => {
-          this.cat_name.set(response.name); //used in the template
-        },
-
-        error: (error: any) => {
-          this.errHandler.handleError(error);
-          this.router.navigateByUrl("/");
-        }
-      });
+      const catName = this.catsState.cats().find(cat => cat.id === cat_id)?.name;
+      this.cat_name.set(catName ?? '');
     });
 
     //set geolocation when user clicks on map
@@ -97,7 +84,7 @@ export class UploadComponent {
           next: (response: PhotoResponse) => {
             this.toastr.success('Photo uploaded successfully!');
             this.uploadForm.reset();
-            this.catState.new_photo.set(response); //trigger catsState.initializePhotoData
+            this.catsState.newPhotoSignal.set(response);
             setTimeout(() => { this.router.navigateByUrl(`/cats/${this.cat_id()}`) }, 10);
           },
 
@@ -137,6 +124,6 @@ export class UploadComponent {
 
     console.log('Form Data:', formData);
 
-    this.multipartFormDataSignal.set(formData); //trigger the effect to upload the photo
+    this.multipartFormDataSignal.set(formData);
   }
 }

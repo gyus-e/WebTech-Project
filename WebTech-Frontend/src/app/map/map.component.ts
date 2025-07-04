@@ -1,13 +1,10 @@
 import { Component, inject, effect, signal, Input, computed } from '@angular/core';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
-import { marker, tileLayer, LatLng, icon, Icon } from 'leaflet';
+import { tileLayer } from 'leaflet';
 import { MapStateService } from '../_services/map/map-state.service';
 import { MapConfig } from '../_config/MapConfig';
 import { CatsStateService } from '../_services/cats/cats-state.service';
 import { Router } from '@angular/router';
-import { CatResponse } from '../_types/cat-response.type';
-import { RestBackendFetchService } from '../_services/rest-backend/rest-backend-fetch.service';
-import { PhotoResponse } from '../_types/photo-response.type';
 
 
 @Component({
@@ -22,10 +19,9 @@ export class MapComponent {
 
   mapState = inject(MapStateService);
   catsState = inject(CatsStateService);
-  fetchService = inject(RestBackendFetchService);
   router = inject(Router);
 
-  viewLayers = computed(() => { this.updatedView(); return this.mapState.layers(); });
+  viewLayers = computed(() => { this.mapState.newMarker(); return this.mapState.catMarkersLayer; });
 
   options = {
     layers: [
@@ -36,7 +32,6 @@ export class MapComponent {
   };
 
   private readonly mapSignal = signal<L.Map | undefined>(undefined);
-  private readonly updatedView = signal<boolean>(false);
 
 
   constructor() {
@@ -47,23 +42,12 @@ export class MapComponent {
         map.setView(this.mapState.center, this.mapState.zoom);
       }
     });
-
-    effect(() => {
-      const map = this.mapSignal();
-      const cats = this.catsState.cats();
-      const new_geo = this.catsState.new_geo();
-
-      const catsArrayIsValid: boolean = Array.isArray(cats) && cats.length > 0;
-      if (map && catsArrayIsValid && new_geo && this.showCatMarkers) {
-        this.initMarkersLayer(cats!);
-        this.catsState.new_geo.set(false);
-      }
-    });
   }
 
 
   onMapReady(map: L.Map) {
     this.mapSignal.set(map);
+    this.mapState.mapReadySignal.set(true);
 
     map.on('moveend', () => {
       this.mapState.center = map.getCenter();
@@ -73,55 +57,8 @@ export class MapComponent {
     if (!this.showCatMarkers) {
       map.on('click', (event: L.LeafletMouseEvent) => {
         this.mapState.clickPositionSignal.set(event.latlng);
-        // console.log('Map clicked at:', event.latlng);
       });
     }
-  }
-
-
-  initMarkersLayer(cats: Array<CatResponse>) {
-    for (const cat of cats) {
-      this.fetchService.getCatPhotos(cat.id).subscribe({
-        next: (photos) => {
-          for (const photo of photos) {
-            const photoGeolocation = this.getPhotoGeolocations(photo.id);
-            if (photoGeolocation) {
-              this.addMarker(cat, photo, photoGeolocation);
-            }
-          }
-        },
-        error: (error) => {
-          console.error('Error fetching photos for cat:', cat.id, error);
-        }
-      });
-    }
-  }
-
-
-  private addMarker(cat: CatResponse, photo: PhotoResponse, geolocation: LatLng) {
-
-    // const catImageURL = this.catsState.catProfilePicUrls.get(cat.id);
-    // const catIcon = icon({
-    //   ...Icon.Default.prototype.options,
-    //   iconUrl: catImageURL ?? 'assets/marker-icon.png',
-    //   // iconRetinaUrl: 'assets/marker-icon-2x.png',
-    //   // shadowUrl: 'assets/marker-shadow.png'
-    // });
-
-    const newMarker = marker(geolocation, { icon: MapConfig.MARKER_ICON });
-    newMarker.on('click', () => {
-      this.router.navigate(['/cats', photo.catId]); //TODO: Fix
-    });
-    this.mapState.layers().push(newMarker);
-    this.updatedView.set(!this.updatedView());
-    // console.log('Added marker at:', catMarker.getLatLng());
-  }
-
-
-  getPhotoGeolocations(photoId: number): LatLng | null {
-    const photoGeoSignal = this.catsState.photoGeolocations.get(photoId);
-    // console.log('getCatGeolocations: catGeoSignal for cat ', catId, ' is ', catGeoSignal);
-    return photoGeoSignal ?? null;
   }
 
 
