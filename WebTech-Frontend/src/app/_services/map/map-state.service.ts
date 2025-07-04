@@ -74,8 +74,8 @@ export class MapStateService {
 
   public initMarkersLayer() {
     for (const [catId, photos] of this.catsState.catPhotos) {
-      for (const photoId of photos) {
-        const geolocation = this.catsState.photoGeolocations.get(photoId);
+      for (const photo of photos) {
+        const geolocation = this.catsState.photoGeolocations.get(photo.id);
         if (geolocation) {
           this.addMarker(catId, geolocation);
         }

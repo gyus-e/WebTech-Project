@@ -13,7 +13,7 @@ export class CatsStateService {
 
   catsResponses = new Array<CatResponse>();
   catProfilePicUrls = new Map<number, string>();
-  catPhotos = new Map<number, Array<number>>();
+  catPhotos = new Map<number, Array<PhotoResponse>>();
   photoGeolocations = new Map<number, LatLng | undefined>();
 
   cats = computed(() => {
@@ -90,7 +90,7 @@ export class CatsStateService {
     this.catsResponses = this.catsResponses.filter(cat => cat.id !== catId);
     this.catProfilePicUrls.delete(catId);
     for (const photo of this.catPhotos.get(catId) ?? []) {
-      this.photoGeolocations.delete(photo);
+      this.photoGeolocations.delete(photo.id);
     }
     this.catPhotos.delete(catId);
     this.catRemoveSignal.set(catId);
@@ -99,7 +99,7 @@ export class CatsStateService {
 
   public removePhoto(catId: number, photoId: number) {
     if (this.catPhotos.has(catId)) {
-      this.catPhotos.set(catId, this.catPhotos.get(catId)!.filter(photo => photo !== photoId));
+      this.catPhotos.set(catId, this.catPhotos.get(catId)!.filter(photo => photo.id !== photoId));
     }
     this.photoGeolocations.delete(photoId);
     this.photoRemoveSignal.set(photoId);
@@ -144,6 +144,6 @@ export class CatsStateService {
       this.photoGeolocations.set(photo.id, new LatLng(geolocation[0], geolocation[1]));
     }
 
-    this.catPhotos.get(photo.catId)!.push(photo.id);
+    this.catPhotos.get(photo.catId)!.push(photo);
   }
 }
