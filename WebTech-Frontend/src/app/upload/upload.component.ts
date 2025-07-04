@@ -82,9 +82,9 @@ export class UploadComponent {
         this.uploadService.postPhoto(cat_id, multipartFormData).subscribe({
 
           next: (response: PhotoResponse) => {
+            this.catsState.newPhotoSignal.set(response);
             this.toastr.success('Photo uploaded successfully!');
             this.uploadForm.reset();
-            this.catsState.newPhotoSignal.set(response);
             setTimeout(() => { this.router.navigateByUrl(`/cats/${this.cat_id()}`) }, 10);
           },
 

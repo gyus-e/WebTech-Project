@@ -15,8 +15,8 @@
         <li>
             <h1>{{cat.name}}</h1>
             <a [routerLink]="['/cats', cat.id]">
-                @let profilePicUrl = catsState.catProfilePics().get(cat.id) ?? '/assets/yamamaya.jpg';
-                <img [src]="profilePicUrl" alt="{{cat.name}}" />
+                <img [src]="catsState.catProfilePics().get(cat.id)" alt="{{cat.name}}" />
+                <p>{{catsState.catProfilePics().get(cat.id)}}</p>
             </a>
         </li>
         }

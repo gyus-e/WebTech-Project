@@ -18,7 +18,7 @@ export class CatsStateService {
   });
 
   catProfilePics = computed(() => {
-    this.newPhotoInitializedSignal()
+    this.profilePictureUrlUpdateSignal();
     return this.catProfilePicUrls;
   });
 
@@ -26,18 +26,21 @@ export class CatsStateService {
   newPhotoSignal = signal<PhotoResponse | undefined>(undefined);
 
   catsResponses = new Array<CatResponse>();
-  catProfilePicUrls = new Map<number, string | undefined>();
+  catProfilePicUrls = new Map<number, string>();
   catPhotos = new Map<number, Array<number>>();
   photoGeolocations = new Map<number, LatLng | undefined>();
 
   catsFetchedSignal = signal<boolean>(false);
   newCatInitializedSignal = signal<CatResponse | undefined>(undefined);
   newPhotoInitializedSignal = signal<PhotoResponse | undefined>(undefined);
+  private readonly profilePictureUrlUpdateSignal = signal<string | undefined>(undefined);
   private readonly catRemoveSignal = signal<number>(0);
   private readonly photoRemoveSignal = signal<number>(0);
   
   private readonly restFetchService = inject(RestBackendFetchService);
   private readonly errHandler = inject(RestBackendErrorHandlerService);
+
+  private readonly PLACEHOLDER = 'assets/yamamaya.jpg';
 
 
   constructor() {
@@ -107,7 +110,7 @@ export class CatsStateService {
     if (cat.profilePicture) {
       this.catProfilePicUrls.set(cat.id, `${REST_BACKEND_URL}/cats/${cat.id}/photos/${cat.profilePicture}/send`);
     } else {
-      this.catProfilePicUrls.set(cat.id, undefined);
+      this.catProfilePicUrls.set(cat.id, this.PLACEHOLDER);
     }
 
     this.catPhotos.set(cat.id, []);
@@ -127,8 +130,12 @@ export class CatsStateService {
 
 
   private initializePhotoData(photo: PhotoResponse) {
-    if (!this.catProfilePicUrls.get(photo.catId)) {
+    if (this.catProfilePicUrls.get(photo.catId) === this.PLACEHOLDER) {
+      console.log("No profile picture yet, setting it now.");
       this.catProfilePicUrls.set(photo.catId, `${REST_BACKEND_URL}/cats/${photo.catId}/photos/${photo.id}/send`);
+      console.log("profile picture set to: ", this.catProfilePicUrls.get(photo.catId));
+      
+      this.profilePictureUrlUpdateSignal.set(this.catProfilePicUrls.get(photo.catId));
     }
 
     this.photoGeolocations.set(photo.id, undefined);
