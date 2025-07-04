@@ -3,26 +3,20 @@ import { LatLng, latLng, Marker, marker } from 'leaflet';
 import { MapConfig } from '../../_config/MapConfig';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
-import { CatsStateService } from '../cats/cats-state.service';
 
-
-//TODO: REMOVE DEPENDENCY FROM CATSSTATE SERVICE
 @Injectable({
   providedIn: 'root'
 })
 export class MapStateService {
 
-  public catMarkersLayer: Array<Marker> = [];
   public userMarkerLayer: Array<Marker> = [];
   public center = MapConfig.DEFAULT_CENTER;
   public zoom = MapConfig.DEFAULT_ZOOM;
   public userPositionSignal = signal<LatLng | undefined>(undefined);
   public clickPositionSignal = signal<LatLng | undefined>(undefined);
   public mapReadySignal = signal<boolean>(false);
-  public newMarkerSignal = signal<Marker | undefined>(undefined);
-
+ 
   router = inject(Router);
-  catsState = inject(CatsStateService);
 
   private readonly currentPositionObservable = new Observable<LatLng>((subscriber) => {
     navigator.geolocation.getCurrentPosition(
@@ -51,48 +45,10 @@ export class MapStateService {
       }
     });
 
-    effect(() => {
-      if (this.catsState.catsFetchedSignal()) {
-        this.initMarkersLayer();
-      }
-    });
-
-    effect(() => {
-      const newPhoto =this.catsState.newPhotoInitializedSignal();
-      if (newPhoto) {
-        const geolocation = this.catsState.photoGeolocations.get(newPhoto.id);
-        if (geolocation) {
-          this.addMarker(newPhoto.catId, geolocation);
-        }
-      }
-    });
-
     this.currentPositionObservable.subscribe({
       next: (pos) => { this.userPositionSignal.set(pos); },
       error: (error) => { console.error('Error getting current position:', error); }
     });
-  }
-
-
-  public initMarkersLayer() {
-    for (const [catId, photos] of this.catsState.catPhotos) {
-      for (const photo of photos) {
-        const geolocation = this.catsState.photoGeolocations.get(photo.id);
-        if (geolocation) {
-          this.addMarker(catId, geolocation);
-        }
-      }
-    }
-  }
-
-
-  public addMarker(catId: number, geolocation: LatLng) {
-    const newMarker = marker(geolocation, { icon: MapConfig.MARKER_ICON });
-    newMarker.on('click', () => {
-      this.router.navigate(['/cats', catId]);
-    });
-    this.catMarkersLayer.push(newMarker);
-    this.newMarkerSignal.set(newMarker);
   }
 
 }

@@ -21,9 +21,20 @@ export class RestBackendFetchService {
     return this.http.get(url) as Observable<PhotoResponse[]>;
   }
 
+  //TODO: define type {photoId: number, catId: number, geolocation: {lat: number, lng: number}}
+  getPhotosGeolocations(): Observable<Array<any>> {
+    const url = REST_BACKEND_URL + '/photos/geolocations';
+    return this.http.get(url) as Observable<Array<any>>;
+  }
+
   getCatById(catId: number): Observable<CatResponse> {
     const url = REST_BACKEND_URL + `/cats/${catId}`;
     return this.http.get(url) as Observable<CatResponse>;
+  }
+
+  getCatProfilePicture(catId: number): Observable<number | null> {
+    const url = REST_BACKEND_URL + `/cats/${catId}/profile-picture`;
+    return this.http.get(url) as Observable<number | null>;
   }
 
   getCatPhotos(catId: number): Observable<PhotoResponse[]> {
@@ -36,10 +47,10 @@ export class RestBackendFetchService {
     return this.http.get(url) as Observable<PhotoResponse>;
   }
 
-  // downloadCatPhotoById(catId: number, photoId: number): Observable<Blob> {
-  //   const url = REST_BACKEND_URL + `/cats/${catId}/photos/${photoId}/send`;
-  //   return this.http.get(url, { responseType: 'blob' });
-  // }
+  downloadCatPhotoById(catId: number, photoId: number): Observable<Blob> {
+    const url = REST_BACKEND_URL + `/cats/${catId}/photos/${photoId}/send`;
+    return this.http.get(url, { responseType: 'blob' });
+  }
 
   getComments(catId: number, photoId: number): Observable<any[]> {
     const url = REST_BACKEND_URL + `/cats/${catId}/photos/${photoId}/comments`;

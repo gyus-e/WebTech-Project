@@ -15,10 +15,11 @@ export async function getPhotos(req: express.Request, res: express.Response) {
 export async function getPhotosGeolocations(req: express.Request, res: express.Response) {
     try {
         const photos = await Photo.findAll({
-            attributes: ['id', 'geolocation']
+            attributes: ['id', 'catId', 'geolocation']
         });
         const geolocations = photos.map(photo => ({
             id: photo.id,
+            catId: photo.catId,
             geolocation: photo.geolocation
         }));
         res.json(geolocations);

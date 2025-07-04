@@ -1,10 +1,11 @@
 import { Component, inject, effect, signal, Input, computed } from '@angular/core';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
-import { tileLayer } from 'leaflet';
+import { tileLayer, Marker, LatLng, marker } from 'leaflet';
 import { MapStateService } from '../_services/map/map-state.service';
 import { MapConfig } from '../_config/MapConfig';
 import { Router } from '@angular/router';
-
+import { RestBackendFetchService } from '../_services/rest-backend/rest-backend-fetch.service';
+import { RestBackendErrorHandlerService } from '../_services/rest-backend/rest-backend-error-handler.service';
 
 @Component({
   selector: 'app-map',
@@ -16,10 +17,10 @@ export class MapComponent {
 
   @Input() showCatMarkers: boolean = true;
 
+  fetchService = inject(RestBackendFetchService);
+  errService = inject(RestBackendErrorHandlerService);
   mapState = inject(MapStateService);
   router = inject(Router);
-
-  viewLayers = computed(() => { this.mapState.newMarkerSignal(); return this.mapState.catMarkersLayer; });
 
   options = {
     layers: [
@@ -29,8 +30,10 @@ export class MapComponent {
     zoom: MapConfig.DEFAULT_ZOOM,
   };
 
+  viewLayers = signal<Array<Marker>>([]);
+  
+  private readonly catMarkersLayer: Array<Marker> = [];
   private readonly mapSignal = signal<L.Map | undefined>(undefined);
-
 
   constructor() {
     effect(() => {
@@ -38,6 +41,19 @@ export class MapComponent {
       const pos = this.mapState.userPositionSignal();
       if (map && pos) {
         map.setView(this.mapState.center, this.mapState.zoom);
+      }
+    });
+
+    this.fetchService.getPhotosGeolocations().subscribe({
+      next: (geolocations: Array<any>) => {
+        for (const { _, catId, geolocation } of geolocations) {
+          const [lat, lng] = geolocation.split(',').map(Number);
+          this.addMarker(catId, new LatLng(lat, lng));
+        }
+        this.viewLayers.set(this.catMarkersLayer);
+      },
+      error: (error: any) => {
+        this.errService.handleError(error);
       }
     });
   }
@@ -63,4 +79,14 @@ export class MapComponent {
   resetPosition() {
     this.mapSignal()?.setView(this.mapState.userPositionSignal() ?? MapConfig.DEFAULT_CENTER, MapConfig.DEFAULT_ZOOM);
   }
+
+
+  addMarker(catId: number, geolocation: LatLng) {
+    const newMarker = marker(geolocation, { icon: MapConfig.MARKER_ICON });
+    newMarker.on('click', () => {
+      this.router.navigate(['/cats', catId]);
+    });
+    this.catMarkersLayer.push(newMarker);
+  }
+  
 }

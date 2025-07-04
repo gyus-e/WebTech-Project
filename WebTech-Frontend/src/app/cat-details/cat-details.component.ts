@@ -4,7 +4,6 @@ import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CatResponse } from '../_types/cat-response.type';
 import { RestBackendErrorHandlerService } from '../_services/rest-backend/rest-backend-error-handler.service';
-import { CatsStateService } from '../_services/cats/cats-state.service';
 import { PhotoResponse } from '../_types/photo-response.type';
 import { REST_BACKEND_URL } from '../_config/rest-backend-url';
 import { QuillModule } from 'ngx-quill';
@@ -27,7 +26,6 @@ export class CatDetailsComponent {
   uploadService = inject(RestBackendUploadService);
   deleteService = inject(RestBackendDeleteService);
   errHandler = inject(RestBackendErrorHandlerService);
-  catsState = inject(CatsStateService);
 
   photosUrls = new Map<number, string>();
   commentsMap = new Map<number, any[]>(); // photoId -> comments array
@@ -208,7 +206,6 @@ export class CatDetailsComponent {
 
     this.deleteService.deleteCat(catId).subscribe({
       next: () => {
-        this.catsState.removeCat(catId);
         this.toastr.success('Cat deleted successfully.');
         this.router.navigateByUrl("/cats");
       },
