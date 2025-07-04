@@ -30,15 +30,14 @@ export class CatDetailsComponent {
   catsState = inject(CatsStateService);
 
   photosUrls = new Map<number, string>();
+  commentsMap = new Map<number, any[]>(); // photoId -> comments array
   photos = signal<PhotoResponse[] | null>(null);
   cat_id = signal<number | undefined>(undefined);
   cat = computed(() => this.catSignal());
-  commentsMap = new Map<number, any[]>(); // photoId -> comments array
 
   private readonly catSignal = signal<CatResponse | undefined>(undefined);
 
   commentForm = new FormGroup({
-    // photoId: new FormControl<number | undefined>(undefined, [Validators.required]),
     comment: new FormControl('', [Validators.required]),
   });
 
@@ -53,13 +52,13 @@ export class CatDetailsComponent {
       }
       this.fetchService.getCatById(catId).subscribe({
         next: (cat) => {
-          if (!cat) {
-            this.toastr.error('Cat not found.');
-            this.router.navigateByUrl("/cats");
-          } else {
-            this.catSignal.set(cat);
-            this.getAllPhotos(cat);
-          }
+      if (!cat) {
+        this.toastr.error('Cat not found.');
+        this.router.navigateByUrl("/cats");
+      } else {
+        this.catSignal.set(cat);
+        this.getAllPhotos(cat);
+      }
         },
         error: (err) => {
           this.errHandler.handleError(err);
@@ -75,7 +74,7 @@ export class CatDetailsComponent {
         return;
       }
 
-      this.setPhotosUrlsAndGeolocations(cat.id, photos);
+      this.setPhotosUrls(cat.id, photos);
     });
 
 
@@ -103,7 +102,7 @@ export class CatDetailsComponent {
         // Load comments for each photo
         photos.forEach(photo => {
           this.getComments(photo.id);
-        });
+    });
       },
       error: (err) => {
         this.errHandler.handleError(err);
@@ -111,7 +110,7 @@ export class CatDetailsComponent {
     });
   }
 
-  setPhotosUrlsAndGeolocations(cat_id: number, photos: PhotoResponse[]) {
+  setPhotosUrls(cat_id: number, photos: PhotoResponse[]) {
     if (!photos || photos.length === 0) {
       return;
     }
@@ -121,7 +120,7 @@ export class CatDetailsComponent {
     }
   }
 
-  getDescription(photo: PhotoResponse): string {
+  createDescriptionElement(photo: PhotoResponse): string {
     const txt = document.createElement('textarea');
     txt.innerHTML = photo.description ?? '';
     return txt.value;

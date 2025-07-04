@@ -3,7 +3,6 @@ import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import { tileLayer } from 'leaflet';
 import { MapStateService } from '../_services/map/map-state.service';
 import { MapConfig } from '../_config/MapConfig';
-import { CatsStateService } from '../_services/cats/cats-state.service';
 import { Router } from '@angular/router';
 
 
@@ -18,10 +17,9 @@ export class MapComponent {
   @Input() showCatMarkers: boolean = true;
 
   mapState = inject(MapStateService);
-  catsState = inject(CatsStateService);
   router = inject(Router);
 
-  viewLayers = computed(() => { this.mapState.newMarker(); return this.mapState.catMarkersLayer; });
+  viewLayers = computed(() => { this.mapState.newMarkerSignal(); return this.mapState.catMarkersLayer; });
 
   options = {
     layers: [

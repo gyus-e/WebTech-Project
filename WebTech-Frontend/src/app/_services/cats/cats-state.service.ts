@@ -1,3 +1,6 @@
+// TODO: IMPORTANT! THIS SERVICE CAUSES ONLY TROUBLE, MOVE EVERYTHING TO COMPONENTS
+// MAKE NETWORK REQUESTS TO THE BACKEND, DON'T STORE INFORMATIONS HERE
+// STATE SERVICES SHOULD ONLY BE USED FOR STORING STATE ABOUT THE USER'S SESSION, SUCH AS THE MAP POSITION.
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { LatLng } from 'leaflet';
 import { CatResponse } from '../../_types/cat-response.type';

@@ -5,6 +5,8 @@ import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { CatsStateService } from '../cats/cats-state.service';
 
+
+//TODO: REMOVE DEPENDENCY FROM CATSSTATE SERVICE
 @Injectable({
   providedIn: 'root'
 })
@@ -12,12 +14,12 @@ export class MapStateService {
 
   public catMarkersLayer: Array<Marker> = [];
   public userMarkerLayer: Array<Marker> = [];
-  public center: LatLng = MapConfig.DEFAULT_CENTER;
-  public zoom: number = MapConfig.DEFAULT_ZOOM;
+  public center = MapConfig.DEFAULT_CENTER;
+  public zoom = MapConfig.DEFAULT_ZOOM;
   public userPositionSignal = signal<LatLng | undefined>(undefined);
   public clickPositionSignal = signal<LatLng | undefined>(undefined);
   public mapReadySignal = signal<boolean>(false);
-  public newMarker = signal<Marker | undefined>(undefined);
+  public newMarkerSignal = signal<Marker | undefined>(undefined);
 
   router = inject(Router);
   catsState = inject(CatsStateService);
@@ -90,7 +92,7 @@ export class MapStateService {
       this.router.navigate(['/cats', catId]);
     });
     this.catMarkersLayer.push(newMarker);
-    this.newMarker.set(newMarker);
+    this.newMarkerSignal.set(newMarker);
   }
 
 }

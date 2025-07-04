@@ -14,7 +14,7 @@
                     <img [src]="photosUrls.get(photo.id)" alt="Cat" loading="lazy" />
                 </div>
                 <div class="description-container">
-                    <quill-view [content]="getDescription(photo)"></quill-view>
+                    <quill-view [content]="createDescriptionElement(photo)"></quill-view>
                 </div>
             </div>
 
