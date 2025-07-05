@@ -58,6 +58,24 @@ export async function sendPhotoById(req: express.Request, res: express.Response)
     res.sendFile(filePath, { root: process.cwd() });
 }
 
+export async function putPhotoById(req: express.Request, res: express.Response) {
+    try {
+        const photo = await Photo.findByPk(req.params.photo_id);
+        if (!photo) {
+            res.status(404).json(ErrorsJson.fromMessage(`Photo not found.`));
+            return;
+        }
+        photo.title = req.body.title ?? photo.title;
+        photo.description = req.body.description ?? photo.description;
+        await photo.save();
+        res.json(photo);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json(ErrorsJson.fromMessage(`Failed to update photo.`));
+    }
+}
+
 export async function deletePhotoById(req: express.Request, res: express.Response) {
     try {
         const photo = await Photo.findByPk(req.params.photo_id);
@@ -71,7 +89,6 @@ export async function deletePhotoById(req: express.Request, res: express.Respons
     } catch (error) {
         console.error(error);
         res.status(500).json(ErrorsJson.fromMessage(`Failed to delete photo.`));
-        console.error(error);
     }
 }
 

@@ -1,6 +1,6 @@
 import express from 'express';
-import { validateRequest } from '../middleware/validators.js';
-import { deleteComment, getComments, postComments } from '../controllers/commentsController.js';
+import { commentTextValidator, validateRequest } from '../middleware/validators.js';
+import { deleteComment, getComments, postComments, putComment } from '../controllers/commentsController.js';
 import { enforceAuthentication } from '../middleware/enforceAuthentication.js';
 
 export const commentsRouter = express.Router({ mergeParams: true });
@@ -45,9 +45,10 @@ export const commentsRouter = express.Router({ mergeParams: true });
  */
 commentsRouter.route(`/`)
     .get([validateRequest], getComments)
-    .post([enforceAuthentication, validateRequest], postComments);
+    .post([enforceAuthentication, commentTextValidator(), validateRequest], postComments);
 
 
-//TODO: PUT COMMENT
 commentsRouter.route(`/:comment_id`)
-    .delete([enforceAuthentication, validateRequest], deleteComment);
+    .all(enforceAuthentication)
+    .put([commentTextValidator(), validateRequest], putComment)
+    .delete([validateRequest], deleteComment);
