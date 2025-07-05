@@ -33,7 +33,8 @@ export class CatDetailsComponent {
   commentsMap = new Map<number, any[]>(); // photoId -> comments array
   photos = signal<PhotoResponse[] | null>(null);
   cat_id = signal<number | undefined>(undefined);
-  showCommentEditor = signal<number>(-1)
+  showCommentEditor = signal<number>(-1);
+  showPhotoEditor = signal<number>(-1);
   cat = computed(() => this.catSignal());
 
   private readonly catSignal = signal<CatResponse | undefined>(undefined);

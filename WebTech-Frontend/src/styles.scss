@@ -20,3 +20,48 @@ $semibold: 600;
     font-weight: bold;
     margin-bottom: 2.5rem;
 }
+
+@mixin button() {
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+    font-weight: $semibold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    &:hover {
+        transform: translateY(-1px);
+    }
+}
+
+@mixin redButton() {
+    @include button();
+    background-color: #e53e3e;
+    &:hover {
+        background-color: #c53030;
+    }
+}
+
+@mixin blueButton() {
+    @include button();
+    background-color: #3b82f6;
+    &:hover {
+        background-color: #2563eb;
+    }
+}
+
+@mixin tealButton() {
+    @include button();
+    background-color: #38b2ac;
+    &:hover {
+        background-color: #319795;
+    }
+}
+
+@mixin grayButton() {
+    @include button();
+    background-color: #a0aec0;
+    &:hover {
+        background-color: #718096;
+    }
+}

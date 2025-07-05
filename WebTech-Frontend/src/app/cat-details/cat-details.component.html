@@ -1,7 +1,8 @@
 <section>
     <h1>{{cat()?.name}}</h1>
-    <button type="button" (click)="router.navigate([`/upload`, cat()?.id]);">Post new photo</button>
-
+    @if (authService.isAuthenticated()){
+    <button type="button" class="post-photo-button" (click)="router.navigate([`/upload`, cat()?.id]);">Post new photo</button>
+    }
     <div class="photos-grid">
         @for (photo of photos(); track photo){
         <article class="photo-card">
@@ -27,7 +28,7 @@
                         <quill-view class="comment-text" [content]="createQuillElement(comment.text)"></quill-view>
                         @if (authService.isAuthenticated() && verifyCommentUploader(comment)){
                         <div class="comment-actions">
-                            <button type="button" class="comment-submit"
+                            <button type="button" class="edit-comment-button"
                                 (click)="showCommentEditor.set(comment.id)">Edit</button>
                             <button type="button" class="delete-comment-button"
                                 (click)="deleteComment(photo, comment)">Delete</button>
@@ -61,7 +62,14 @@
 
             @if (authService.isAuthenticated() && verifyPhotoUploader(photo)){
             <div class="photo-actions">
-                <button type="button" (click)="deletePhoto(photo)">Delete Photo</button>
+                @if (showPhotoEditor() !== photo.id){
+                <button type="button" class="edit-cat-photo" (click)="showPhotoEditor.set(photo.id)">Edit Photo</button>
+                <button type="button" class="delete-cat-photo" (click)="deletePhoto(photo)">Delete Photo</button>
+                } @else {
+                <p>Work in Progress!</p>
+                <button type="button" class="edit-photo-cancel"
+                    (click)="showPhotoEditor.set(-1)">Cancel</button>
+                }
             </div>
             }
         </article>

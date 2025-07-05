@@ -12,25 +12,7 @@ section {
         text-align: center;
         margin-bottom: 1rem;
     }
-
-    >button {
-        align-self: center;
-        padding: 0.75rem 2rem;
-        background-color: #3b82f6;
-        color: white;
-        border: none;
-        border-radius: 0.5rem;
-        font-weight: $semibold;
-        cursor: pointer;
-        transition: all 0.3s ease;
-
-        &:hover {
-            background-color: #2563eb;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-        }
-    }
-
+    
     .photos-grid {
         display: grid;
         grid-template-columns: 1fr;
@@ -53,10 +35,13 @@ section {
         .photo-header {
             padding: 1.5rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
             h2 {
                 color: white;
-                font-size: 1.5rem;
+                font-size: 2rem;
                 font-weight: bold;
                 margin: 0;
             }
@@ -94,10 +79,11 @@ section {
 
                 quill-view {
                     color: whitesmoke;
-                    line-height: 1.6;
+                    font-size: 1.5rem;
 
                     ::ng-deep .ql-editor {
                         padding: 0;
+                        font-size: 1.5rem;
                         color: whitesmoke;
                     }
                 }
@@ -122,19 +108,7 @@ section {
                 margin-top: 1rem;
 
                 .edit-comment-cancel {
-                    padding: 0.5rem 1.5rem;
-                    background-color: #5e5e5e;
-                    color: white;
-                    border: none;
-                    border-radius: 0.5rem;
-                    font-weight: $semibold;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
-
-                    &:hover {
-                        background-color: #555555;
-                        transform: translateY(-1px);
-                    }
+                    @include button();
                 }
             }
 
@@ -154,21 +128,6 @@ section {
                 }
             }
 
-            .delete-comment-button {
-                padding: 0.5rem 1.5rem;
-                background-color: #ef4444;
-                color: white;
-                border: none;
-                border-radius: 0.5rem;
-                font-weight: $semibold;
-                cursor: pointer;
-                transition: all 0.3s ease;
-
-                &:hover {
-                    background-color: #dc2626;
-                    transform: translateY(-1px);
-                }
-            }
 
             .comment-form {
                 margin-top: 2rem;
@@ -228,41 +187,11 @@ section {
             padding: 1rem 1.5rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
 
-            button {
-                padding: 0.5rem 1rem;
-                background-color: #ef4444;
-                color: white;
-                border: none;
-                border-radius: 0.5rem;
-                font-weight: $semibold;
-                cursor: pointer;
-                transition: all 0.3s ease;
-
-                &:hover {
-                    background-color: #dc2626;
-                    transform: translateY(-1px);
-                }
-            }
         }
     }
 
     .delete-cat-button {
-        align-self: center;
-        padding: 0.75rem 2rem;
-        background-color: #ef4444;
-        color: white;
-        border: none;
-        border-radius: 0.5rem;
-        font-weight: bold;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        margin-top: 2rem;
-
-        &:hover {
-            background-color: #dc2626;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-        }
+        @include redButton();
     }
 
     @media (max-width: 767px) {
@@ -290,4 +219,38 @@ section {
             }
         }
     }
+}
+
+.photo-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+
+    button.delete-cat-photo {
+        @include redButton();
+    }
+
+    button.edit-cat-photo {
+        @include blueButton();
+    }
+}
+
+.post-photo-button {
+    @include tealButton();
+    margin-bottom: 1rem;
+}
+
+.edit-comment-cancel {
+    @include grayButton();
+}
+
+.edit-photo-cancel {
+    @include grayButton();
+}
+
+.delete-comment-button {
+    @include redButton();
+}
+.edit-comment-button {
+    @include blueButton();
 }
