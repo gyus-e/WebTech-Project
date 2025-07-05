@@ -24,6 +24,6 @@ export class RestBackendUpdateService {
 
   putComment(catId: number, photoId: number, commentId: number, comment: string): Observable<any> {
     const url = REST_BACKEND_URL + `/cats/${catId}/photos/${photoId}/comments/${commentId}`;
-    return this.http.post(url, { text: comment }) as Observable<any>;
+    return this.http.put(url, { text: comment }) as Observable<any>;
   }
 }

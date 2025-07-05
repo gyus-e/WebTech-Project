@@ -100,6 +100,7 @@ export class CatDetailsComponent {
     return this.commentsMap.get(photoId) || [];
   }
 
+
   getAllPhotos(cat: number) {
     this.fetchService.getCatPhotos(cat).subscribe({
       next: (photos) => {
@@ -114,6 +115,7 @@ export class CatDetailsComponent {
     });
   }
 
+
   setPhotosUrls(cat_id: number, photos: PhotoResponse[]) {
     if (!photos || photos.length === 0) {
       return;
@@ -124,11 +126,13 @@ export class CatDetailsComponent {
     }
   }
 
+
   createQuillElement(text: string | undefined | null): string {
     const txt = document.createElement('textarea');
     txt.innerHTML = text ?? '';
     return txt.value;
   }
+
 
   getComments(photoId: number) {
     this.fetchService.getComments(this.cat_id()!, photoId).subscribe({
@@ -140,6 +144,7 @@ export class CatDetailsComponent {
       }
     });
   }
+
 
   postComment(photoId: number) {
     if (!this.authService.isAuthenticated()) {
@@ -181,12 +186,14 @@ export class CatDetailsComponent {
     });
   }
 
+
   verifyCatUploader(): boolean {
     if (!this.cat() || !this.authService.isAuthenticated()) {
       return false;
     }
     return this.authService.user() === this.cat()!.uploader;
   }
+
 
   verifyPhotoUploader(photo: PhotoResponse): boolean {
     if (!photo || !this.authService.isAuthenticated()) {
@@ -195,6 +202,7 @@ export class CatDetailsComponent {
     return this.authService.user() === photo.uploader;
   }
 
+
   verifyCommentUploader(comment: any): boolean {
     if (!comment || !this.authService.isAuthenticated()) {
       return false;
@@ -202,9 +210,10 @@ export class CatDetailsComponent {
     return this.authService.user() === comment.uploader;
   }
 
+
   editComment(photo: PhotoResponse, comment: any) {
     const catId = this.cat_id();
-    if (!catId) {
+    if (!catId || photo.catId !== catId) {
       this.toastr.error('Cat ID is not set.');
       return;
     }
@@ -213,10 +222,12 @@ export class CatDetailsComponent {
       this.toastr.error('Comment cannot be empty.');
       return;
     }
-
+    console.log("edited comment: ", commentText);
     this.updateService.putComment(catId, photo.id, comment.id, commentText).subscribe({
       next: () => {
-        this.toastr.success('Comment deleted successfully.');
+        this.toastr.success('Comment edited successfully.');
+        this.showCommentEditor.set(-1);
+        this.editCommentForm.reset();
         this.getComments(photo.id);
       },
       error: (err) => {
@@ -224,6 +235,7 @@ export class CatDetailsComponent {
       }
     });
   }
+
 
   deleteCat() {
     const catId = this.cat_id();
@@ -243,6 +255,7 @@ export class CatDetailsComponent {
     });
   }
 
+
   deletePhoto(photo: PhotoResponse) {
     const catId = this.cat_id();
     if (!catId) {
@@ -260,6 +273,7 @@ export class CatDetailsComponent {
       }
     });
   }
+
 
   deleteComment(photo: PhotoResponse, comment: any) {
     const catId = this.cat_id();
