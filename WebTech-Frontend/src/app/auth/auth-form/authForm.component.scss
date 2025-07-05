@@ -2,6 +2,7 @@
 
 section.auth-section {
     @include flexColumn();
+    width: 100%;
 
     h1.auth-title {
         @include formTitle();
@@ -19,6 +20,7 @@ section.auth-section {
 
         div {
             @include flexColumn();
+            width: 100%;
 
             label.auth-label {
                 font-size: 1.125rem;
@@ -28,8 +30,9 @@ section.auth-section {
             }
 
             input.auth-input {
-                width: auto;
-                min-width: 25rem;
+                width: 100%;
+                max-width: 100%;
+                min-width: 20rem;
                 background-color: whitesmoke;
                 border: 1px solid;
                 border-radius: 0.5rem;
@@ -60,4 +63,20 @@ section.auth-section {
         }
     }
 
+    @media (max-width: 768px) {
+
+        padding: 0.25rem;
+        max-width: 100%;
+        min-width: 50%;
+
+        form.auth-form {
+            padding: 0.5rem;
+            
+            input.auth-input {
+                min-width: 0;
+                font-size: 16px;
+            }
+        }
+
+   }
 }
