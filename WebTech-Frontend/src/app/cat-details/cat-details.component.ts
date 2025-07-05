@@ -1,4 +1,4 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, Signal, signal } from '@angular/core';
 import { RestBackendFetchService } from '../_services/rest-backend/rest-backend-fetch.service';
 import { ToastrService } from 'ngx-toastr';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,6 +11,7 @@ import { AuthService } from '../_services/auth/auth.service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RestBackendUploadService } from '../_services/rest-backend/rest-backend-upload.service';
 import { RestBackendDeleteService } from '../_services/rest-backend/rest-backend-delete.service';
+import { RestBackendUpdateService } from '../_services/rest-backend/rest-backend-update.service';
 
 @Component({
   selector: 'app-cat-details',
@@ -24,6 +25,7 @@ export class CatDetailsComponent {
   authService = inject(AuthService);
   fetchService = inject(RestBackendFetchService);
   uploadService = inject(RestBackendUploadService);
+  updateService = inject(RestBackendUpdateService);
   deleteService = inject(RestBackendDeleteService);
   errHandler = inject(RestBackendErrorHandlerService);
 
@@ -31,11 +33,16 @@ export class CatDetailsComponent {
   commentsMap = new Map<number, any[]>(); // photoId -> comments array
   photos = signal<PhotoResponse[] | null>(null);
   cat_id = signal<number | undefined>(undefined);
+  showCommentEditor = signal<number>(-1)
   cat = computed(() => this.catSignal());
 
   private readonly catSignal = signal<CatResponse | undefined>(undefined);
 
   commentForm = new FormGroup({
+    comment: new FormControl('', [Validators.required]),
+  });
+
+  editCommentForm = new FormGroup({
     comment: new FormControl('', [Validators.required]),
   });
 
@@ -50,13 +57,13 @@ export class CatDetailsComponent {
       }
       this.fetchService.getCatById(catId).subscribe({
         next: (cat) => {
-      if (!cat) {
-        this.toastr.error('Cat not found.');
-        this.router.navigateByUrl("/cats");
-      } else {
-        this.catSignal.set(cat);
-        this.getAllPhotos(cat);
-      }
+          if (!cat) {
+            this.toastr.error('Cat not found.');
+            this.router.navigateByUrl("/cats");
+          } else {
+            this.catSignal.set(cat);
+            this.getAllPhotos(cat.id);
+          }
         },
         error: (err) => {
           this.errHandler.handleError(err);
@@ -93,14 +100,13 @@ export class CatDetailsComponent {
     return this.commentsMap.get(photoId) || [];
   }
 
-  getAllPhotos(cat: CatResponse) {
-    this.fetchService.getCatPhotos(cat.id).subscribe({
+  getAllPhotos(cat: number) {
+    this.fetchService.getCatPhotos(cat).subscribe({
       next: (photos) => {
         this.photos.set(photos);
-        // Load comments for each photo
         photos.forEach(photo => {
           this.getComments(photo.id);
-    });
+        });
       },
       error: (err) => {
         this.errHandler.handleError(err);
@@ -118,9 +124,9 @@ export class CatDetailsComponent {
     }
   }
 
-  createDescriptionElement(photo: PhotoResponse): string {
+  createQuillElement(text: string | undefined | null): string {
     const txt = document.createElement('textarea');
-    txt.innerHTML = photo.description ?? '';
+    txt.innerHTML = text ?? '';
     return txt.value;
   }
 
@@ -167,7 +173,6 @@ export class CatDetailsComponent {
       next: () => {
         this.toastr.success('Comment posted successfully.');
         this.commentForm.reset();
-        // Refresh comments for this photo
         this.getComments(photoId);
       },
       error: (err) => {
@@ -195,6 +200,29 @@ export class CatDetailsComponent {
       return false;
     }
     return this.authService.user() === comment.uploader;
+  }
+
+  editComment(photo: PhotoResponse, comment: any) {
+    const catId = this.cat_id();
+    if (!catId) {
+      this.toastr.error('Cat ID is not set.');
+      return;
+    }
+    const commentText = this.editCommentForm.value.comment;
+    if (!commentText || commentText.trim() === '') {
+      this.toastr.error('Comment cannot be empty.');
+      return;
+    }
+
+    this.updateService.putComment(catId, photo.id, comment.id, commentText).subscribe({
+      next: () => {
+        this.toastr.success('Comment deleted successfully.');
+        this.getComments(photo.id);
+      },
+      error: (err) => {
+        this.errHandler.handleError(err);
+      }
+    });
   }
 
   deleteCat() {
@@ -225,7 +253,7 @@ export class CatDetailsComponent {
     this.deleteService.deleteCatPhoto(catId, photo.id).subscribe({
       next: () => {
         this.toastr.success('Photo deleted successfully.');
-        //TODO: Refresh the photo list or take any other action
+        this.getAllPhotos(catId);
       },
       error: (err) => {
         this.errHandler.handleError(err);
@@ -243,7 +271,6 @@ export class CatDetailsComponent {
     this.deleteService.deleteComment(catId, photo.id, comment.id).subscribe({
       next: () => {
         this.toastr.success('Comment deleted successfully.');
-        // Refresh comments for this photo
         this.getComments(photo.id);
       },
       error: (err) => {

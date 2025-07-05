@@ -13,7 +13,7 @@ section {
         margin-bottom: 1rem;
     }
 
-    > button {
+    >button {
         align-self: center;
         padding: 0.75rem 2rem;
         background-color: #3b82f6;
@@ -23,7 +23,7 @@ section {
         font-weight: $semibold;
         cursor: pointer;
         transition: all 0.3s ease;
-        
+
         &:hover {
             background-color: #2563eb;
             transform: translateY(-2px);
@@ -91,11 +91,11 @@ section {
             .description-container {
                 flex: 1;
                 padding: 1.5rem;
-                
+
                 quill-view {
                     color: whitesmoke;
                     line-height: 1.6;
-                    
+
                     ::ng-deep .ql-editor {
                         padding: 0;
                         color: whitesmoke;
@@ -108,37 +108,39 @@ section {
             padding: 1.5rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
 
+            .comment-submit {
+                padding: 0.5rem 1.5rem;
+                background-color: #10b981;
+                color: white;
+                border: none;
+                border-radius: 0.5rem;
+                font-weight: $semibold;
+                cursor: pointer;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    background-color: #059669;
+                    transform: translateY(-1px);
+                }
+            }
+
             .comment-form {
                 margin-top: 2rem;
-                
+
                 quill-editor {
                     background-color: whitesmoke;
                     margin-bottom: 1rem;
-                    
+
                     ::ng-deep .ql-container {
                         border-radius: 0.5rem;
                     }
-                    
+
                     ::ng-deep .ql-toolbar {
                         border-radius: 0.5rem 0.5rem 0 0;
                     }
                 }
 
-                .comment-submit {
-                    padding: 0.5rem 1.5rem;
-                    background-color: #10b981;
-                    color: white;
-                    border: none;
-                    border-radius: 0.5rem;
-                    font-weight: $semibold;
-                    cursor: pointer;
-                    transition: all 0.3s ease;
 
-                    &:hover {
-                        background-color: #059669;
-                        transform: translateY(-1px);
-                    }
-                }
             }
 
             .comments-list {
@@ -164,7 +166,7 @@ section {
 
                     quill-view {
                         color: whitesmoke;
-                        
+
                         ::ng-deep .ql-editor {
                             padding: 0;
                             color: whitesmoke;
@@ -177,7 +179,7 @@ section {
         .photo-actions {
             padding: 1rem 1.5rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            
+
             button {
                 padding: 0.5rem 1rem;
                 background-color: #ef4444;

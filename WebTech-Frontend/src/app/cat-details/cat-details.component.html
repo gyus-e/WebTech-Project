@@ -14,7 +14,7 @@
                     <img [src]="photosUrls.get(photo.id)" alt="Cat" loading="lazy" />
                 </div>
                 <div class="description-container">
-                    <quill-view [content]="createDescriptionElement(photo)"></quill-view>
+                    <quill-view [content]="createQuillElement(photo.description)"></quill-view>
                 </div>
             </div>
 
@@ -23,11 +23,25 @@
                     @for (comment of getCommentsForPhoto(photo.id); track comment){
                     <li class="comment-item">
                         <p class="comment-author">{{comment.uploader}}</p>
-                        <quill-view [content]="comment.text"></quill-view>
+                        @if (showCommentEditor() !== comment.id) {
+                        <quill-view [content]="createQuillElement(comment.text)"></quill-view>
                         @if (authService.isAuthenticated() && verifyCommentUploader(comment)){
+                        <button type="button" class="comment-submit"
+                            (click)="showCommentEditor.set(comment.id)">Edit</button>
                         <button type="button" class="delete-comment-button"
                             (click)="deleteComment(photo, comment)">Delete</button>
                         }
+                        } @else {
+                        <form class="comment-form" [formGroup]="editCommentForm"
+                            (ngSubmit)="editComment(photo, comment)">
+                            <quill-editor formControlName="comment"
+                                [placeholder]="createQuillElement(comment.text)"></quill-editor>
+                            <button type="submit" class="comment-submit">Submit</button>
+                            <button type="button" class="comment-cancel"
+                                (click)="showCommentEditor.set(-1)">Cancel</button>
+                        </form>
+                        }
+
                     </li>
                     }
                 </ul>
