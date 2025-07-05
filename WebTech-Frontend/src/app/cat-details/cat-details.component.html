@@ -24,21 +24,25 @@
                     <li class="comment-item">
                         <p class="comment-author">{{comment.uploader}}</p>
                         @if (showCommentEditor() !== comment.id) {
-                        <quill-view [content]="createQuillElement(comment.text)"></quill-view>
+                        <quill-view class="comment-text" [content]="createQuillElement(comment.text)"></quill-view>
                         @if (authService.isAuthenticated() && verifyCommentUploader(comment)){
-                        <button type="button" class="comment-submit"
-                            (click)="showCommentEditor.set(comment.id)">Edit</button>
-                        <button type="button" class="delete-comment-button"
-                            (click)="deleteComment(photo, comment)">Delete</button>
+                        <div class="comment-actions">
+                            <button type="button" class="comment-submit"
+                                (click)="showCommentEditor.set(comment.id)">Edit</button>
+                            <button type="button" class="delete-comment-button"
+                                (click)="deleteComment(photo, comment)">Delete</button>
+                        </div>
                         }
                         } @else {
                         <form class="comment-form" [formGroup]="editCommentForm"
                             (ngSubmit)="editComment(photo, comment)">
                             <quill-editor formControlName="comment"
                                 [placeholder]="createQuillElement(comment.text)"></quill-editor>
-                            <button type="submit" class="comment-submit">Submit</button>
-                            <button type="button" class="comment-cancel"
-                                (click)="showCommentEditor.set(-1)">Cancel</button>
+                            <div class="edit-comment-actions">
+                                <button type="submit" class="comment-submit">Submit</button>
+                                <button type="button" class="edit-comment-cancel"
+                                    (click)="showCommentEditor.set(-1)">Cancel</button>
+                            </div>
                         </form>
                         }
 

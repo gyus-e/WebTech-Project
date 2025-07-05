@@ -108,6 +108,36 @@ section {
             padding: 1.5rem;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
 
+            .comment-actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: 1rem;
+                margin-top: 1rem;
+            }
+
+            .edit-comment-actions {
+                display: flex;
+                justify-content: flex-end;
+                gap: 1rem;
+                margin-top: 1rem;
+
+                .edit-comment-cancel {
+                    padding: 0.5rem 1.5rem;
+                    background-color: #5e5e5e;
+                    color: white;
+                    border: none;
+                    border-radius: 0.5rem;
+                    font-weight: $semibold;
+                    cursor: pointer;
+                    transition: all 0.3s ease;
+
+                    &:hover {
+                        background-color: #555555;
+                        transform: translateY(-1px);
+                    }
+                }
+            }
+
             .comment-submit {
                 padding: 0.5rem 1.5rem;
                 background-color: #10b981;
@@ -120,6 +150,22 @@ section {
 
                 &:hover {
                     background-color: #059669;
+                    transform: translateY(-1px);
+                }
+            }
+
+            .delete-comment-button {
+                padding: 0.5rem 1.5rem;
+                background-color: #ef4444;
+                color: white;
+                border: none;
+                border-radius: 0.5rem;
+                font-weight: $semibold;
+                cursor: pointer;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    background-color: #dc2626;
                     transform: translateY(-1px);
                 }
             }
@@ -164,12 +210,14 @@ section {
                         font-size: 0.9rem;
                     }
 
-                    quill-view {
+                    .comment-text {
                         color: whitesmoke;
+                        font-size: 1.15rem;
 
                         ::ng-deep .ql-editor {
                             padding: 0;
                             color: whitesmoke;
+                            font-size: 1.15rem;
                         }
                     }
                 }
