@@ -1,7 +1,8 @@
 <section>
     <h1>{{cat()?.name}}</h1>
     @if (authService.isAuthenticated()){
-    <button type="button" class="post-photo-button" (click)="router.navigate([`/upload`, cat()?.id]);">Post new photo</button>
+    <button type="button" class="post-photo-button" (click)="router.navigate([`/upload`, cat()?.id]);">Post new
+        photo</button>
     }
     <div class="photos-grid">
         @for (photo of photos(); track photo){
@@ -12,10 +13,19 @@
 
             <div class="photo-content">
                 <div class="image-container">
-                    <img [src]="photosUrls.get(photo.id)" alt="Cat" loading="lazy" />
+                    <img [src]="photosUrls.get(photo.id)" alt="Cat" />
                 </div>
                 <div class="description-container">
+
+                    @if (showPhotoEditor() !== photo.id){
                     <quill-view [content]="createQuillElement(photo.description)"></quill-view>
+                    } @else {
+                    <form class="photo-edit-form" [formGroup]="editPhotoForm" (ngSubmit)="editPhoto(photo)">
+                        <quill-editor formControlName="description" id="descr" class="descr-input"
+                            placeholder="Enter photo description..."></quill-editor>
+                        <button type="submit" class="photo-edit-submit">Save</button>
+                    </form>
+                    }
                 </div>
             </div>
 
@@ -67,8 +77,7 @@
                 <button type="button" class="delete-cat-photo" (click)="deletePhoto(photo)">Delete Photo</button>
                 } @else {
                 <p>Work in Progress!</p>
-                <button type="button" class="edit-photo-cancel"
-                    (click)="showPhotoEditor.set(-1)">Cancel</button>
+                <button type="button" class="edit-photo-cancel" (click)="showPhotoEditor.set(-1)">Cancel</button>
                 }
             </div>
             }

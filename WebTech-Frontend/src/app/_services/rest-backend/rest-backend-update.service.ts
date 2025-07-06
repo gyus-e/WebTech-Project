@@ -17,9 +17,9 @@ export class RestBackendUpdateService {
     })
   };
 
-  putPhoto(catId: number, photoId: number, formValues: any): Observable<PhotoResponse> {
+  putPhoto(catId: number, photoId: number, title: string, description: string): Observable<PhotoResponse> {
     const url = REST_BACKEND_URL + `/cats/${catId}/photos/${photoId}`;
-    return this.http.put(url, formValues) as Observable<PhotoResponse>;
+    return this.http.put(url, { title: title, description: description }) as Observable<PhotoResponse>;
   }
 
   putComment(catId: number, photoId: number, commentId: number, comment: string): Observable<any> {

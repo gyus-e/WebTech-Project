@@ -37,6 +37,10 @@ export class CatDetailsComponent {
   showPhotoEditor = signal<number>(-1);
   cat = computed(() => this.catSignal());
 
+  editPhotoForm = new FormGroup({
+    description: new FormControl('', [Validators.required]),
+  });
+
   private readonly catSignal = signal<CatResponse | undefined>(undefined);
 
   commentForm = new FormGroup({
@@ -209,6 +213,35 @@ export class CatDetailsComponent {
       return false;
     }
     return this.authService.user() === comment.uploader;
+  }
+
+  editPhoto(photo: PhotoResponse) {
+    const catId = this.cat_id();
+    if (!catId || photo.catId !== catId) {
+      this.toastr.error('Cat ID is not set.');
+      return;
+    }
+    if (this.editPhotoForm.invalid) {
+      this.toastr.error('Description cannot be empty.');
+      return;
+    }
+    const description = this.editPhotoForm.value.description;
+    if (!description || description.trim() === '') {
+      this.toastr.error('Description cannot be empty.');
+      return;
+    }
+    console.log("edited description: ", description);
+    this.updateService.putPhoto(catId, photo.id, photo.title, description).subscribe({
+      next: () => {
+        this.toastr.success('Photo edited successfully.');
+        this.showPhotoEditor.set(-1);
+        this.editPhotoForm.reset();
+        this.getAllPhotos(catId);
+      },
+      error: (err) => {
+        this.errHandler.handleError(err);
+      }
+    });
   }
 
 
