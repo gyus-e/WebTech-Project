@@ -44,7 +44,7 @@ ng test
 
 ## Running end-to-end tests
 
-For running end-to-end (e2e) tests with Playwright, run:
+For running end-to-end (e2e) tests with [Playwright](https://playwright.dev/), run:
 
 ```bash
 ng e2e
