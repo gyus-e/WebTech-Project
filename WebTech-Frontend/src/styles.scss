@@ -29,6 +29,7 @@ $semibold: 600;
     font-weight: $semibold;
     cursor: pointer;
     transition: all 0.3s ease;
+
     &:hover {
         transform: translateY(-1px);
     }
@@ -37,6 +38,7 @@ $semibold: 600;
 @mixin redButton() {
     @include button();
     background-color: #e53e3e;
+
     &:hover {
         background-color: #c53030;
     }
@@ -45,6 +47,7 @@ $semibold: 600;
 @mixin blueButton() {
     @include button();
     background-color: #3b82f6;
+
     &:hover {
         background-color: #2563eb;
     }
@@ -53,6 +56,7 @@ $semibold: 600;
 @mixin tealButton() {
     @include button();
     background-color: #38b2ac;
+
     &:hover {
         background-color: #319795;
     }
@@ -61,7 +65,22 @@ $semibold: 600;
 @mixin grayButton() {
     @include button();
     background-color: #a0aec0;
+
     &:hover {
         background-color: #718096;
+    }
+}
+
+
+quill-editor {
+    background-color: whitesmoke;
+    margin-bottom: 1rem;
+
+    ::ng-deep .ql-container {
+        border-radius: 0.5rem;
+    }
+
+    ::ng-deep .ql-toolbar {
+        border-radius: 0.5rem 0.5rem 0 0;
     }
 }

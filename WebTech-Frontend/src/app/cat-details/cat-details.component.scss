@@ -12,7 +12,7 @@ section {
         text-align: center;
         margin-bottom: 1rem;
     }
-    
+
     .photos-grid {
         display: grid;
         grid-template-columns: 1fr;
@@ -113,37 +113,25 @@ section {
             }
 
             .comment-submit {
-                padding: 0.5rem 1.5rem;
-                background-color: #10b981;
-                color: white;
-                border: none;
-                border-radius: 0.5rem;
-                font-weight: $semibold;
-                cursor: pointer;
-                transition: all 0.3s ease;
-
-                &:hover {
-                    background-color: #059669;
-                    transform: translateY(-1px);
-                }
+                @include tealButton();
             }
 
 
             .comment-form {
                 margin-top: 2rem;
 
-                quill-editor {
-                    background-color: whitesmoke;
-                    margin-bottom: 1rem;
+                // quill-editor {
+                //     background-color: whitesmoke;
+                //     margin-bottom: 1rem;
 
-                    ::ng-deep .ql-container {
-                        border-radius: 0.5rem;
-                    }
+                //     ::ng-deep .ql-container {
+                //         border-radius: 0.5rem;
+                //     }
 
-                    ::ng-deep .ql-toolbar {
-                        border-radius: 0.5rem 0.5rem 0 0;
-                    }
-                }
+                //     ::ng-deep .ql-toolbar {
+                //         border-radius: 0.5rem 0.5rem 0 0;
+                //     }
+                // }
 
 
             }
@@ -244,6 +232,10 @@ section {
     @include grayButton();
 }
 
+.edit-photo-submit {
+    @include tealButton();
+}
+
 .edit-photo-cancel {
     @include grayButton();
 }
@@ -251,6 +243,7 @@ section {
 .delete-comment-button {
     @include redButton();
 }
+
 .edit-comment-button {
     @include blueButton();
 }
