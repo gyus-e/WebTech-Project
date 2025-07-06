@@ -5,10 +5,10 @@ import { ToastrService } from 'ngx-toastr';
 import { RestBackendUploadService } from '../_services/rest-backend/rest-backend-upload.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RestBackendErrorHandlerService } from '../_services/rest-backend/rest-backend-error-handler.service';
-import { CatsStateService } from '../_services/cats/cats-state.service';
 import { QuillModule } from 'ngx-quill';
 import { MapStateService } from '../_services/map/map-state.service';
 import { PhotoResponse } from '../_types/photo-response.type';
+import { RestBackendFetchService } from '../_services/rest-backend/rest-backend-fetch.service';
 
 @Component({
   selector: 'app-upload',
@@ -19,10 +19,10 @@ import { PhotoResponse } from '../_types/photo-response.type';
 export class UploadComponent {
   toastr = inject(ToastrService);
   router = inject(Router);
-  catsState = inject(CatsStateService);
   mapState = inject(MapStateService);
   errHandler = inject(RestBackendErrorHandlerService);
   uploadService = inject(RestBackendUploadService);
+  fetchService = inject(RestBackendFetchService);
 
   multipartFormDataSignal = signal<FormData | undefined>(undefined);
   cat_id = signal<number | undefined>(undefined);
@@ -61,8 +61,15 @@ export class UploadComponent {
       if (!cat_id) {
         return;
       }
-      const catName = this.catsState.cats().find(cat => cat.id === cat_id)?.name;
-      this.cat_name.set(catName ?? '');
+      this.fetchService.getCatById(cat_id).subscribe({
+        next: (cat) => {
+          this.cat_name.set(cat.name);
+        },
+        error: (error) => {
+          this.errHandler.handleError(error);
+          console.error('Error fetching cat by id:', error);
+        }
+      });
     });
 
     //set geolocation when user clicks on map
@@ -82,7 +89,6 @@ export class UploadComponent {
         this.uploadService.postPhoto(cat_id, multipartFormData).subscribe({
 
           next: (response: PhotoResponse) => {
-            // this.catsState.newPhotoSignal.set(response);
             this.toastr.success('Photo uploaded successfully!');
             this.uploadForm.reset();
             setTimeout(() => { this.router.navigateByUrl(`/cats/${this.cat_id()}`) }, 10);

@@ -6,10 +6,8 @@ import { RestBackendErrorHandlerService } from '../_services/rest-backend/rest-b
 import { CatResponse } from '../_types/cat-response.type';
 import { REST_BACKEND_URL } from '../_config/rest-backend-url';
 import { CatUploadFormComponent } from '../cat-upload-form/cat-upload-form.component';
+import { PLACEHOLDER } from '../_config/placeholder';
 
-
-//TODO: move somewehre else
-const PLACEHOLDER = 'assets/yamamaya.jpg';
 
 
 @Component({

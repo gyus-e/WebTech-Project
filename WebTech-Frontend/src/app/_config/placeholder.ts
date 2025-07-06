@@ -1,0 +1,1 @@
+export const PLACEHOLDER = 'assets/yamamaya.jpg';
