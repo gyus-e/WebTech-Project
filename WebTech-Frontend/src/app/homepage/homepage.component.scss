@@ -6,11 +6,16 @@ section {
     div.hero {
         text-align: center;
         color: white;
-        font-weight: bold;
         padding: 0.5rem;
 
         h1 {
             font-size: 2.25rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
             margin-bottom: 0.5rem;
         }
     }

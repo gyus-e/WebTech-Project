@@ -1,9 +1,17 @@
 <section>
   <div class="hero">
     <h1 class="title">WebTech Streetcats</h1>
+
+    @if (authState.isAuthenticated()){
+    <app-cat-upload-form></app-cat-upload-form>
+    }
     <h2 class="subtitle">
       Find cats in your area!
     </h2>
+    <p>
+      Click on a marker on the map to see the cat's profile.
+    </p>
   </div>
   <app-map class="map-component" [showCatMarkers]="true"></app-map>
+
 </section>

@@ -1,12 +1,7 @@
 <section class="cats-section">
     <h1 class="title">Cats</h1>
     @if (authState.isAuthenticated()){
-    <form class="upload-cat-form" [formGroup]="uploadCatForm" (ngSubmit)="onSubmit()">
-        <div>
-            <input type="text" formControlName="name" id="name" placeholder="Enter cat name" required />
-        </div>
-        <button type="submit">Upload New Cat</button>
-    </form>
+    <app-cat-upload-form></app-cat-upload-form>
     }
 
     <ul>
