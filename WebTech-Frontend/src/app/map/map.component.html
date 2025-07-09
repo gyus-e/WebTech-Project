@@ -2,11 +2,15 @@
     <div class="leaflet" leaflet [leafletOptions]="options" (leafletMapReady)="onMapReady($event)">
         @if (showCatMarkers){
         <div [leafletLayers]="viewLayers()"></div>
+            @if (cat_summary_to_show()){
+            <app-cat-summary [cat]="cat_summary_to_show()"></app-cat-summary>
+            }
         }
         @else {
         <div [leafletLayers]="mapState.userMarkerLayer"></div>
         }
     </div>
-
     <button type="button" (click)="resetPosition()">Reset position</button>
+
+
 </div>

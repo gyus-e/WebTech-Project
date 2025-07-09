@@ -12,6 +12,15 @@ div.map-container{
         border-radius: 0.5rem;
         padding: 1rem;
         margin-bottom: 0.5rem;
+
+
+        app-cat-summary {
+            position: absolute;
+            z-index: 9999;
+            background-color: $form-bg-color;
+            margin-bottom: 1rem;
+            margin-right: 1rem;
+        }
     }
 
     button {
@@ -25,4 +34,6 @@ div.map-container{
             background-color: darkgrey;
         }
     }
+
+
 }

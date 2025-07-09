@@ -6,10 +6,12 @@ import { MapConfig } from '../_config/MapConfig';
 import { Router } from '@angular/router';
 import { RestBackendFetchService } from '../_services/rest-backend/rest-backend-fetch.service';
 import { RestBackendErrorHandlerService } from '../_services/rest-backend/rest-backend-error-handler.service';
+import { CatSummaryComponent } from '../cat-summary/cat-summary.component';
+import { CatResponse } from '../_types/cat-response.type';
 
 @Component({
   selector: 'app-map',
-  imports: [LeafletModule],
+  imports: [LeafletModule, CatSummaryComponent],
   templateUrl: './map.component.html',
   styleUrl: './map.component.scss',
 })
@@ -31,7 +33,8 @@ export class MapComponent {
   };
 
   viewLayers = signal<Array<Marker>>([]);
-  
+  cat_summary_to_show = signal<CatResponse | undefined>(undefined);
+
   private readonly catMarkersLayer: Array<Marker> = [];
   private readonly mapSignal = signal<L.Map | undefined>(undefined);
 
@@ -68,7 +71,13 @@ export class MapComponent {
       this.mapState.zoom = map.getZoom();
     });
 
-    if (!this.showCatMarkers) {
+    if (this.showCatMarkers) {
+      map.on('click', (event: L.LeafletMouseEvent) => {
+        this.reset_show_cat_summary();
+      });
+    }
+
+    else {
       map.on('click', (event: L.LeafletMouseEvent) => {
         this.mapState.clickPositionSignal.set(event.latlng);
       });
@@ -84,9 +93,27 @@ export class MapComponent {
   addMarker(catId: number, geolocation: LatLng) {
     const newMarker = marker(geolocation, { icon: MapConfig.MARKER_ICON });
     newMarker.on('click', () => {
-      this.router.navigate(['/cats', catId]);
+      this.toggleCatSummary(catId);
     });
     this.catMarkersLayer.push(newMarker);
   }
-  
+
+  toggleCatSummary(catId: number) {
+    this.reset_show_cat_summary();
+
+    this.fetchService.getCatById(catId).subscribe({
+      next: (cat) => {
+        this.cat_summary_to_show.set(cat);
+      },
+      error: (error: any) => {
+        this.errService.handleError(error);
+      }
+    });
+  }
+
+  reset_show_cat_summary() {
+    if (this.cat_summary_to_show()) {
+      this.cat_summary_to_show.set(undefined);
+    }
+  }
 }
