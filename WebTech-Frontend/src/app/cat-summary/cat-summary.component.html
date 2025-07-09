@@ -1,0 +1,6 @@
+<div>
+    <h1>{{cat?.name}}</h1>
+    <a [routerLink]="['/cats', cat?.id]">
+        <img [src]="getProfilePictureUrl(cat!)" alt="{{cat?.name}}" />
+    </a>
+</div>
