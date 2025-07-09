@@ -16,10 +16,11 @@ div.map-container{
 
         app-cat-summary {
             position: absolute;
+            left: 1rem;
+            bottom: 1rem;
             z-index: 9999;
             background-color: $form-bg-color;
-            margin-bottom: 1rem;
-            margin-right: 1rem;
+            margin: 1rem;
         }
     }
 
