@@ -7,6 +7,8 @@ Backend for Unina WebTech 2025 StreetCats project.
 Make sure you have installed:
 - [node and npm](https://nodejs.org/en/download)
 
+Rename the ``.env.example`` file to ``.env`` and change its values accordingly.
+
 Run the following command:
 ```bash
 npm install
